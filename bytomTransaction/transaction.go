@@ -146,26 +146,6 @@ func VerifyRawTransaction(txHex string) bool {
 
 	emptyTrans := signedTrans.cloneEmpty()
 
-	// emptyTxBytes, err := emptyTrans.toBytes()
-
-	// if err != nil {
-	// 	return false
-	// }
-
-	// txHashes, err := CreateRawTransactionHashForSig(hex.EncodeToString(emptyTxBytes))
-
-	// if err != nil {
-	// 	return false
-	// }
-
-	// for i := 0; i < len(txHashes); i ++{
-	// 	if txHashes[i].IsMultiSig{
-
-	// 	}else{
-
-	// 	}
-	// }
-
 	var txHashes [][]byte
 
 	for i := 0; i < len(emptyTrans.Inputs); i++ {
