@@ -332,11 +332,11 @@ func Test_case4(t *testing.T) {
 	}
 
 	// 交易单验证
-	// pass := VerifyRawTransaction(signedTrans)
+	pass := VerifyRawTransaction(signedTrans)
 
-	// if pass {
-	// 	fmt.Println("验证通过")
-	// } else {
-	// 	t.Error("交易单验证失败")
-	// }
+	if pass {
+		fmt.Println("验证通过")
+	} else {
+		t.Error("交易单验证失败")
+	}
 }

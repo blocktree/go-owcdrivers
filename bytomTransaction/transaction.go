@@ -4,7 +4,7 @@ import (
 	"encoding/hex"
 	"errors"
 
-	"github.com/blocktree/go-owcrypt"
+	owcrypt "github.com/blocktree/go-owcrypt"
 )
 
 type Vin struct {
@@ -146,6 +146,26 @@ func VerifyRawTransaction(txHex string) bool {
 
 	emptyTrans := signedTrans.cloneEmpty()
 
+	// emptyTxBytes, err := emptyTrans.toBytes()
+
+	// if err != nil {
+	// 	return false
+	// }
+
+	// txHashes, err := CreateRawTransactionHashForSig(hex.EncodeToString(emptyTxBytes))
+
+	// if err != nil {
+	// 	return false
+	// }
+
+	// for i := 0; i < len(txHashes); i ++{
+	// 	if txHashes[i].IsMultiSig{
+
+	// 	}else{
+
+	// 	}
+	// }
+
 	var txHashes [][]byte
 
 	for i := 0; i < len(emptyTrans.Inputs); i++ {
@@ -157,8 +177,27 @@ func VerifyRawTransaction(txHex string) bool {
 	}
 
 	for i := 0; i < len(txHashes); i++ {
-		if owcrypt.SUCCESS != owcrypt.Verify(signedTrans.Inputs[i].SigPub.Pubkey, nil, 0, txHashes[i], 32, signedTrans.Inputs[i].SigPub.Signature, owcrypt.ECC_CURVE_ED25519) {
-			return false
+		if len(signedTrans.Inputs[i].ControlProgram) == 0x22 {
+			sigs, pubs, err := getMultiSigPubs(signedTrans.Inputs[i].MultiSig)
+			if err != nil {
+				return false
+			}
+			count := 0
+			for j := 0; j < len(sigs); j++ {
+				for k := j; k < len(pubs); k++ {
+					if owcrypt.SUCCESS == owcrypt.Verify(pubs[k], nil, 0, txHashes[i], 32, sigs[j], owcrypt.ECC_CURVE_ED25519) {
+						count++
+					}
+				}
+			}
+
+			if count != len(sigs) {
+				return false
+			}
+		} else {
+			if owcrypt.SUCCESS != owcrypt.Verify(signedTrans.Inputs[i].SigPub.Pubkey, nil, 0, txHashes[i], 32, signedTrans.Inputs[i].SigPub.Signature, owcrypt.ECC_CURVE_ED25519) {
+				return false
+			}
 		}
 	}
 	return true

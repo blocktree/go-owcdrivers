@@ -213,28 +213,36 @@ func DecodeRawTransaction(txBytes []byte) (*Transaction, error) {
 			if index+2 > limit {
 				return nil, errors.New("Invalid transaction data!")
 			}
-			if txBytes[index] != 0x02 || txBytes[index+1] != 0x40 {
+			if txBytes[index] == 0x02 && txBytes[index+1] == 0x40 {
+				index += 2
+				if index+64 > limit {
+					return nil, errors.New("Invalid transaction data!")
+				}
+				sig := txBytes[index : index+64]
+				index += 64
+				if index+1 > limit {
+					return nil, errors.New("Invalid transaction data!")
+				}
+				if txBytes[index] != 32 {
+					return nil, errors.New("Invalid transaction data!")
+				}
+				index++
+				if index+32 > limit {
+					return nil, errors.New("Invalid transaction data!")
+				}
+				pub := txBytes[index : index+32]
+				index += 32
+				in.SigPub = &SigPub{sig, pub}
+			} else if txBytes[index] == 0x01 && txBytes[index+1] == 0x03 {
+
+				if index+spScriptLen+1 > limit {
+					return nil, errors.New("Invalid transaction data!")
+				}
+				in.MultiSig = txBytes[index : index+spScriptLen+1]
+				index += spScriptLen + 1
+			} else {
 				return nil, errors.New("Invalid transaction data!")
 			}
-			index += 2
-			if index+64 > limit {
-				return nil, errors.New("Invalid transaction data!")
-			}
-			sig := txBytes[index : index+64]
-			index += 64
-			if index+1 > limit {
-				return nil, errors.New("Invalid transaction data!")
-			}
-			if txBytes[index] != 32 {
-				return nil, errors.New("Invalid transaction data!")
-			}
-			index++
-			if index+32 > limit {
-				return nil, errors.New("Invalid transaction data!")
-			}
-			pub := txBytes[index : index+32]
-			index += 32
-			in.SigPub = &SigPub{sig, pub}
 		}
 		rawTx.Inputs = append(rawTx.Inputs, in)
 	}
@@ -494,6 +502,7 @@ func (t Transaction) cloneEmpty() Transaction {
 	ret.TimeRange = append(ret.TimeRange, t.TimeRange...)
 	for i := 0; i < len(ret.Inputs); i++ {
 		ret.Inputs[i].SigPub = nil
+		ret.Inputs[i].MultiSig = nil
 	}
 	return ret
 }

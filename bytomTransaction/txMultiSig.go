@@ -106,3 +106,107 @@ func getMultiSigDetail(signScript []byte) ([]MultiTx, byte, error) {
 
 	return multi, required, nil
 }
+
+func getMultiSigPubs(sp []byte) ([][]byte, [][]byte, error) {
+
+	var sigs [][]byte
+	var pubs [][]byte
+
+	limit := len(sp)
+	index := 0
+
+	if index+2 > limit {
+		return nil, nil, errors.New("Invalid signature and public key data!")
+	}
+
+	if sp[index] != 0x01 || sp[index+1] != 0x03 {
+		return nil, nil, errors.New("Invalid signature and public key data!")
+	}
+
+	index += 2
+
+	for {
+		if index+1 > limit {
+			return nil, nil, errors.New("Invalid signature and public key data!")
+		}
+
+		if sp[index] == 0x40 {
+			index++
+			if index+0x40 > limit {
+				return nil, nil, errors.New("Invalid signature and public key data!")
+			}
+			sigs = append(sigs, sp[index:index+0x40])
+			index += 0x40
+		} else {
+			break
+		}
+	}
+
+	if index+1 > limit {
+		return nil, nil, errors.New("Invalid signature and public key data!")
+	}
+
+	commitLen := int(sp[index])
+
+	index++
+
+	if index+commitLen != limit {
+		return nil, nil, errors.New("Invalid signature and public key data!")
+	}
+	if index+1 > limit {
+		return nil, nil, errors.New("Invalid signature and public key data!")
+	}
+	if sp[index] != Op_TxSignHash {
+		return nil, nil, errors.New("Invalid signature and public key data!")
+	}
+	index++
+	for {
+		if index+1 > limit {
+			return nil, nil, errors.New("Invalid signature and public key data!")
+		}
+		if sp[index] != 0x20 {
+			break
+		}
+		index++
+
+		if index+0x20 > limit {
+			return nil, nil, errors.New("Invalid signature and public key data!")
+		}
+
+		pubs = append(pubs, sp[index:index+0x20])
+
+		index += 0x20
+	}
+
+	required := sp[index] - (Op_1 - 1)
+	index++
+
+	if index+1 > limit {
+		return nil, nil, errors.New("Invalid signature and public key data!")
+	}
+
+	count := sp[index] - (Op_1 - 1)
+	index++
+
+	if int(count) != len(pubs) {
+		return nil, nil, errors.New("Invalid signature and public key data!")
+	}
+
+	if int(required) != len(sigs) {
+		return nil, nil, errors.New("Not competely signed!")
+	}
+	if index+1 > limit {
+		return nil, nil, errors.New("Invalid signature and public key data!")
+	}
+
+	if sp[index] != Op_CheckMultiSig {
+		return nil, nil, errors.New("Invalid signature and public key data!")
+	}
+	index++
+
+	if index != limit {
+		return nil, nil, errors.New("Invalid signature and public key data!")
+	}
+
+	return sigs, pubs, nil
+}
