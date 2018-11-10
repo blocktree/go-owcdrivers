@@ -8,5 +8,6 @@
         btcLikeTxDriver  -  类比特币交易单驱动
         btxTransaction   -  重构，支持全系地址
         bytomTransaction -  比原链交易单驱动
+        omniTransaction  -  omni协议染色笔交易单驱动
 ```
 
