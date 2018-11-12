@@ -92,6 +92,9 @@ func Eip55_decode(encode_addr string)([]byte,error){
 		return nil,ErrorInvalidAddress
 	}
 	*/
+	if encode_addr[0:2] == "0x" {
+		encode_addr = encode_addr[2:]
+	}
 	decode_addr,err :=hex.DecodeString(encode_addr)
 	if err!=nil{
 		return nil,err
