@@ -111,6 +111,9 @@ func calcHash(data []byte, hashType string) []byte {
 	if hashType == "sha3_256_last_twenty" {
 		return owcrypt.Hash(data, 32, owcrypt.HASH_ALG_SHA3_256)[12:32]
 	}
+	if hashType == "keccak256_last_twenty"{
+		return owcrypt.Hash(data, 32, owcrypt.HASH_ALG_KECCAK256)[12:32]
+	}
 	return nil
 }
 

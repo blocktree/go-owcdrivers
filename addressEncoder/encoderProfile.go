@@ -13,7 +13,10 @@ var (
 	hcAlphabet        = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 	qtumAlphabet      = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 	dcrdAlphabet      = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+	nasAlphabet      = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+	tronAlphabet       = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 )
+
 
 type AddressType struct {
 	encodeType   string //编码类型
@@ -124,11 +127,11 @@ var (
 	DCRD_simnetAddressPrivate    = AddressType{"base58", dcrdAlphabet, "doubleBlake256", "ripemd160", 20, []byte{0x23, 0x07}, nil} //PrivateKeyID, starts with Ps
 
 	//Nebulas stuff
-	NAS_AccountAddress       = AddressType{"base58", dcrdAlphabet, "sha3_256", "sha3_256_ripemd160", 20, []byte{0x19, 0x57}, nil}
-	NAS_SmartContractAddress = AddressType{"base58", dcrdAlphabet, "sha3_256", "sha3_256_ripemd160", 20, []byte{0x19, 0x58}, nil}
+	NAS_AccountAddress       = AddressType{"base58", nasAlphabet, "sha3_256", "sha3_256_ripemd160", 20, []byte{0x19, 0x57}, nil}
+	NAS_SmartContractAddress = AddressType{"base58", nasAlphabet, "sha3_256", "sha3_256_ripemd160", 20, []byte{0x19, 0x58}, nil}
 
 	//TRON stuff
-	TRON_mainnetAddress = AddressType{"base58", btcAlphabet, "doubleSHA256", "sha3_256_last_twenty", 20, []byte{0x41}, nil}
+	TRON_mainnetAddress = AddressType{"base58", tronAlphabet, "doubleSHA256", "keccak256_last_twenty", 20, []byte{0x41}, nil}
 	//ICX stuff
 	ICX_walletAddress =AddressType{"ICX", "", "hx", "sha3_256_last_twenty", 20, nil, nil}
 )

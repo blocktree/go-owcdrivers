@@ -4,7 +4,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"testing"
-
 	"github.com/blocktree/go-owcrypt"
 )
 
@@ -19,7 +18,7 @@ func Test_btc_address(t *testing.T) {
 	if m_p2pkh_addr != "19xD3nnvEiu7Uqd8irRvF3j5ExLb4ZtSju" {
 		t.Error("btc mainnet p2pkh address encode wrong result!")
 	} else {
-		fmt.Println("encoded result:", m_p2pkh_addr)
+		fmt.Println("btcP2Pkh encoded result:", m_p2pkh_addr)
 	}
 
 	fmt.Println("mainnet p2pkh address decode")
@@ -33,7 +32,7 @@ func Test_btc_address(t *testing.T) {
 				break
 			}
 		}
-		fmt.Println("decode result:", hex.EncodeToString(m_p2pkh_check[:]))
+		fmt.Println("btcP2Pkh decode result:", hex.EncodeToString(m_p2pkh_check[:]))
 	}
 
 	fmt.Println("mainnet p2sh address encode:")
@@ -294,18 +293,12 @@ func Test_NAS_address(t *testing.T) {
 
 	//NAS Account address test......
 	Account_encodeAddress := "n1TV3sU6jyzR4rJ1D7jCAmtVGSntJagXZHC"
-	fmt.Println("NAS account  address decode test")
 	Account_decodeAddressChk, err := AddressDecode(Account_encodeAddress, NAS_AccountAddress)
 	if err != nil {
 		t.Error("NAS account address decode error")
 	} else {
-		fmt.Println("NAS account address decode result:")
-		for _, s := range Account_decodeAddressChk {
-			fmt.Printf("0x%x ", s)
-		}
-		fmt.Printf("\n")
+		fmt.Println("NAS account address decode result:",hex.EncodeToString(Account_decodeAddressChk))
 	}
-	fmt.Println("NAS Account  address encode test")
 	Account_encodeAddressChk := AddressEncode(Account_decodeAddressChk, NAS_AccountAddress)
 	if Account_encodeAddressChk != "n1TV3sU6jyzR4rJ1D7jCAmtVGSntJagXZHC" {
 		t.Error("NAS Account address encode error")
@@ -315,18 +308,12 @@ func Test_NAS_address(t *testing.T) {
 
 	//NAS smart contract address test......
 	SmartContract_encodeAddress := "n1sLnoc7j57YfzAVP8tJ3yK5a2i56QrTDdK"
-	fmt.Println("DAS smart contract  address decode test")
 	SmartContract_decodeAddressChk, err := AddressDecode(SmartContract_encodeAddress, NAS_SmartContractAddress)
 	if err != nil {
 		t.Error("NAS smart contract address decode error")
 	} else {
-		fmt.Println("NAS smart contract address decode result:")
-		for _, s := range SmartContract_decodeAddressChk {
-			fmt.Printf("0x%x ", s)
-		}
-		fmt.Printf("\n")
+		fmt.Println("NAS smart contract address decode result:",hex.EncodeToString(SmartContract_decodeAddressChk))
 	}
-	fmt.Println("NAS Account  address encode test")
 	SmartContract_encodeAddressChk := AddressEncode(SmartContract_decodeAddressChk, NAS_SmartContractAddress)
 	if SmartContract_encodeAddressChk != "n1sLnoc7j57YfzAVP8tJ3yK5a2i56QrTDdK" {
 		t.Error("NAS smart contract encode error")
@@ -391,14 +378,15 @@ func Test_base64(t *testing.T) {
 }
 
 func Test_TRON_address(t *testing.T) {
-	addr := []byte{0x5a, 0x52, 0x3b, 0x44, 0x98, 0x90, 0x85, 0x4c, 0x8f, 0xc4, 0x60, 0xab, 0x60, 0x2d, 0xf9, 0xf3, 0x1f, 0xe4, 0x29, 0x3f}
+	//addr := []byte{0x5a, 0x52, 0x3b, 0x44, 0x98, 0x90, 0x85, 0x4c, 0x8f, 0xc4, 0x60, 0xab, 0x60, 0x2d, 0xf9, 0xf3, 0x1f, 0xe4, 0x29, 0x3f}
+	addr:=[]byte{0xFA,0xA3,0x96,0x31,0x95,0x6B,0xAC,0x11,0xA6,0x00,0x23,0x50,0x85,0xEB,0x07,0x02,0x5A,0x39,0xDD,0x84,0x67,0x6D,0x78,0xC1,0x70,0xFD,0xB9,0xA5,0xA6,0xA1,0x4A,0x5F,0x36,0x8B,0xAA,0x49,0xB7,0x98,0x0C,0x9E,0x36,0xC5,0x4F,0x20,0xD5,0x5A,0x05,0xAE,0x4B,0x88,0xA8,0x45,0xB4,0x86,0xED,0xFE,0xFD,0xAE,0x86,0x9E,0x2A,0x91,0x70,0x6A}
 	encodeAddr := AddressEncode(addr, TRON_mainnetAddress)
-	fmt.Println("encodeAddr=:", string(encodeAddr))
+	fmt.Println("tron encodeAddr=:", string(encodeAddr))
 	decodeAddr, err := AddressDecode(encodeAddr, TRON_mainnetAddress)
 	if err != nil {
 		t.Error("tron addr decode error!!!!")
 	} else {
-		fmt.Println("decodeAddr=:", hex.EncodeToString(decodeAddr))
+		fmt.Println("tron decodeAddr=:", hex.EncodeToString(decodeAddr))
 	}
 }
 
