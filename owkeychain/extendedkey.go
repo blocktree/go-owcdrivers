@@ -103,7 +103,13 @@ func getPriChildViaPriParent(il, prikey []byte, typeChoose uint32) ([]byte, erro
 		if check.Sign() == 0 {
 			return nil, ErrInvalidChild
 		}
-		priChild = inverse(ilNum.Bytes())
+		priChild = ilNum.Bytes()
+		if len(priChild) < 32 {
+			for i := 0; i < 32-len(priChild); i++ {
+				priChild = append([]byte{0x00}, priChild...)
+			}
+		}
+		priChild = inverse(priChild)
 	} else {
 		ilNum := new(big.Int).SetBytes(il)
 		curveOrder := new(big.Int).SetBytes(owcrypt.GetCurveOrder(typeChoose))
@@ -117,6 +123,11 @@ func getPriChildViaPriParent(il, prikey []byte, typeChoose uint32) ([]byte, erro
 			return nil, ErrInvalidChild
 		}
 		priChild = ilNum.Bytes()
+		if len(priChild) < 32 {
+			for i := 0; i < 32-len(priChild); i++ {
+				priChild = append([]byte{0x00}, priChild...)
+			}
+		}
 	}
 	return priChild, nil
 }
@@ -126,7 +137,14 @@ func getPubChildViaPubParent(il, pubkey []byte, typeChoose uint32) ([]byte, erro
 		ilNum := new(big.Int).SetBytes(inverse(il[:28]))
 		num8 := new(big.Int).SetBytes([]byte{8})
 		ilNum.Mul(ilNum, num8)
-		il2 := inverse(ilNum.Bytes())
+
+		il2 := ilNum.Bytes()
+		if len(il2) < 32 {
+			for i := 0; i < 32-len(il2); i++ {
+				il2 = append([]byte{0x00}, il2...)
+			}
+		}
+		il2 = inverse(il2)
 		point, isinfinity := owcrypt.Point_mulBaseG_add(pubkey, il2, typeChoose)
 		if isinfinity {
 			return nil, ErrInvalidChild
