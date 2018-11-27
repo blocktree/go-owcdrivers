@@ -839,3 +839,15 @@ func Test_base58(t *testing.T){
 	 hash:=owcrypt.Hash(msg,28,owcrypt.HASH_ALG_BLAKE2B)
 	 fmt.Println("sha3-256 result",hex.EncodeToString(hash))
 	}
+
+	func Test_ONT_address(t *testing.T){
+		addr:="ATfZt5HAHrx3Xmio3Ak9rr23SyvmgNVJqU"
+		DecodeAddr, err := AddressDecode(addr, ONT_Address)
+		if err!=nil{
+			fmt.Println("ONT address decode error!!!")
+		}else{
+			fmt.Println("ONT address decode result:",hex.EncodeToString(DecodeAddr))
+		}
+		EncodeAddr := AddressEncode(DecodeAddr, ONT_Address)
+	    fmt.Println("ONT address:", EncodeAddr)
+	}

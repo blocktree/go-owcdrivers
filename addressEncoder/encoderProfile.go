@@ -2,6 +2,8 @@ package addressEncoder
 
 var (
 	btcAlphabet       = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+	ontAlphabet       = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+	xrpAlphabet       = "rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"
 	zecAlphabet       = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 	btcBech32Alphabet = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
 	btmBech32Alphabet = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
@@ -44,6 +46,10 @@ var (
 	BTC_testnetPrivateWIFCompressed = AddressType{"base58", btcAlphabet, "doubleSHA256", "", 32, []byte{0xEF}, []byte{0x01}}
 	BTC_testnetPublicBIP32          = AddressType{"base58", btcAlphabet, "doubleSHA256", "", 74, []byte{0x04, 0x35, 0x87, 0xCF}, nil}
 	BTC_testnetPrivateBIP32         = AddressType{"base58", btcAlphabet, "doubleSHA256", "", 74, []byte{0x04, 0x35, 0x83, 0x94}, nil}
+	//ONT stuff
+	ONT_Address                     = AddressType{"base58", ontAlphabet, "doubleSHA256", "h160", 20, []byte{0x17}, nil}
+	//XRP stuff
+	XRP_Address                     = AddressType{"base58", xrpAlphabet, "doubleSHA256", "h160", 20, []byte{0x00}, nil}
 	//BTM stuff
 	BTM_mainnetAddressBech32V0      = AddressType{"bech32", btcBech32Alphabet, "bm", "h160", 20, nil, nil}
 	BTM_testnetAddressBech32V0      = AddressType{"bech32", btcBech32Alphabet, "tm", "h160", 20, nil, nil}
@@ -133,5 +139,6 @@ var (
 	//TRON stuff
 	TRON_mainnetAddress = AddressType{"base58", tronAlphabet, "doubleSHA256", "keccak256_last_twenty", 20, []byte{0x41}, nil}
 	//ICX stuff
-	ICX_walletAddress =AddressType{"ICX", "", "hx", "sha3_256_last_twenty", 20, nil, nil}
+	ICX_walletAddress   = AddressType{"ICX", "", "hx", "sha3_256_last_twenty", 20, nil, nil}
+	
 )
