@@ -9,6 +9,11 @@ const (
 )
 
 const (
+	DefaultGasPrice = uint64(500)
+	DefaultGasLimit = uint64(20000)
+)
+
+const (
 	ONTContractVersion = byte(0x00)
 	ONGContractVersion = byte(0x00)
 	ONTContractAddress = "0100000000000000000000000000000000000000"
