@@ -1,6 +1,7 @@
 package ontologyTransaction
 
 import (
+	"encoding/hex"
 	"errors"
 )
 
@@ -25,6 +26,34 @@ func NewEmptyTransaction(assetType int, txType byte, nonce uint32, gasPrice, gas
 	}
 	_, payerBytes, _ := DecodeCheck(payer)
 	return Transaction{version, txType, uint32ToLittleEndianBytes(nonce), uint64ToLittleEndianBytes(gasPrice), uint64ToLittleEndianBytes(gasLimit), payerBytes, payload, DefaultAttribute, nil}
+}
+
+func (t Transaction) GetVersion() byte {
+	return t.Version
+}
+
+func (t Transaction) GetTxType() byte {
+	return t.TxType
+}
+
+func (t Transaction) GetNonce() uint32 {
+	return littleEndianBytesToUint32(t.Nonce)
+}
+
+func (t Transaction) GetGasPrice() uint64 {
+	return littleEndianBytesToUint64(t.GasPrice)
+}
+
+func (t Transaction) GetGasLimit() uint64 {
+	return littleEndianBytesToUint64(t.GaseLimit)
+}
+
+func (t Transaction) GetPayLoad() string {
+	return hex.EncodeToString(t.Payload)
+}
+
+func (t Transaction) GetPayer() string {
+	return EncodeCheck(AddressPrefix, t.Payer)
 }
 
 func (t Transaction) ToBytes() ([]byte, error) {

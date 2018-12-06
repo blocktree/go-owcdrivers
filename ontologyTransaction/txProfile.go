@@ -9,7 +9,7 @@ const (
 )
 
 const (
-	DefaultGasPrice = uint64(500)
+	DefaultGasPrice = uint64(0)
 	DefaultGasLimit = uint64(20000)
 )
 
