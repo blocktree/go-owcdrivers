@@ -1,6 +1,7 @@
 package bytomTransaction
 
 import (
+	"encoding/hex"
 	"errors"
 )
 
@@ -11,7 +12,7 @@ type TxOut struct {
 }
 
 func (out *TxOut) SetAssetID() {
-	out.AssetID = BTMAssetID
+	out.AssetID, _ = hex.DecodeString(BTMAssetID)
 }
 
 func (out *TxOut) SetControlProgram(address string) error {
