@@ -3,7 +3,7 @@ package signatureSet
 import (
 	"math/big"
 
-	owcrypt "github.com/blocktree/go-owcrypt"
+	"github.com/blocktree/go-owcrypt"
 )
 
 // according to RFC6979 standard
