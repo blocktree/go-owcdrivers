@@ -15,10 +15,9 @@ var (
 	hcAlphabet        = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 	qtumAlphabet      = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 	dcrdAlphabet      = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
-	nasAlphabet      = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
-	tronAlphabet       = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+	nasAlphabet       = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+	tronAlphabet      = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 )
-
 
 type AddressType struct {
 	encodeType   string //编码类型
@@ -46,13 +45,16 @@ var (
 	BTC_testnetPrivateWIFCompressed = AddressType{"base58", btcAlphabet, "doubleSHA256", "", 32, []byte{0xEF}, []byte{0x01}}
 	BTC_testnetPublicBIP32          = AddressType{"base58", btcAlphabet, "doubleSHA256", "", 74, []byte{0x04, 0x35, 0x87, 0xCF}, nil}
 	BTC_testnetPrivateBIP32         = AddressType{"base58", btcAlphabet, "doubleSHA256", "", 74, []byte{0x04, 0x35, 0x83, 0x94}, nil}
+
+	//DOGE_singleSignAddressP2PKH = AddressType{"base58", btcAlphabet, "doubleSHA256", "h160", 20, []byte{0x16}, nil}
+	DOGE_multiSignAddressP2PKH = AddressType{"base58", btcAlphabet, "doubleSHA256", "h160", 20, []byte{0x16}, nil}
 	//ONT stuff
-	ONT_Address                     = AddressType{"base58", ontAlphabet, "doubleSHA256", "h160", 20, []byte{0x17}, nil}
+	ONT_Address = AddressType{"base58", ontAlphabet, "doubleSHA256", "h160", 20, []byte{0x16}, nil}
 	//XRP stuff
-	XRP_Address                     = AddressType{"base58", xrpAlphabet, "doubleSHA256", "h160", 20, []byte{0x00}, nil}
+	XRP_Address = AddressType{"base58", xrpAlphabet, "doubleSHA256", "h160", 20, []byte{0x00}, nil}
 	//BTM stuff
-	BTM_mainnetAddressBech32V0      = AddressType{"bech32", btcBech32Alphabet, "bm", "h160", 20, nil, nil}
-	BTM_testnetAddressBech32V0      = AddressType{"bech32", btcBech32Alphabet, "tm", "h160", 20, nil, nil}
+	BTM_mainnetAddressBech32V0 = AddressType{"bech32", btcBech32Alphabet, "bm", "h160", 20, nil, nil}
+	BTM_testnetAddressBech32V0 = AddressType{"bech32", btcBech32Alphabet, "tm", "h160", 20, nil, nil}
 	//ZEC stuff
 	ZEC_mainnet_t_AddressP2PKH = AddressType{"base58", zecAlphabet, "doubleSHA256", "h160", 20, []byte{0x1C, 0xB8}, nil}
 	ZEC_mainnet_t_AddressP2SH  = AddressType{"base58", zecAlphabet, "doubleSHA256", "h160", 20, []byte{0x1C, 0xBD}, nil}
@@ -70,7 +72,7 @@ var (
 	LTC_mainnetPrivateBIP32         = AddressType{"base58", btcAlphabet, "doubleSHA256", "", 74, []byte{0x04, 0x88, 0xAD, 0xE4}, nil}
 	LTC_testnetAddressP2PKH         = AddressType{"base58", ltcAlphabet, "doubleSHA256", "h160", 20, []byte{0x6F}, nil}
 	LTC_testnetAddressP2SH          = AddressType{"base58", ltcAlphabet, "doubleSHA256", "h160", 20, []byte{0xC4}, nil}
-	LTC_testnetAddressP2SH2          = AddressType{"base58", ltcAlphabet, "doubleSHA256", "h160", 20, []byte{0x3A}, nil}
+	LTC_testnetAddressP2SH2         = AddressType{"base58", ltcAlphabet, "doubleSHA256", "h160", 20, []byte{0x3A}, nil}
 	LTC_testnetAddressBech32V0      = AddressType{"bech32", ltcBech32Alphabet, "tltc", "h160", 20, nil, nil}
 	LTC_testnetPrivateWIF           = AddressType{"base58", ltcAlphabet, "doubleSHA256", "", 32, []byte{0xEF}, nil}
 	LTC_testnetPrivateWIFCompressed = AddressType{"base58", ltcAlphabet, "doubleSHA256", "", 32, []byte{0xEF}, []byte{0x01}}
@@ -139,6 +141,5 @@ var (
 	//TRON stuff
 	TRON_mainnetAddress = AddressType{"base58", tronAlphabet, "doubleSHA256", "keccak256_last_twenty", 20, []byte{0x41}, nil}
 	//ICX stuff
-	ICX_walletAddress   = AddressType{"ICX", "", "hx", "sha3_256_last_twenty", 20, nil, nil}
-	
+	ICX_walletAddress = AddressType{"ICX", "", "hx", "sha3_256_last_twenty", 20, nil, nil}
 )
