@@ -2,6 +2,7 @@ package addressEncoder
 
 var (
 	btcAlphabet       = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+	xmrAlphabet       = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 	ontAlphabet       = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 	xrpAlphabet       = "rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz"
 	zecAlphabet       = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
@@ -46,6 +47,15 @@ var (
 	BTC_testnetPublicBIP32          = AddressType{"base58", btcAlphabet, "doubleSHA256", "", 74, []byte{0x04, 0x35, 0x87, 0xCF}, nil}
 	BTC_testnetPrivateBIP32         = AddressType{"base58", btcAlphabet, "doubleSHA256", "", 74, []byte{0x04, 0x35, 0x83, 0x94}, nil}
 
+	//XMR stuff
+	XMR_mainnetPublicAddress           = AddressType{"XMR", xmrAlphabet, "keccak256", "", 64, []byte{0x12}, nil}
+	XMR_mainnetPublicSubAddress        = AddressType{"XMR", xmrAlphabet, "keccak256", "", 64, []byte{0x2A}, nil}
+	XMR_mainnetPublicIntegratedAddress = AddressType{"XMR", xmrAlphabet, "keccak256", "payID", 72, []byte{0x13}, nil}
+	XMR_testnetPublicAddress           = AddressType{"XMR", xmrAlphabet, "keccak256", "", 64, []byte{0x35}, nil}
+	XMR_testnetPublicSubAddress        = AddressType{"XMR", xmrAlphabet, "keccak256", "", 64, []byte{0x3f}, nil}
+	XMR_testnetPublicIntegratedAddress = AddressType{"XMR", xmrAlphabet, "keccak256", "payID", 72, []byte{0x36}, nil}
+
+	//DOGE stuff
 	//DOGE_singleSignAddressP2PKH = AddressType{"base58", btcAlphabet, "doubleSHA256", "h160", 20, []byte{0x16}, nil}
 	DOGE_multiSignAddressP2PKH = AddressType{"base58", btcAlphabet, "doubleSHA256", "h160", 20, []byte{0x16}, nil}
 	//ONT stuff
