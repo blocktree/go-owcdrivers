@@ -7,7 +7,7 @@ import (
 	"github.com/blocktree/go-owcrypt"
 )
 
-func CreateMultiSig(required byte, pubkeys [][]byte) (string, string, error) {
+func CreateMultiSig(required byte, pubkeys [][]byte, isTestNet bool) (string, string, error) {
 	if pubkeys == nil || len(pubkeys) == 0 {
 		return "", "", errors.New("No pubkeys input!")
 	}
@@ -38,7 +38,14 @@ func CreateMultiSig(required byte, pubkeys [][]byte) (string, string, error) {
 
 	scriptHash := owcrypt.Hash(signScript, 0, owcrypt.HASH_ALG_SHA3_256)
 
-	address, err := encodeSegWitAddress(Bech32HRPSegwit, DefaultWitnessVersion, scriptHash)
+	var address string
+	var err error
+
+	if isTestNet {
+		address, err = encodeSegWitAddress(Bech32HRPSegwitTestNet, DefaultWitnessVersion, scriptHash)
+	} else {
+		address, err = encodeSegWitAddress(Bech32HRPSegwitMainNet, DefaultWitnessVersion, scriptHash)
+	}
 
 	if err != nil {
 		return "", "", err

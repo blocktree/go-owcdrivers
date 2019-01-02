@@ -20,7 +20,20 @@ type Vout struct {
 	Amount  uint64
 }
 
-func CreateEmptyRawTransaction(vins []Vin, vouts []Vout, timeRange uint64) (string, error) {
+func CreateEmptyRawTransaction(vins []Vin, vouts []Vout, timeRange uint64, isTestNet bool) (string, error) {
+
+	for _, addr := range vouts {
+		if isTestNet {
+			if addr.Address[:2] != Bech32HRPSegwitTestNet {
+				return "", errors.New("Invalid address to send!")
+			}
+		} else {
+			if addr.Address[:2] != Bech32HRPSegwitMainNet {
+				return "", errors.New("Invalid address to send!")
+			}
+		}
+	}
+
 	emptyTrans, err := newEmptyTransaction(vins, vouts, timeRange)
 	if err != nil {
 		return "", err
@@ -34,7 +47,7 @@ func CreateEmptyRawTransaction(vins []Vin, vouts []Vout, timeRange uint64) (stri
 	return hex.EncodeToString(txBytes), nil
 }
 
-func CreateRawTransactionHashForSig(txHex string) ([]TxHash, error) {
+func CreateRawTransactionHashForSig(txHex string, isTestNet bool) ([]TxHash, error) {
 	txBytes, err := hex.DecodeString(txHex)
 	if err != nil {
 		return nil, errors.New("Invalid transaction hex string!")
@@ -57,7 +70,14 @@ func CreateRawTransactionHashForSig(txHex string) ([]TxHash, error) {
 		if len(emptyTrans.Inputs[i].ControlProgram) == 34 {
 			tH.NRequired = 1
 		} else {
-			addr, err := encodeSegWitAddress(Bech32HRPSegwit, DefaultWitnessVersion, emptyTrans.Inputs[i].ControlProgram[2:])
+
+			var addr string
+			var err error
+			if isTestNet {
+				addr, err = encodeSegWitAddress(Bech32HRPSegwitTestNet, DefaultWitnessVersion, emptyTrans.Inputs[i].ControlProgram[2:])
+			} else {
+				addr, err = encodeSegWitAddress(Bech32HRPSegwitMainNet, DefaultWitnessVersion, emptyTrans.Inputs[i].ControlProgram[2:])
+			}
 
 			if err != nil {
 				return nil, err

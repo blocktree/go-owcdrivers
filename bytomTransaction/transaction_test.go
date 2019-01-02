@@ -34,7 +34,7 @@ func Test_case1(t *testing.T) {
 	timeRange := uint64(0)
 
 	// 构建空交易单
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, timeRange)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, timeRange, false)
 
 	if err != nil {
 		t.Error("创建空交易单失败")
@@ -43,7 +43,7 @@ func Test_case1(t *testing.T) {
 	}
 
 	// 获取交易单哈希
-	txHash, err := CreateRawTransactionHashForSig(emptyTrans)
+	txHash, err := CreateRawTransactionHashForSig(emptyTrans, false)
 
 	if err != nil {
 		fmt.Println(err)
@@ -128,7 +128,7 @@ func Test_case2(t *testing.T) {
 	timeRange := uint64(654)
 
 	// 构建空交易单
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in1, in2}, []Vout{out1, out2}, timeRange)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in1, in2}, []Vout{out1, out2}, timeRange, false)
 
 	if err != nil {
 		t.Error("创建空交易单失败")
@@ -137,7 +137,7 @@ func Test_case2(t *testing.T) {
 	}
 
 	// 获取交易单的签名哈希
-	txHash, err := CreateRawTransactionHashForSig(emptyTrans)
+	txHash, err := CreateRawTransactionHashForSig(emptyTrans, false)
 
 	if err != nil {
 		fmt.Println(err)
@@ -211,7 +211,7 @@ func Test_case3(t *testing.T) {
 	addressCHK := "bm1qxduz8fah8g2kz8q9lze4rnwtujy50325wmv082zsg7sxl08fs7zqz0kr08"
 	signScriptCHK := "ae20a560f736c78313cf59007dab5de5804d22afded4345e34029b605412420b8831209f3b0af50d33ac7be238b9059783da7cc6ec71f56befd082a696509ecdce06095252ad"
 
-	address, signScript, err := CreateMultiSig(required, [][]byte{key1, key2})
+	address, signScript, err := CreateMultiSig(required, [][]byte{key1, key2}, false)
 
 	if err != nil {
 		t.Error("创建多签地址失败")
@@ -238,7 +238,7 @@ func Test_case4(t *testing.T) {
 	prikey2 := []byte{0xB0, 0x22, 0xEE, 0x6F, 0x15, 0x23, 0x93, 0x19, 0x62, 0x23, 0xB3, 0xAF, 0x19, 0x3B, 0x8F, 0x6F, 0x62, 0x85, 0x55, 0xEC, 0xAE, 0x23, 0xF4, 0xCB, 0x1A, 0x49, 0x83, 0x7E, 0x06, 0xB9, 0x70, 0x5F}
 	pubkey1 := owcrypt.Point_mulBaseG(prikey1, owcrypt.ECC_CURVE_ED25519)
 	pubkey2 := owcrypt.Point_mulBaseG(prikey2, owcrypt.ECC_CURVE_ED25519)
-	_, signScript, _ := CreateMultiSig(2, [][]byte{pubkey1, pubkey2})
+	_, signScript, _ := CreateMultiSig(2, [][]byte{pubkey1, pubkey2}, false)
 	signScriptBytes, _ := hex.DecodeString(signScript)
 	controlProgramBytes := owcrypt.Hash(signScriptBytes, 0, owcrypt.HASH_ALG_SHA3_256)
 
@@ -264,7 +264,7 @@ func Test_case4(t *testing.T) {
 	timeRange := uint64(0)
 
 	// 构建空交易单
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, timeRange)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, timeRange, false)
 
 	if err != nil {
 		t.Error("创建空交易单失败")
@@ -273,7 +273,7 @@ func Test_case4(t *testing.T) {
 	}
 
 	// 获取交易单哈希
-	txHash, err := CreateRawTransactionHashForSig(emptyTrans)
+	txHash, err := CreateRawTransactionHashForSig(emptyTrans, false)
 
 	if err != nil {
 		fmt.Println(err)

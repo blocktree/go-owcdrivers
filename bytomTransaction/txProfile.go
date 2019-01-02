@@ -1,7 +1,8 @@
 package bytomTransaction
 
 const (
-	Bech32HRPSegwit           = "bm"
+	Bech32HRPSegwitMainNet    = "bm"
+	Bech32HRPSegwitTestNet    = "tm"
 	HashPrefixEntry           = "entryid:"
 	HashPrefixOutput          = "output1:"
 	HashPrefixSpend           = "spend1:"
