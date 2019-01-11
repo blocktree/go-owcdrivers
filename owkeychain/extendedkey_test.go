@@ -572,3 +572,82 @@ func Test_privateKey_start_with_ZERO(t *testing.T) {
 		}
 	}
 }
+
+func Test_ed25519_extend(t *testing.T) {
+	// owner, _ := OWDecode("owpubeyoV6GSa7Tbbxm6xsjgv9VtGACjZxFjBbsKDMybSWqjEF3CJpNVrTeSGuWGYQptoPLtGy5qqfWPguThJdiFm8omhknN1D2LWWkYu25jrM1yrvFtrY")
+
+	// fmt.Println(hex.EncodeToString(owner.key))
+	// fmt.Println(owner.OWEncode())
+	//seed := [64]byte{0x40, 0x3E, 0x5A, 0xB7, 0x1F, 0x5C, 0x1A, 0x4C, 0xCD, 0xD1, 0x0C, 0xE6, 0x9A, 0x02, 0x14, 0xF1, 0x0A, 0x47, 0x8B, 0xFD, 0x64, 0x6A, 0xD9, 0x31, 0xC9, 0x21, 0x22, 0x1E, 0xB3, 0xFA, 0xB3, 0x42, 0x2B, 0x14, 0xB5, 0x68, 0x5A, 0xAB, 0x4C, 0xB2, 0x75, 0x2A, 0xF0, 0xB0, 0x0B, 0x6B, 0x1B, 0x55, 0xCB, 0xBE, 0x24, 0xF7, 0x21, 0xCB, 0x73, 0x3D, 0x68, 0xE3, 0xB6, 0xF3, 0x02, 0xA6, 0x35, 0xF4}
+	seed := [32]byte{0x89, 0xb1, 0x79, 0x7a, 0x20, 0xba, 0x70, 0x0d, 0xe2, 0x73, 0xfe, 0xad, 0xac, 0x21, 0x0e, 0x0b, 0x15, 0x25, 0x53, 0x06, 0xac, 0x01, 0x14, 0x2d, 0x1f, 0x0a, 0x13, 0x38, 0x25, 0x71, 0xc3, 0xb0}
+	path := "m/44'/88'/1'"
+	pkey, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_ED25519_EXTEND)
+	if err != nil {
+		t.Error("产生失败！")
+	} else {
+
+		fmt.Println("1: ", hex.EncodeToString(pkey.key))
+
+	}
+
+	ppub := pkey.GetPublicKey()
+	if err != nil {
+		t.Error("产生失败！")
+	} else {
+
+		fmt.Println(hex.EncodeToString(ppub.key))
+
+	}
+
+	//fmt.Println(ppub.OWEncode())
+
+	cpub, err := ppub.GenPublicChild(0)
+
+	if err != nil {
+		t.Error("产生失败！")
+	} else {
+
+		fmt.Println(hex.EncodeToString(cpub.key))
+
+	}
+
+	cpub1, err := cpub.GenPublicChild(0)
+
+	if err != nil {
+		t.Error("产生失败！")
+	} else {
+
+		fmt.Println("2 ", hex.EncodeToString(cpub1.key))
+
+	}
+
+	path = "m/44'/88'/1'/0/2"
+	cpri, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_ED25519_EXTEND)
+	if err != nil {
+		t.Error("产生失败！")
+	} else {
+
+		fmt.Println(hex.EncodeToString(cpri.key))
+
+	}
+
+	// path = "/0"
+	// prikey, err := pkey.GenPublicChild(0)
+	// if err != nil {
+	// 	t.Error("产生失败！")
+	// } else {
+
+	// 	fmt.Println(hex.EncodeToString(prikey.key))
+
+	// }
+	// path = "/0"
+
+	// pubkey, err := pkey.DerivedPublicKeyFromPath(path)
+	// if err != nil {
+	// 	t.Error("产生失败！")
+	// } else {
+
+	// 	fmt.Println(hex.EncodeToString(pubkey.key))
+
+	// }
+}

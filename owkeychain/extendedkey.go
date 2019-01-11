@@ -4,6 +4,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha512"
 	"encoding/binary"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"math/big"
@@ -92,11 +93,11 @@ func inverse(data []byte) []byte {
 
 func getPriChildViaPriParent(il, prikey []byte, typeChoose uint32) ([]byte, error) {
 	priChild := []byte{}
-	if typeChoose == owcrypt.ECC_CURVE_ED25519 {
+	if typeChoose == owcrypt.ECC_CURVE_ED25519_EXTEND {
 		ilNum := new(big.Int).SetBytes(inverse(il[:28]))
 		kpr := new(big.Int).SetBytes(inverse(prikey))
 		num8 := new(big.Int).SetBytes([]byte{8})
-		curveOrder := new(big.Int).SetBytes(owcrypt.GetCurveOrder(typeChoose))
+		curveOrder := new(big.Int).SetBytes(owcrypt.GetCurveOrder(owcrypt.ECC_CURVE_ED25519))
 		ilNum.Mul(ilNum, num8)
 		ilNum.Add(ilNum, kpr)
 		check := new(big.Int).Mod(ilNum, curveOrder)
@@ -133,7 +134,7 @@ func getPriChildViaPriParent(il, prikey []byte, typeChoose uint32) ([]byte, erro
 }
 
 func getPubChildViaPubParent(il, pubkey []byte, typeChoose uint32) ([]byte, error) {
-	if typeChoose == owcrypt.ECC_CURVE_ED25519 {
+	if typeChoose == owcrypt.ECC_CURVE_ED25519_EXTEND {
 		ilNum := new(big.Int).SetBytes(inverse(il[:28]))
 		num8 := new(big.Int).SetBytes([]byte{8})
 		ilNum.Mul(ilNum, num8)
@@ -145,7 +146,7 @@ func getPubChildViaPubParent(il, pubkey []byte, typeChoose uint32) ([]byte, erro
 			}
 		}
 		il2 = inverse(il2)
-		point, isinfinity := owcrypt.Point_mulBaseG_add(pubkey, il2, typeChoose)
+		point, isinfinity := owcrypt.Point_mulBaseG_add(pubkey, il2, owcrypt.ECC_CURVE_ED25519)
 		if isinfinity {
 			return nil, ErrInvalidChild
 		}
@@ -228,6 +229,9 @@ func (k *ExtendedKey) GenPublicChild(serializes uint32) (*ExtendedKey, error) {
 
 	}
 	childPrikey, err := k.GenPrivateChild(serializes)
+
+	fmt.Println("pri: ", hex.EncodeToString(childPrikey.key))
+
 	if err != nil {
 		return nil, err
 	}
@@ -245,7 +249,7 @@ func InitRootKeyFromSeed(seed []byte, curveType uint32) (*ExtendedKey, error) {
 	ctx := sha512.New()
 	ctx.Write(seed)
 	i := ctx.Sum(nil)
-	if curveType == owcrypt.ECC_CURVE_ED25519 {
+	if curveType == owcrypt.ECC_CURVE_ED25519_EXTEND {
 		i[0] &= 248
 		i[31] &= 63
 		i[31] |= 64
