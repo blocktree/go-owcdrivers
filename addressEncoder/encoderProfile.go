@@ -18,6 +18,7 @@ var (
 	dcrdAlphabet      = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 	nasAlphabet       = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 	tronAlphabet      = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+	vsysAlphabet      = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 )
 
 type AddressType struct {
@@ -152,4 +153,8 @@ var (
 	TRON_mainnetAddress = AddressType{"base58", tronAlphabet, "doubleSHA256", "keccak256_last_twenty", 20, []byte{0x41}, nil}
 	//ICX stuff
 	ICX_walletAddress = AddressType{"ICX", "", "hx", "sha3_256_last_twenty", 20, nil, nil}
+
+	//VSYS stuff
+	VSYS_mainnetAddress = AddressType{"base58", vsysAlphabet, "blake2b_and_keccak256_first_twenty", "blake2b_and_keccak256_first_twenty", 20, []byte{0x05, 0x4D}, nil}
+	VSYS_testnetAddress = AddressType{"base58", vsysAlphabet, "blake2b_and_keccak256_first_twenty", "blake2b_and_keccak256_first_twenty", 20, []byte{0x05, 0x54}, nil}
 )

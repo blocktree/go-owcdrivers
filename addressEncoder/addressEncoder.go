@@ -30,6 +30,9 @@ func calcChecksum(data []byte, chkType string) []byte {
 	if chkType == "sha3_256" {
 		return owcrypt.Hash(data, 0, owcrypt.HASH_ALG_SHA3_256)[:4]
 	}
+	if chkType == "blake2b_and_keccak256_first_twenty" {
+		return owcrypt.Hash(owcrypt.Hash(data, 32, owcrypt.HASH_ALG_BLAKE2B), 32, owcrypt.HASH_ALG_KECCAK256)[:4]
+	}
 	return nil
 }
 
@@ -114,6 +117,9 @@ func calcHash(data []byte, hashType string) []byte {
 	}
 	if hashType == "keccak256_last_twenty" {
 		return owcrypt.Hash(data, 32, owcrypt.HASH_ALG_KECCAK256)[12:32]
+	}
+	if hashType == "blake2b_and_keccak256_first_twenty" {
+		return owcrypt.Hash(owcrypt.Hash(data, 32, owcrypt.HASH_ALG_BLAKE2B), 32, owcrypt.HASH_ALG_KECCAK256)[:20]
 	}
 	return nil
 }

@@ -935,3 +935,27 @@ func Test_xmrAddress(t *testing.T) {
 	}
 	//----------------------------end--------------------------
 }
+
+func Test_VSYSAddress(t *testing.T) {
+	pubkey, _ := hex.DecodeString("a9d59feec551438cc7437e39cd75328bc0c345bfc8fc918843c2548772ba2640")
+	hash := owcrypt.Hash(pubkey, 32, owcrypt.HASH_ALG_BLAKE2B)
+	hash = owcrypt.Hash(hash, 32, owcrypt.HASH_ALG_KECCAK256)[:20]
+	fmt.Println(hex.EncodeToString(hash))
+
+	address := AddressEncode(hash, VSYS_mainnetAddress)
+
+	fmt.Println(address)
+	if address != "ARQEGuxzau9ZSsPgWWHNJYgVPUxJYQeGb4F" {
+		t.Error("vsys address encode failed")
+	} else {
+		fmt.Println(address)
+	}
+
+	chk, err := AddressDecode(address, VSYS_mainnetAddress)
+
+	if err != nil {
+		t.Error("vsys address decode failed!")
+	} else {
+		fmt.Println(hex.EncodeToString(chk))
+	}
+}
