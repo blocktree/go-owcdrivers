@@ -51,11 +51,11 @@ func (tx TxHash) GetMultiTxPubkeys() []string {
 
 func newTxHash(hash, lockscript, redeem []byte, inType, sigType byte) (*TxHash, error) {
 	if inType == TypeP2PKH {
-		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{EncodeCheck(P2PKHPrefix, lockscript[3:23]), sigType, SignaturePubkey{nil, nil}}, nil}, nil
+		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{ /*EncodeCheck(P2PKHPrefix, lockscript[3:23])*/ "", sigType, SignaturePubkey{nil, nil}}, nil}, nil
 	} else if inType == TypeP2WPKH {
-		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{EncodeCheck(P2WPKHPrefix, lockscript[2:22]), sigType, SignaturePubkey{nil, nil}}, nil}, nil
+		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{ /*EncodeCheck(P2WPKHPrefix, lockscript[2:22])*/ "", sigType, SignaturePubkey{nil, nil}}, nil}, nil
 	} else if inType == TypeBech32 {
-		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{Bech32Encode(Bech32Prefix, BTCBech32Alphabet, lockscript[2:]), sigType, SignaturePubkey{nil, nil}}, nil}, nil
+		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{ /*Bech32Encode(Bech32Prefix, BTCBech32Alphabet, lockscript[2:])*/ "", sigType, SignaturePubkey{nil, nil}}, nil}, nil
 	} else if inType == TypeMultiSig {
 		nRequired, pubkeys, err := getMultiDetails(redeem)
 		if err != nil {
