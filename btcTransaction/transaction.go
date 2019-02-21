@@ -26,8 +26,8 @@ type TxUnlock struct {
 	SigType byte
 }
 
-func CreateEmptyRawTransaction(vins []Vin, vouts []Vout, lockTime uint32, replaceable bool) (string, error) {
-	emptyTrans, err := newEmptyTransaction(vins, vouts, lockTime, replaceable)
+func CreateEmptyRawTransaction(vins []Vin, vouts []Vout, lockTime uint32, replaceable bool, symbol string, isTestNet bool) (string, error) {
+	emptyTrans, err := newEmptyTransaction(vins, vouts, lockTime, replaceable, symbol, isTestNet)
 	if err != nil {
 		return "", err
 	}
@@ -40,7 +40,7 @@ func CreateEmptyRawTransaction(vins []Vin, vouts []Vout, lockTime uint32, replac
 	return hex.EncodeToString(txBytes), nil
 }
 
-func CreateRawTransactionHashForSig(txHex string, unlockData []TxUnlock, SegwitON bool) ([]TxHash, error) {
+func CreateRawTransactionHashForSig(txHex string, unlockData []TxUnlock, SegwitON bool, symbol string, isTestNet bool) ([]TxHash, error) {
 	txBytes, err := hex.DecodeString(txHex)
 	if err != nil {
 		return nil, errors.New("Invalid transaction hex string!")
@@ -51,7 +51,7 @@ func CreateRawTransactionHashForSig(txHex string, unlockData []TxUnlock, SegwitO
 		return nil, err
 	}
 
-	return emptyTrans.getHashesForSig(unlockData, SegwitON)
+	return emptyTrans.getHashesForSig(unlockData, SegwitON, symbol, isTestNet)
 }
 
 func SignRawTransactionHash(txHash string, prikey []byte) (*SignaturePubkey, error) {
@@ -164,7 +164,7 @@ func InsertSignatureIntoEmptyTransaction(txHex string, txHashes []TxHash, unlock
 	return hex.EncodeToString(ret), nil
 }
 
-func VerifyRawTransaction(txHex string, unlockData []TxUnlock, SegwitON bool) bool {
+func VerifyRawTransaction(txHex string, unlockData []TxUnlock, SegwitON bool, symbol string, isTestNet bool) bool {
 	txBytes, err := hex.DecodeString(txHex)
 	if err != nil {
 		return false
@@ -181,7 +181,7 @@ func VerifyRawTransaction(txHex string, unlockData []TxUnlock, SegwitON bool) bo
 
 	emptyTrans := signedTrans.cloneEmpty()
 
-	txHash, err := emptyTrans.getHashesForSig(unlockData, SegwitON)
+	txHash, err := emptyTrans.getHashesForSig(unlockData, SegwitON, symbol, isTestNet)
 	if err != nil {
 		return false
 	}

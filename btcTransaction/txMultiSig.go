@@ -17,7 +17,7 @@ type txMultiSig struct {
 	sigPub    []SignaturePubkey
 }
 
-func CreateMultiSig(required byte, pubkeys [][]byte, SegwitON bool) (string, string, error) {
+func CreateMultiSig(required byte, pubkeys [][]byte, SegwitON bool, symbol string, isTestNet bool) (string, string, error) {
 	if required < 1 {
 		return "", "", errors.New("A multisignature address must require at least one key to redeem!")
 	}
@@ -55,7 +55,21 @@ func CreateMultiSig(required byte, pubkeys [][]byte, SegwitON bool) (string, str
 	} else {
 		redeemHash = owcrypt.Hash(redeem, 0, owcrypt.HASH_ALG_HASH160)
 	}
-	return EncodeCheck(P2WPKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
+
+	if symbol == "btc" || symbol == "bch" {
+		if isTestNet {
+			return EncodeCheck(BTCMainNetP2PKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
+		}
+		return EncodeCheck(BTCTestNetP2PKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
+	} else if symbol == "ltc" {
+		if isTestNet {
+			return EncodeCheck(LTCMainNetP2PKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
+		}
+		return EncodeCheck(LTCTestNetP2PKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
+	} else {
+		return "", "", errors.New("Unknown coin type!")
+	}
+
 }
 
 func getMultiDetails(redeem []byte) (byte, []string, error) {

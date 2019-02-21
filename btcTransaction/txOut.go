@@ -10,16 +10,41 @@ type TxOut struct {
 	lockScript []byte
 }
 
-func newTxOutForEmptyTrans(vout []Vout) ([]TxOut, error) {
+func newTxOutForEmptyTrans(vout []Vout, symbol string, isTestNet bool) ([]TxOut, error) {
 	if vout == nil || len(vout) == 0 {
 		return nil, errors.New("No address to send when create an empty transaction!")
 	}
 	var ret []TxOut
-
+	var prefixStr string
+	var p2pkhPrefixByte byte
+	var p2wpkhPrefixByte byte
+	if symbol == "btc" || symbol == "bch" {
+		if isTestNet {
+			prefixStr = BTCTestNetBech32Prefix
+			p2pkhPrefixByte = BTCTestNetP2PKHPrefix
+			p2wpkhPrefixByte = BTCTestNetP2WPKHPrefix
+		} else {
+			prefixStr = BTCMainNetBech32Prefix
+			p2pkhPrefixByte = BTCMainNetP2PKHPrefix
+			p2wpkhPrefixByte = BTCMainNetP2WPKHPrefix
+		}
+	} else if symbol == "ltc" {
+		if isTestNet {
+			prefixStr = LTCTestNetBech32Prefix
+			p2pkhPrefixByte = LTCTestNetP2PKHPrefix
+			p2wpkhPrefixByte = LTCTestNetP2WPKHPrefix
+		} else {
+			prefixStr = LTCMainNetBech32Prefix
+			p2pkhPrefixByte = LTCMainNetP2PKHPrefix
+			p2wpkhPrefixByte = LTCMainNetP2WPKHPrefix
+		}
+	} else {
+		return nil, errors.New("Unknown coin type!")
+	}
 	for _, v := range vout {
 		amount := uint64ToLittleEndianBytes(v.Amount)
 
-		if strings.Index(v.Address, Bech32Prefix) == 0 || strings.Index(v.Address, LTCBech32Prefix) == 0 {
+		if strings.Index(v.Address, prefixStr) == 0 {
 			redeem, err := Bech32Decode(v.Address)
 			if err != nil {
 				return nil, errors.New("Invalid bech32 type address!")
@@ -42,10 +67,10 @@ func newTxOutForEmptyTrans(vout []Vout) ([]TxOut, error) {
 
 		hash = append([]byte{byte(len(hash))}, hash...)
 		hash = append([]byte{OpCodeHash160}, hash...)
-		if prefix == P2PKHPrefix || prefix == LTCP2PKHPrefix {
+		if prefix == p2pkhPrefixByte {
 			hash = append(hash, OpCodeEqualVerify, OpCodeCheckSig)
 			hash = append([]byte{OpCodeDup}, hash...)
-		} else if prefix == P2WPKHPrefix || prefix == LTCP2WPKHPrefix {
+		} else if prefix == p2wpkhPrefixByte {
 			hash = append(hash, OpCodeEqual)
 		} else {
 			return nil, errors.New("Invalid address to send!")

@@ -1,12 +1,19 @@
 package btcTransaction
 
 const (
-	P2PKHPrefix     = byte(0x00)
-	P2WPKHPrefix    = byte(0x05)
-	Bech32Prefix    = "bc"
-	LTCP2PKHPrefix  = byte(0x30)
-	LTCP2WPKHPrefix = byte(0x05)
-	LTCBech32Prefix = "ltc"
+	BTCMainNetP2PKHPrefix  = byte(0x00)
+	BTCTestNetP2PKHPrefix  = byte(0x6F)
+	BTCMainNetP2WPKHPrefix = byte(0x05)
+	BTCTestNetP2WPKHPrefix = byte(0xC4)
+	BTCMainNetBech32Prefix = "bc"
+	BTCTestNetBech32Prefix = "tb"
+
+	LTCMainNetP2PKHPrefix  = byte(0x30)
+	LTCTestNetP2PKHPrefix  = byte(0x6F)
+	LTCMainNetP2WPKHPrefix = byte(0x05)
+	LTCTestNetP2WPKHPrefix = byte(0xC4)
+	LTCMainNetBech32Prefix = "ltc"
+	LTCTestNetBech32Prefix = "tltc"
 )
 
 const (
