@@ -3,6 +3,7 @@ package btcTransaction
 import (
 	"encoding/hex"
 	"errors"
+	"strings"
 
 	"github.com/blocktree/go-owcrypt"
 )
@@ -27,7 +28,8 @@ type TxUnlock struct {
 }
 
 func CreateEmptyRawTransaction(vins []Vin, vouts []Vout, lockTime uint32, replaceable bool, symbol string, isTestNet bool) (string, error) {
-	emptyTrans, err := newEmptyTransaction(vins, vouts, lockTime, replaceable, symbol, isTestNet)
+	lowerCaseSymbol := strings.ToLower(symbol)
+	emptyTrans, err := newEmptyTransaction(vins, vouts, lockTime, replaceable, lowerCaseSymbol, isTestNet)
 	if err != nil {
 		return "", err
 	}
@@ -51,7 +53,9 @@ func CreateRawTransactionHashForSig(txHex string, unlockData []TxUnlock, SegwitO
 		return nil, err
 	}
 
-	return emptyTrans.getHashesForSig(unlockData, SegwitON, symbol, isTestNet)
+	lowerCaseSymbol := strings.ToLower(symbol)
+
+	return emptyTrans.getHashesForSig(unlockData, SegwitON, lowerCaseSymbol, isTestNet)
 }
 
 func SignRawTransactionHash(txHash string, prikey []byte) (*SignaturePubkey, error) {
@@ -180,8 +184,8 @@ func VerifyRawTransaction(txHex string, unlockData []TxUnlock, SegwitON bool, sy
 	}
 
 	emptyTrans := signedTrans.cloneEmpty()
-
-	txHash, err := emptyTrans.getHashesForSig(unlockData, SegwitON, symbol, isTestNet)
+	lowerCaseSymbol := strings.ToLower(symbol)
+	txHash, err := emptyTrans.getHashesForSig(unlockData, SegwitON, lowerCaseSymbol, isTestNet)
 	if err != nil {
 		return false
 	}
