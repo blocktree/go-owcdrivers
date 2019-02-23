@@ -651,3 +651,25 @@ func Test_ed25519_extend(t *testing.T) {
 
 	// }
 }
+
+func Test_ed25519_extend2(t *testing.T) {
+	seed := []byte{0x7a, 0xd1, 0xdf, 0x7c, 0x25, 0x13, 0xa5, 0xbe, 0xfe, 0x3e, 0x65, 0x2d, 0xcd, 0x1b, 0x67, 0xe2, 0x48, 0x40, 0x3c, 0x22, 0xd4, 0xc1, 0x55, 0x0e, 0x17, 0x1d, 0xf4, 0x6c, 0xea, 0xa3, 0x91, 0x35}
+	path := "m/44'/88'/1'/0/0"
+	pkey, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_ED25519_EXTEND)
+	if err != nil {
+		t.Error("产生失败！")
+	} else {
+		fmt.Println("1: ", hex.EncodeToString(pkey.key))
+	}
+
+	ppub := pkey.GetPublicKey()
+	if err != nil {
+		t.Error("产生失败！")
+	} else {
+		fmt.Println(hex.EncodeToString(ppub.key))
+	}
+
+	chk := owcrypt.Point_mulBaseG(pkey.key, owcrypt.ECC_CURVE_ED25519)
+
+	fmt.Println(hex.EncodeToString(chk))
+}

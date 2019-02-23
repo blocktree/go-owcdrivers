@@ -67,14 +67,15 @@ func SignTransaction(emptyTrans string, prikey []byte) (*SignaturePubkey, error)
 		return nil, errors.New("Failed to sign the transaction!")
 	}
 
-	pub, ret := owcrypt.GenPubkey(prikey, owcrypt.ECC_CURVE_ED25519_REF10)
-	if ret != owcrypt.SUCCESS {
+	pub := owcrypt.Point_mulBaseG(prikey, owcrypt.ECC_CURVE_ED25519_REF10)
+
+	cpub, err := owcrypt.CURVE25519_convert_X_to_Ed(pub)
+	if err != nil {
 		return nil, errors.New("Failed to sign the transaction!")
 	}
-
 	return &SignaturePubkey{
 		Signature: sig,
-		PublicKey: pub,
+		PublicKey: cpub,
 	}, nil
 }
 
