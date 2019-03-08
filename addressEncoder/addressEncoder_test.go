@@ -391,6 +391,10 @@ func Test_TRON_address(t *testing.T) {
 	} else {
 		fmt.Println("tron decodeAddr=:", hex.EncodeToString(decodeAddr))
 	}
+
+
+	encodeTestnetAddr := AddressEncode(decodeAddr, TRON_testnetAddress)
+	fmt.Println("tron encodeTestnetAddr=:", string(encodeTestnetAddr))
 }
 
 func Test_bch32_multi(t *testing.T) {

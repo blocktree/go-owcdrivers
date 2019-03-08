@@ -151,6 +151,7 @@ var (
 
 	//TRON stuff
 	TRON_mainnetAddress = AddressType{"base58", tronAlphabet, "doubleSHA256", "keccak256_last_twenty", 20, []byte{0x41}, nil}
+	TRON_testnetAddress = AddressType{"base58", tronAlphabet, "doubleSHA256", "keccak256_last_twenty", 20, []byte{0xa0}, nil}
 	//ICX stuff
 	ICX_walletAddress = AddressType{"ICX", "", "hx", "sha3_256_last_twenty", 20, nil, nil}
 
