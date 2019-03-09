@@ -140,8 +140,9 @@ func getPubChildViaPubParent(il, pubkey []byte, typeChoose uint32) ([]byte, erro
 		ilNum.Mul(ilNum, num8)
 
 		il2 := ilNum.Bytes()
-		if len(il2) < 32 {
-			for i := 0; i < 32-len(il2); i++ {
+		il2Len := len(il2)
+		if il2Len < 32 {
+			for i := 0; i < 32-il2Len; i++ {
 				il2 = append([]byte{0x00}, il2...)
 			}
 		}
