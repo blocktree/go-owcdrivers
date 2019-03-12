@@ -419,7 +419,7 @@ func AddressCheck(addr string, symbol string) (bool, error) {
 			}
 		}
 		//other type(TODO)
-	case "TRON":
+	case "TRX":
 		if addr[0] == 'T' {
 			_, err = AddressDecode(addr, TRON_mainnetAddress)
 			if err == nil {
