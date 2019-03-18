@@ -437,6 +437,15 @@ func AddressCheck(addr string, symbol string) (bool, error) {
 				return false, err
 			}
 		}
+	case "VSYS":
+		if addr[0] == 'A' && addr[1] == 'R' {
+			_, err = AddressDecode(addr, VSYS_mainnetAddress)
+			if err == nil {
+				return true, err
+			} else {
+				return false, err
+			}
+		}
 	default:
 		return false, ErrorSymbolType
 	}
