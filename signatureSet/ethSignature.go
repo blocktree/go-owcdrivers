@@ -1,7 +1,6 @@
 package signatureSet
 
 import (
-	"errors"
 	"math/big"
 
 	"github.com/blocktree/go-owcrypt"
@@ -246,12 +245,4 @@ func EthSignature(prikey []byte, hash []byte) ([]byte, uint16) {
 		}
 	}
 	return signature, ret
-}
-
-func VSYSSignature(prikey, msg []byte) ([]byte, error) {
-	sig, err := owcrypt.Signature(prikey, nil, 0, msg, uint16(len(msg)), owcrypt.ECC_CURVE_ED25519_REF10)
-	if err != owcrypt.SUCCESS {
-		return nil, errors.New("VSYS sign failed!")
-	}
-	return sig, nil
 }
