@@ -36,7 +36,7 @@ func calcSignaturePubkey(hash, prikey []byte) (*SigPub, error) {
 		return nil, errors.New("Miss transaction hash or prikey data!")
 	}
 
-	sig, err := owcrypt.Signature(prikey, nil, 0, hash, 32, owcrypt.ECC_CURVE_ED25519_EXTEND)
+	sig, err := owcrypt.Signature(prikey, nil, 0, hash, 32, owcrypt.ECC_CURVE_ED25519)
 
 	if err != owcrypt.SUCCESS {
 		return nil, errors.New("sign error!")
@@ -44,7 +44,7 @@ func calcSignaturePubkey(hash, prikey []byte) (*SigPub, error) {
 
 	sp.Signature = sig
 
-	pub := owcrypt.Point_mulBaseG(prikey, owcrypt.ECC_CURVE_ED25519)
+	pub := owcrypt.Point_mulBaseG(prikey, owcrypt.ECC_CURVE_ED25519_NORMAL)
 
 	sp.Pubkey = pub
 

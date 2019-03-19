@@ -93,11 +93,14 @@ func inverse(data []byte) []byte {
 
 func getPriChildViaPriParent(il, prikey []byte, typeChoose uint32) ([]byte, error) {
 	priChild := []byte{}
-	if typeChoose == owcrypt.ECC_CURVE_ED25519_EXTEND {
+	if typeChoose == owcrypt.ECC_CURVE_X25519 {
+		typeChoose = owcrypt.ECC_CURVE_ED25519
+	}
+	if typeChoose == owcrypt.ECC_CURVE_ED25519 {
 		ilNum := new(big.Int).SetBytes(inverse(il[:28]))
 		kpr := new(big.Int).SetBytes(inverse(prikey))
 		num8 := new(big.Int).SetBytes([]byte{8})
-		curveOrder := new(big.Int).SetBytes(owcrypt.GetCurveOrder(owcrypt.ECC_CURVE_ED25519))
+		curveOrder := new(big.Int).SetBytes(owcrypt.GetCurveOrder(typeChoose))
 		ilNum.Mul(ilNum, num8)
 		ilNum.Add(ilNum, kpr)
 		check := new(big.Int).Mod(ilNum, curveOrder)
@@ -134,7 +137,10 @@ func getPriChildViaPriParent(il, prikey []byte, typeChoose uint32) ([]byte, erro
 }
 
 func getPubChildViaPubParent(il, pubkey []byte, typeChoose uint32) ([]byte, error) {
-	if typeChoose == owcrypt.ECC_CURVE_ED25519_EXTEND {
+	if typeChoose == owcrypt.ECC_CURVE_X25519 {
+		typeChoose = owcrypt.ECC_CURVE_ED25519
+	}
+	if typeChoose == owcrypt.ECC_CURVE_ED25519 {
 		ilNum := new(big.Int).SetBytes(inverse(il[:28]))
 		num8 := new(big.Int).SetBytes([]byte{8})
 		ilNum.Mul(ilNum, num8)
@@ -147,7 +153,7 @@ func getPubChildViaPubParent(il, pubkey []byte, typeChoose uint32) ([]byte, erro
 			}
 		}
 		il2 = inverse(il2)
-		point, isinfinity := owcrypt.Point_mulBaseG_add(pubkey, il2, owcrypt.ECC_CURVE_ED25519)
+		point, isinfinity := owcrypt.Point_mulBaseG_add(pubkey, il2, typeChoose)
 		if isinfinity {
 			return nil, ErrInvalidChild
 		}
@@ -172,6 +178,9 @@ func getFP(key []byte, isPrivate bool, typeChoose uint32) []byte {
 	if !isPrivate {
 		fingerPrint = owcrypt.Hash(key, 0, owcrypt.HASH_ALG_HASH160)[:4]
 	} else {
+		if typeChoose == owcrypt.ECC_CURVE_X25519 {
+			typeChoose = owcrypt.ECC_CURVE_ED25519
+		}
 		pubkey := owcrypt.Point_mulBaseG(key, typeChoose)
 		fingerPrint = owcrypt.Hash(pubkey, 0, owcrypt.HASH_ALG_HASH160)[:4]
 	}
@@ -180,6 +189,10 @@ func getFP(key []byte, isPrivate bool, typeChoose uint32) []byte {
 
 //GenPrivateChild 通过k扩展子私钥
 func (k *ExtendedKey) GenPrivateChild(serializes uint32) (*ExtendedKey, error) {
+	typeChoose := k.curveType
+	if typeChoose == owcrypt.ECC_CURVE_X25519 {
+		typeChoose = owcrypt.ECC_CURVE_ED25519
+	}
 	i := []byte{}
 	childChainCode := []byte{}
 	//越过最大深度限制
@@ -192,13 +205,13 @@ func (k *ExtendedKey) GenPrivateChild(serializes uint32) (*ExtendedKey, error) {
 	}
 
 	if serializes >= HardenedKeyStart { //强化扩展
-		i = getI(k.key, k.chainCode, serializes, k.curveType)
+		i = getI(k.key, k.chainCode, serializes, typeChoose)
 	} else { //普通扩展
-		point := owcrypt.Point_mulBaseG(k.key, k.curveType)
-		i = getI(point[:], k.chainCode, serializes, k.curveType)
+		point := owcrypt.Point_mulBaseG(k.key, typeChoose)
+		i = getI(point[:], k.chainCode, serializes, typeChoose)
 	}
 
-	childKey, err := getPriChildViaPriParent(i[:32], k.key, k.curveType)
+	childKey, err := getPriChildViaPriParent(i[:32], k.key, typeChoose)
 
 	if err != nil {
 		return nil, err
@@ -206,25 +219,29 @@ func (k *ExtendedKey) GenPrivateChild(serializes uint32) (*ExtendedKey, error) {
 
 	childChainCode = i[32:]
 
-	parentFP := getFP(k.key, k.isPrivate, k.curveType)
+	parentFP := getFP(k.key, k.isPrivate, typeChoose)
 	return NewExtendedKey(childKey, childChainCode, parentFP, k.depth+1,
 		serializes, true, k.curveType), nil
 }
 
 //GenPublicChild 通过k扩展子公钥
 func (k *ExtendedKey) GenPublicChild(serializes uint32) (*ExtendedKey, error) {
+	typeChoose := k.curveType
+	if typeChoose == owcrypt.ECC_CURVE_X25519 {
+		typeChoose = owcrypt.ECC_CURVE_ED25519
+	}
 	if !k.isPrivate {
 		if serializes >= HardenedKeyStart { //不能从父公钥强化扩展
 			return nil, ErrDeriveHardFromPublic
 		}
-		i := getI(k.key, k.chainCode, serializes, k.curveType)
-		childKey, err := getPubChildViaPubParent(i[:32], k.key, k.curveType)
+		i := getI(k.key, k.chainCode, serializes, typeChoose)
+		childKey, err := getPubChildViaPubParent(i[:32], k.key, typeChoose)
 		if err != nil {
 			return nil, err
 		}
 		childChainCode := i[len(i)/2:]
 
-		parentFP := getFP(k.key, false, k.curveType)
+		parentFP := getFP(k.key, false, typeChoose)
 		return NewExtendedKey(childKey, childChainCode, parentFP, k.depth+1,
 			serializes, false, k.curveType), nil
 
@@ -236,7 +253,7 @@ func (k *ExtendedKey) GenPublicChild(serializes uint32) (*ExtendedKey, error) {
 	if err != nil {
 		return nil, err
 	}
-	childKey := owcrypt.Point_mulBaseG(childPrikey.key, childPrikey.curveType)
+	childKey := owcrypt.Point_mulBaseG(childPrikey.key, typeChoose)
 	return NewExtendedKey(childKey, childPrikey.chainCode, childPrikey.parentFP, k.depth+1,
 		serializes, false, k.curveType), nil
 
@@ -250,7 +267,7 @@ func InitRootKeyFromSeed(seed []byte, curveType uint32) (*ExtendedKey, error) {
 	ctx := sha512.New()
 	ctx.Write(seed)
 	i := ctx.Sum(nil)
-	if curveType == owcrypt.ECC_CURVE_ED25519_EXTEND {
+	if curveType == owcrypt.ECC_CURVE_ED25519 || curveType == owcrypt.ECC_CURVE_X25519 {
 		i[0] &= 248
 		i[31] &= 63
 		i[31] |= 64

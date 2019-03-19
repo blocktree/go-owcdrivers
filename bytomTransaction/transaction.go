@@ -185,7 +185,7 @@ func VerifyRawTransaction(txHex string) bool {
 			count := 0
 			for j := 0; j < len(sigs); j++ {
 				for k := j; k < len(pubs); k++ {
-					if owcrypt.SUCCESS == owcrypt.Verify(pubs[k], nil, 0, txHashes[i], 32, sigs[j], owcrypt.ECC_CURVE_ED25519) {
+					if owcrypt.SUCCESS == owcrypt.Verify(pubs[k], nil, 0, txHashes[i], 32, sigs[j], owcrypt.ECC_CURVE_ED25519_NORMAL) {
 						count++
 					}
 				}
@@ -195,7 +195,7 @@ func VerifyRawTransaction(txHex string) bool {
 				return false
 			}
 		} else {
-			if owcrypt.SUCCESS != owcrypt.Verify(signedTrans.Inputs[i].SigPub.Pubkey, nil, 0, txHashes[i], 32, signedTrans.Inputs[i].SigPub.Signature, owcrypt.ECC_CURVE_ED25519) {
+			if owcrypt.SUCCESS != owcrypt.Verify(signedTrans.Inputs[i].SigPub.Pubkey, nil, 0, txHashes[i], 32, signedTrans.Inputs[i].SigPub.Signature, owcrypt.ECC_CURVE_ED25519_NORMAL) {
 				return false
 			}
 		}

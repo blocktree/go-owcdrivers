@@ -581,7 +581,7 @@ func Test_ed25519_extend(t *testing.T) {
 	//seed := [64]byte{0x40, 0x3E, 0x5A, 0xB7, 0x1F, 0x5C, 0x1A, 0x4C, 0xCD, 0xD1, 0x0C, 0xE6, 0x9A, 0x02, 0x14, 0xF1, 0x0A, 0x47, 0x8B, 0xFD, 0x64, 0x6A, 0xD9, 0x31, 0xC9, 0x21, 0x22, 0x1E, 0xB3, 0xFA, 0xB3, 0x42, 0x2B, 0x14, 0xB5, 0x68, 0x5A, 0xAB, 0x4C, 0xB2, 0x75, 0x2A, 0xF0, 0xB0, 0x0B, 0x6B, 0x1B, 0x55, 0xCB, 0xBE, 0x24, 0xF7, 0x21, 0xCB, 0x73, 0x3D, 0x68, 0xE3, 0xB6, 0xF3, 0x02, 0xA6, 0x35, 0xF4}
 	seed := [32]byte{0x89, 0xb1, 0x79, 0x7a, 0x20, 0xba, 0x70, 0x0d, 0xe2, 0x73, 0xfe, 0xad, 0xac, 0x21, 0x0e, 0x0b, 0x15, 0x25, 0x53, 0x06, 0xac, 0x01, 0x14, 0x2d, 0x1f, 0x0a, 0x13, 0x38, 0x25, 0x71, 0xc3, 0xb0}
 	path := "m/44'/88'/1'"
-	pkey, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_ED25519_EXTEND)
+	pkey, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_ED25519)
 	if err != nil {
 		t.Error("产生失败！")
 	} else {
@@ -622,7 +622,7 @@ func Test_ed25519_extend(t *testing.T) {
 	}
 
 	path = "m/44'/88'/1'/0/2"
-	cpri, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_ED25519_EXTEND)
+	cpri, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_ED25519)
 	if err != nil {
 		t.Error("产生失败！")
 	} else {
@@ -655,7 +655,7 @@ func Test_ed25519_extend(t *testing.T) {
 func Test_ed25519_extend2(t *testing.T) {
 	seed := []byte{0x7a, 0xd1, 0xdf, 0x7c, 0x25, 0x13, 0xa5, 0xbe, 0xfe, 0x3e, 0x65, 0x2d, 0xcd, 0x1b, 0x67, 0xe2, 0x48, 0x40, 0x3c, 0x22, 0xd4, 0xc1, 0x55, 0x0e, 0x17, 0x1d, 0xf4, 0x6c, 0xea, 0xa3, 0x91, 0x35}
 	path := "m/44'/88'/1'/0/0"
-	pkey, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_ED25519_EXTEND)
+	pkey, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_ED25519)
 	if err != nil {
 		t.Error("产生失败！")
 	} else {
@@ -669,15 +669,16 @@ func Test_ed25519_extend2(t *testing.T) {
 		fmt.Println(hex.EncodeToString(ppub.key))
 	}
 
-	chk := owcrypt.Point_mulBaseG(pkey.key, owcrypt.ECC_CURVE_ED25519)
+	chk := owcrypt.Point_mulBaseG(pkey.key, owcrypt.ECC_CURVE_ED25519_NORMAL)
 
 	fmt.Println(hex.EncodeToString(chk))
 }
 
 func Test_tmp(t *testing.T) {
-	seed := [32]byte{0x89, 0xb1, 0x79, 0x7a, 0x20, 0xba, 0x70, 0x0d, 0xe2, 0x73, 0xfe, 0xad, 0xac, 0x21, 0x0e, 0x0b, 0x15, 0x25, 0x53, 0x06, 0xac, 0x01, 0x14, 0x2d, 0x1f, 0x0a, 0x13, 0x38, 0x25, 0x71, 0xc3, 0xb0}
+	//seed := [32]byte{0x89, 0xb1, 0x79, 0x7a, 0x20, 0xba, 0x70, 0x0d, 0xe2, 0x73, 0xfe, 0xad, 0xac, 0x21, 0x0e, 0x0b, 0x15, 0x25, 0x53, 0x06, 0xac, 0x01, 0x14, 0x2d, 0x1f, 0x0a, 0x13, 0x38, 0x25, 0x71, 0xc3, 0xb0}
+	seed, _ := hex.DecodeString("279906609e7a5b80f3088ac9879eec3f1007aec1bf2999069c6a500032297427")
 	path := "m/44'/88'/1'/0"
-	pkey, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_ED25519_EXTEND)
+	pkey, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_X25519)
 	if err != nil {
 		t.Error("产生失败！")
 	} else {
@@ -718,7 +719,86 @@ func Test_tmp(t *testing.T) {
 		chk := owcrypt.Point_mulBaseG(cpri.key, owcrypt.ECC_CURVE_ED25519)
 		fmt.Println(hex.EncodeToString(chk))
 
-		fmt.Println("------------")
+		xpub, _ := owcrypt.CURVE25519_convert_Ed_to_X(chk)
+		fmt.Println(hex.EncodeToString(xpub))
+		fmt.Println("------------------")
 	}
 
+}
+
+func Test_tmpED(t *testing.T) {
+	//seed := [32]byte{0x89, 0xb1, 0x79, 0x7a, 0x20, 0xba, 0x70, 0x0d, 0xe2, 0x73, 0xfe, 0xad, 0xac, 0x21, 0x0e, 0x0b, 0x15, 0x25, 0x53, 0x06, 0xac, 0x01, 0x14, 0x2d, 0x1f, 0x0a, 0x13, 0x38, 0x25, 0x71, 0xc3, 0xb0}
+	seed, _ := hex.DecodeString("6d2418ec8871f5b8a999c9972c34fb8deebe2769513d1a2c1af3685efd9a3e6f")
+	path := "m/44'/88'/3'"
+	pkey, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_ED25519)
+	if err != nil {
+		t.Error("产生失败！")
+	} else {
+
+		fmt.Println("1: ", hex.EncodeToString(pkey.key))
+
+	}
+
+	ppub := pkey.GetPublicKey()
+	if err != nil {
+		t.Error("产生失败！")
+	} else {
+
+		fmt.Println(hex.EncodeToString(ppub.key))
+
+	}
+	start, _ := ppub.GenPublicChild(0)
+	newKey, _ := start.GenPublicChild(0)
+	fmt.Println(hex.EncodeToString(newKey.key))
+	//fmt.Println(ppub.OWEncode())
+	for index := 0; index < 100; index++ {
+		cpub, err := ppub.GenPublicChild(uint32(index))
+
+		if err != nil {
+			t.Error("产生失败！")
+		} else {
+			fmt.Println(index)
+			fmt.Println(hex.EncodeToString(cpub.key))
+
+		}
+		cpri, err := pkey.GenPrivateChild(uint32(index))
+		if err != nil {
+			t.Error("产生失败！")
+		} else {
+
+			fmt.Println(hex.EncodeToString(cpri.key))
+
+		}
+
+		chk := owcrypt.Point_mulBaseG(cpri.key, owcrypt.ECC_CURVE_ED25519)
+		fmt.Println(hex.EncodeToString(chk))
+
+		fmt.Println("------------------")
+	}
+
+}
+func Test_chkED(t *testing.T) {
+	seed, _ := hex.DecodeString("3796231f98e5813e7b04268ba375e3789ee6fe59c591c582d38477d0d4d56235")
+	path := "m/44'/88'/1'/0/0"
+	pkey, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_ED25519)
+	if err != nil {
+		t.Error("产生失败！")
+	} else {
+
+		fmt.Println("1: ", hex.EncodeToString(pkey.key))
+
+	}
+}
+
+func Test_chkX(t *testing.T) {
+	seed, _ := hex.DecodeString("3796231f98e5813e7b04268ba375e3789ee6fe59c591c582d38477d0d4d56235")
+	path := "m/44'/88'/1'/0/0"
+	pkey, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_X25519)
+	if err != nil {
+		t.Error("产生失败！")
+	} else {
+
+		fmt.Println("1: ", hex.EncodeToString(pkey.key))
+
+	}
 }
