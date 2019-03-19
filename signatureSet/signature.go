@@ -2,10 +2,11 @@ package signatureSet
 
 import (
 	"fmt"
-	"github.com/blocktree/go-owcdrivers/btcTransaction"
-	"github.com/blocktree/go-owcrypt"
 	"math/big"
 	"strings"
+
+	"github.com/blocktree/go-owcdrivers/btcTransaction"
+	"github.com/blocktree/go-owcrypt"
 )
 
 //signTxHash 签名交易单哈希
