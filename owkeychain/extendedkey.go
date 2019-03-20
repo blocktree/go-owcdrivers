@@ -4,7 +4,6 @@ import (
 	"crypto/hmac"
 	"crypto/sha512"
 	"encoding/binary"
-	"encoding/hex"
 	"errors"
 	"fmt"
 	"math/big"
@@ -247,8 +246,6 @@ func (k *ExtendedKey) GenPublicChild(serializes uint32) (*ExtendedKey, error) {
 
 	}
 	childPrikey, err := k.GenPrivateChild(serializes)
-
-	fmt.Println("pri: ", hex.EncodeToString(childPrikey.key))
 
 	if err != nil {
 		return nil, err
