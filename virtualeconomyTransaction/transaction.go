@@ -35,7 +35,7 @@ func CreateEmptyTransaction(ts TxStruct) (string, error) {
 	attachmentLen := []byte{0x00, 0x00}
 	txBytes := []byte{}
 	txBytes = append(txBytes, ts.TxType)
-	binary.BigEndian.PutUint64(timestamp, uint64(time.Now().UnixNano()))
+	binary.BigEndian.PutUint64(timestamp, uint64((time.Now().UnixNano()/100)*100))
 	txBytes = append(txBytes, timestamp...)
 	binary.BigEndian.PutUint64(amount, ts.Amount)
 	txBytes = append(txBytes, amount...)
