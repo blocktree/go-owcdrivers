@@ -36,6 +36,14 @@ func SignTxHash(symbol string, msg []byte, privateKey []byte, eccType uint32) ([
 		return sig, nil
 	}
 
+	if strings.EqualFold(symbol, "TRX") {
+		sig, err := TronSignature(privateKey, msg)
+		if err != owcrypt.SUCCESS {
+			return nil, fmt.Errorf("TRX sign hash failed")
+		}
+		return sig, nil
+	}
+
 	sig, err := owcrypt.Signature(privateKey, nil, 0, msg, 32, eccType)
 	if err != owcrypt.SUCCESS {
 		return nil, fmt.Errorf("ECC sign hash failed")
