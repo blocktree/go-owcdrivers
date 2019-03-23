@@ -728,8 +728,8 @@ func Test_tmp(t *testing.T) {
 
 func Test_tmpED(t *testing.T) {
 	//seed := [32]byte{0x89, 0xb1, 0x79, 0x7a, 0x20, 0xba, 0x70, 0x0d, 0xe2, 0x73, 0xfe, 0xad, 0xac, 0x21, 0x0e, 0x0b, 0x15, 0x25, 0x53, 0x06, 0xac, 0x01, 0x14, 0x2d, 0x1f, 0x0a, 0x13, 0x38, 0x25, 0x71, 0xc3, 0xb0}
-	seed, _ := hex.DecodeString("6d2418ec8871f5b8a999c9972c34fb8deebe2769513d1a2c1af3685efd9a3e6f")
-	path := "m/44'/88'/3'"
+	seed, _ := hex.DecodeString("45BBA4E6271F8088F78BA5B1490C12CB5980C5287750A3E19E58F2C27CD91C91736CEC4B7F1A05AE7CBC0C132CABB47EF2D3647DB600944052388E0D8C78476F")
+	path := "m/44'/88'/9'/0/0"
 	pkey, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_ED25519)
 	if err != nil {
 		t.Error("产生失败！")
