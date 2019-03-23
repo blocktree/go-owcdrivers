@@ -158,4 +158,8 @@ var (
 	//VSYS stuff
 	VSYS_mainnetAddress = AddressType{"base58", vsysAlphabet, "blake2b_and_keccak256_first_twenty", "blake2b_and_keccak256_first_twenty", 20, []byte{0x05, 0x4D}, nil}
 	VSYS_testnetAddress = AddressType{"base58", vsysAlphabet, "blake2b_and_keccak256_first_twenty", "blake2b_and_keccak256_first_twenty", 20, []byte{0x05, 0x54}, nil}
+
+	EOS_mainnetPublic       = AddressType{"eos", btcAlphabet, "ripemd160", "", 33, []byte(EOSPublicKeyPrefixCompat), nil}
+	EOS_mainnetPrivateWIF          = AddressType{"base58", btcAlphabet, "doubleSHA256", "", 32, []byte{0x80}, nil}
+	EOS_mainnetPrivateWIFCompressed = AddressType{"base58", btcAlphabet, "doubleSHA256", "", 32, []byte{0x80}, []byte{0x01}}
 )

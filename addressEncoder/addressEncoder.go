@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/blocktree/go-owcdrivers/addressEncoder/base32PolyMod"
 	"github.com/blocktree/go-owcdrivers/addressEncoder/bech32"
@@ -32,6 +33,9 @@ func calcChecksum(data []byte, chkType string) []byte {
 	}
 	if chkType == "blake2b_and_keccak256_first_twenty" {
 		return owcrypt.Hash(owcrypt.Hash(data, 32, owcrypt.HASH_ALG_BLAKE2B), 32, owcrypt.HASH_ALG_KECCAK256)[:4]
+	}
+	if chkType == "ripemd160" {
+		return owcrypt.Hash(data, 0, owcrypt.HASH_ALG_RIPEMD160)[:4]
 	}
 	return nil
 }
@@ -192,6 +196,11 @@ func AddressEncode(hash []byte, addresstype AddressType) string {
 		EncodeRet += lastBlockBase58
 		return EncodeRet
 	}
+
+	if strings.EqualFold(addresstype.encodeType, "eos") {
+		return encodeEOS(hash, addresstype)
+	}
+
 	data := catData(catData(addresstype.prefix, hash), addresstype.suffix)
 	return encodeData(catData(data, calcChecksum(data, addresstype.checksumType)), addresstype.encodeType, addresstype.alphabet)
 
@@ -291,6 +300,11 @@ func AddressDecode(address string, addresstype AddressType) ([]byte, error) {
 		}
 		return ret, nil
 	}
+
+	if strings.EqualFold(addresstype.encodeType, "eos") {
+		return decodeEOS(address, addresstype)
+	}
+
 	data, err := decodeData(address, addresstype.encodeType, addresstype.alphabet, addresstype.checksumType, addresstype.prefix, addresstype.suffix)
 	if err != nil {
 		return nil, err

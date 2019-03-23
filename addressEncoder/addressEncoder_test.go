@@ -962,3 +962,43 @@ func Test_VSYSAddress(t *testing.T) {
 		fmt.Println(hex.EncodeToString(chk))
 	}
 }
+
+
+func Test_EOSAddress(t *testing.T) {
+	pubkey, _ := hex.DecodeString("02c0ded2bc1f1305fb0faac5e6c03ee3a1924234985427b6167ca569d13df435cf")
+	address := AddressEncode(pubkey, EOS_mainnetPublic)
+
+	fmt.Println(address)
+	if address != "EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV" {
+		t.Error("eos address encode failed")
+		return
+	} else {
+		fmt.Println(address)
+	}
+
+	chk, err := AddressDecode(address, EOS_mainnetPublic)
+	if err != nil {
+		t.Errorf("eos address decode failed! err: %v \n", err)
+		return
+	} else {
+		fmt.Println(hex.EncodeToString(chk))
+	}
+
+	prvkey, _ := hex.DecodeString("62491722c73af9a130baf583d80c03830df6b7a3d5c042a0048c31b095fe0d96")
+	wif := AddressEncode(prvkey, EOS_mainnetPrivateWIF)
+	if wif != "5JZa9piFEu5GkRvDw2gb7jqDwy6r1Bi6cDStKChuEqWGWpvXdao" {
+		t.Error("eos wif encode failed")
+		return
+	} else {
+		fmt.Println(wif)
+	}
+
+	chp, err := AddressDecode(wif, EOS_mainnetPrivateWIF)
+	if err != nil {
+		t.Errorf("eos wif decode failed! err: %v \n", err)
+		return
+	} else {
+		fmt.Println(hex.EncodeToString(chp))
+	}
+
+}
