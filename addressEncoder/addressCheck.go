@@ -447,7 +447,9 @@ func AddressCheck(addr string, symbol string) (bool, error) {
 			}
 		}
 	default:
-		return false, ErrorSymbolType
+		//return false, ErrorSymbolType
+		//不支持的币种忽略检查
+		return true, nil
 	}
 	return false, ErrorSymbolType
 }
