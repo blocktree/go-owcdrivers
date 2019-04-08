@@ -39,7 +39,17 @@ func newTxOutForEmptyTrans(vout []Vout, symbol string, isTestNet bool) ([]TxOut,
 			p2wpkhPrefixByte = LTCMainNetP2WPKHPrefix
 		}
 	} else {
-		return nil, errors.New("Unknown coin type!")
+		//return nil, errors.New("Unknown coin type!")
+		//默认使用BTC的
+		if isTestNet {
+			prefixStr = BTCTestNetBech32Prefix
+			p2pkhPrefixByte = BTCTestNetP2PKHPrefix
+			p2wpkhPrefixByte = BTCTestNetP2WPKHPrefix
+		} else {
+			prefixStr = BTCMainNetBech32Prefix
+			p2pkhPrefixByte = BTCMainNetP2PKHPrefix
+			p2wpkhPrefixByte = BTCMainNetP2WPKHPrefix
+		}
 	}
 	for _, v := range vout {
 		amount := uint64ToLittleEndianBytes(v.Amount)

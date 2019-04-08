@@ -67,7 +67,13 @@ func CreateMultiSig(required byte, pubkeys [][]byte, SegwitON bool, symbol strin
 		}
 		return EncodeCheck(LTCTestNetP2PKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
 	} else {
-		return "", "", errors.New("Unknown coin type!")
+		//return "", "", errors.New("Unknown coin type!")
+
+		//默认使用BTC的
+		if isTestNet {
+			return EncodeCheck(BTCMainNetP2PKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
+		}
+		return EncodeCheck(BTCTestNetP2PKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
 	}
 
 }
