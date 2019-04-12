@@ -201,10 +201,6 @@ func AddressEncode(hash []byte, addresstype AddressType) string {
 		return encodeEOS(hash, addresstype)
 	}
 
-	if strings.EqualFold(addresstype.EncodeType, "ae") {
-		return encodeAE(hash, addresstype)
-	}
-
 	data := catData(catData(addresstype.Prefix, hash), addresstype.Suffix)
 	return encodeData(catData(data, calcChecksum(data, addresstype.ChecksumType)), addresstype.EncodeType, addresstype.Alphabet)
 

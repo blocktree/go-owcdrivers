@@ -1004,24 +1004,4 @@ func Test_EOSAddress(t *testing.T) {
 }
 
 
-func Test_AEAddress(t *testing.T) {
-	pubkey, _ := hex.DecodeString("4b5acf6b45652ee28cbe6cf2747b7971f3c00e9867d15e5b98155811ad66d4ea")
-	address := AddressEncode(pubkey, AE_mainnetAddress)
 
-	fmt.Println(address)
-	if address != "ak_aBqTCwdTqg25fk81LzNW9gwqCxFbPMtd6aVHQgBofC5YJTmQW" {
-		t.Error("ae address encode failed")
-		return
-	} else {
-		fmt.Println(address)
-	}
-
-	chk, err := AddressDecode(address, AE_mainnetAddress)
-	if err != nil {
-		t.Errorf("ae address decode failed! err: %v \n", err)
-		return
-	} else {
-		fmt.Println(hex.EncodeToString(chk))
-	}
-
-}
