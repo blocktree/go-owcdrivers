@@ -14,18 +14,18 @@ type Encoding struct {
 	strict    bool
 }
 
-// NewEncoding returns a new padded Encoding defined by the given alphabet,
+// NewEncoding returns a new padded Encoding defined by the given Alphabet,
 // which must be a 64-byte string that does not contain the padding character
 // or CR / LF ('\r', '\n').
 // The resulting Encoding uses the default padding character ('='),
 // which may be changed or disabled via WithPadding.
 func NewEncoding(encoder string) *Encoding {
 	if len(encoder) != 64 {
-		panic("encoding alphabet is not 64-bytes long")
+		panic("encoding Alphabet is not 64-bytes long")
 	}
 	for i := 0; i < len(encoder); i++ {
 		if encoder[i] == '\n' || encoder[i] == '\r' {
-			panic("encoding alphabet contains newline character")
+			panic("encoding Alphabet contains newline character")
 		}
 	}
 
@@ -172,7 +172,7 @@ func (e CorruptInputError) Error() string {
 }
 
 func (enc *Encoding) decodeQuantum(dst, src []byte, si int) (nsi, n int, err error) {
-	// Decode quantum using the base64 alphabet
+	// Decode quantum using the base64 Alphabet
 	var dbuf [4]byte
 	dinc, dlen := 3, 4
 

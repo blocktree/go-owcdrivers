@@ -27,7 +27,7 @@ func Test_btc_address(t *testing.T) {
 	if err != nil {
 		t.Error("btc mainnet p2pkh address decode error!")
 	} else {
-		for i := 0; i < BTC_mainnetAddressP2PKH.hashLen; i++ {
+		for i := 0; i < BTC_mainnetAddressP2PKH.HashLen; i++ {
 			if m_p2pkh_check[i] != m_p2pkh_hash160[i] {
 				t.Error("btc mainnet p2pkh address decode wrong result!")
 				break
@@ -50,7 +50,7 @@ func Test_btc_address(t *testing.T) {
 	if err != nil {
 		t.Error("btc mainnet p2sh address decode error!")
 	} else {
-		for i := 0; i < BTC_mainnetAddressP2SH.hashLen; i++ {
+		for i := 0; i < BTC_mainnetAddressP2SH.HashLen; i++ {
 			if m_p2sh_check[i] != m_p2sh_hash160[i] {
 				t.Error("btc mainnet p2sh address decode wrong result!")
 				break
@@ -73,7 +73,7 @@ func Test_btc_address(t *testing.T) {
 	if err != nil {
 		t.Error("btc mainnet prikey WIF-Compressed decode error!")
 	} else {
-		for i := 0; i < BTC_mainnetPrivateWIFCompressed.hashLen; i++ {
+		for i := 0; i < BTC_mainnetPrivateWIFCompressed.HashLen; i++ {
 			if m_pri_wif_comp_check[i] != m_privateKey[i] {
 				t.Error("btc mainnet prikey WIF-Compressed decode wrong result!")
 				break
@@ -999,6 +999,29 @@ func Test_EOSAddress(t *testing.T) {
 		return
 	} else {
 		fmt.Println(hex.EncodeToString(chp))
+	}
+
+}
+
+
+func Test_AEAddress(t *testing.T) {
+	pubkey, _ := hex.DecodeString("4b5acf6b45652ee28cbe6cf2747b7971f3c00e9867d15e5b98155811ad66d4ea")
+	address := AddressEncode(pubkey, AE_mainnetAddress)
+
+	fmt.Println(address)
+	if address != "ak_aBqTCwdTqg25fk81LzNW9gwqCxFbPMtd6aVHQgBofC5YJTmQW" {
+		t.Error("ae address encode failed")
+		return
+	} else {
+		fmt.Println(address)
+	}
+
+	chk, err := AddressDecode(address, AE_mainnetAddress)
+	if err != nil {
+		t.Errorf("ae address decode failed! err: %v \n", err)
+		return
+	} else {
+		fmt.Println(hex.EncodeToString(chk))
 	}
 
 }

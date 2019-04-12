@@ -10,15 +10,15 @@ var (
 	ErrorInvalidBase58String = errors.New("invalid base58 string")
 )
 
-// Alphabet The base58 alphabet object.
+// Alphabet The base58 Alphabet object.
 type Base58Alphabet struct {
 	encodeTable        [58]rune
 	decodeTable        [256]int
 	unicodeDecodeTable []rune
 }
 
-// NewAlphabet create a custom alphabet from 58-length string.
-// Note: len(rune(alphabet)) must be 58.
+// NewAlphabet create a custom Alphabet from 58-length string.
+// Note: len(rune(Alphabet)) must be 58.
 func NewBase58Alphabet(alphabet string) *Base58Alphabet {
 	alphabetRunes := []rune(alphabet)
 	if len(alphabetRunes) != 58 {
@@ -42,9 +42,9 @@ func NewBase58Alphabet(alphabet string) *Base58Alphabet {
 	return ret
 }
 
-// Encode encode with custom alphabet
+// Encode encode with custom Alphabet
 func Base58Encode(input []byte, alphabet *Base58Alphabet) string {
-	// prefix 0
+	// Prefix 0
 	inputLength := len(input)
 	prefixZeroes := 0
 	for prefixZeroes < inputLength && input[prefixZeroes] == 0 {
@@ -89,7 +89,7 @@ func Base58Encode(input []byte, alphabet *Base58Alphabet) string {
 	return string(retStrRunes)
 }
 
-// Decode docode with custom alphabet
+// Decode docode with custom Alphabet
 func Base58Decode(input string, alphabet *Base58Alphabet) ([]byte, error) {
 	inputBytes := []rune(input)
 	inputLength := len(inputBytes)
@@ -97,7 +97,7 @@ func Base58Decode(input string, alphabet *Base58Alphabet) ([]byte, error) {
 	output := make([]byte, capacity)
 	outputReverseEnd := capacity - 1
 
-	// prefix 0
+	// Prefix 0
 	zero58Byte := alphabet.encodeTable[0]
 	prefixZeroes := 0
 	for prefixZeroes < inputLength && inputBytes[prefixZeroes] == zero58Byte {

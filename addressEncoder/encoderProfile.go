@@ -22,18 +22,18 @@ var (
 )
 
 type AddressType struct {
-	encodeType   string //编码类型
-	alphabet     string //码表
-	checksumType string //checksum类型(prefix string when encode type is base32PolyMod)
-	hashType     string //地址hash类型，传入数据为公钥时起效
-	hashLen      int    //编码前的数据长度
-	prefix       []byte //数据前面的填充
-	suffix       []byte //数据后面的填充
+	EncodeType   string //编码类型
+	Alphabet     string //码表
+	ChecksumType string //checksum类型(Prefix string when encode type is base32PolyMod)
+	HashType     string //地址hash类型，传入数据为公钥时起效
+	HashLen      int    //编码前的数据长度
+	Prefix       []byte //数据前面的填充
+	Suffix       []byte //数据后面的填充
 }
 
-func (at *AddressType) Prefix() []byte {
-	return at.prefix
-}
+//func (at *AddressType) Prefix() []byte {
+//	return at.Prefix
+//}
 
 var (
 	//BTC stuff
@@ -163,7 +163,10 @@ var (
 	VSYS_mainnetAddress = AddressType{"base58", vsysAlphabet, "blake2b_and_keccak256_first_twenty", "blake2b_and_keccak256_first_twenty", 20, []byte{0x05, 0x4D}, nil}
 	VSYS_testnetAddress = AddressType{"base58", vsysAlphabet, "blake2b_and_keccak256_first_twenty", "blake2b_and_keccak256_first_twenty", 20, []byte{0x05, 0x54}, nil}
 
+	//EOS stuff
 	EOS_mainnetPublic               = AddressType{"eos", btcAlphabet, "ripemd160", "", 33, []byte(EOSPublicKeyPrefixCompat), nil}
 	EOS_mainnetPrivateWIF           = AddressType{"base58", btcAlphabet, "doubleSHA256", "", 32, []byte{0x80}, nil}
 	EOS_mainnetPrivateWIFCompressed = AddressType{"base58", btcAlphabet, "doubleSHA256", "", 32, []byte{0x80}, []byte{0x01}}
+
+
 )
