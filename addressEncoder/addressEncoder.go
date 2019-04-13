@@ -130,43 +130,43 @@ func calcHash(data []byte, hashType string) []byte {
 
 func AddressEncode(hash []byte, addresstype AddressType) string {
 
-	if addresstype.encodeType == "bech32" {
-		return bech32.Encode(addresstype.checksumType, addresstype.alphabet, hash)
+	if addresstype.EncodeType == "bech32" {
+		return bech32.Encode(addresstype.ChecksumType, addresstype.Alphabet, hash)
 	}
 
-	if len(hash) != addresstype.hashLen {
-		hash = calcHash(hash, addresstype.hashType)
+	if len(hash) != addresstype.HashLen {
+		hash = calcHash(hash, addresstype.HashType)
 	}
 
-	if addresstype.encodeType == "base32PolyMod" {
-		return base32PolyMod.Encode(addresstype.checksumType, addresstype.alphabet, hash)
+	if addresstype.EncodeType == "base32PolyMod" {
+		return base32PolyMod.Encode(addresstype.ChecksumType, addresstype.Alphabet, hash)
 	}
-	if addresstype.encodeType == "eip55" {
+	if addresstype.EncodeType == "eip55" {
 		return eip55.Eip55_encode(hash)
 	}
-	if addresstype.encodeType == "ICX" {
-		return addresstype.checksumType + hex.EncodeToString(hash[:])
+	if addresstype.EncodeType == "ICX" {
+		return addresstype.ChecksumType + hex.EncodeToString(hash[:])
 	}
-	if addresstype.encodeType == "XMR" {
-		if addresstype.hashType == "" {
+	if addresstype.EncodeType == "XMR" {
+		if addresstype.HashType == "" {
 			//hash = public spend key(32-byte)||public view key(32 byte),total 64 bytes
 			if len(hash) != 64 {
 				fmt.Println("hash length is error,not 64!!!")
 				return ""
 			}
 		}
-		if addresstype.hashType == "payID" {
+		if addresstype.HashType == "payID" {
 			//hash=public spend key(32 byte)||public view key(32 byte)||payID(8 byte),total 72 bytes
 			if len(hash) != 72 {
 				fmt.Println("hash length is error,not 72!!!")
 				return ""
 			}
 		}
-		//addPrefixHash = prefix||hash=prxfix || public sepend key||public view key(65-byte)
-		addPrefixHash := append(addresstype.prefix, hash...)
+		//addPrefixHash = Prefix||hash=prxfix || public sepend key||public view key(65-byte)
+		addPrefixHash := append(addresstype.Prefix, hash...)
 		//checksum is the first four bytes of keccak256(addPrefixHash)
 		checksum := owcrypt.Hash(addPrefixHash, 32, owcrypt.HASH_ALG_KECCAK256)[:4]
-		//suffix checksum addPrefixHash(69-byte)
+		//Suffix checksum addPrefixHash(69-byte)
 		addPrefixHashSuffix := append(addPrefixHash, checksum...)
 		//Separed addPrefixHashSuffix 8 blocks whose length is 8-byte.  Convered Base58 characters for each block.
 		//If the length of characters less than 11,the conversion pads it with “1”s(1 is 0 in Base58)
@@ -177,7 +177,7 @@ func AddressEncode(hash []byte, addresstype AddressType) string {
 		remainder := len(addPrefixHashSuffix) - (cycle << 3)
 		for i := 0; i < cycle; i++ {
 			blockBuf := addPrefixHashSuffix[(i << 3):((i + 1) << 3)]
-			blockBase58 := Base58Encode(blockBuf, NewBase58Alphabet(addresstype.alphabet))
+			blockBase58 := Base58Encode(blockBuf, NewBase58Alphabet(addresstype.Alphabet))
 			if len(blockBase58) < 11 {
 				cycle := 11 - len(blockBase58)
 				for j := 0; j < cycle; j++ {
@@ -186,7 +186,7 @@ func AddressEncode(hash []byte, addresstype AddressType) string {
 			}
 			EncodeRet += blockBase58
 		}
-		lastBlockBase58 := Base58Encode(addPrefixHashSuffix[cycle<<3:(cycle<<3)+remainder], NewBase58Alphabet(addresstype.alphabet))
+		lastBlockBase58 := Base58Encode(addPrefixHashSuffix[cycle<<3:(cycle<<3)+remainder], NewBase58Alphabet(addresstype.Alphabet))
 		if len(lastBlockBase58) < 7 {
 			cycle := 7 - len(lastBlockBase58)
 			for j := 0; j < cycle; j++ {
@@ -197,18 +197,18 @@ func AddressEncode(hash []byte, addresstype AddressType) string {
 		return EncodeRet
 	}
 
-	if strings.EqualFold(addresstype.encodeType, "eos") {
+	if strings.EqualFold(addresstype.EncodeType, "eos") {
 		return encodeEOS(hash, addresstype)
 	}
 
-	data := catData(catData(addresstype.prefix, hash), addresstype.suffix)
-	return encodeData(catData(data, calcChecksum(data, addresstype.checksumType)), addresstype.encodeType, addresstype.alphabet)
+	data := catData(catData(addresstype.Prefix, hash), addresstype.Suffix)
+	return encodeData(catData(data, calcChecksum(data, addresstype.ChecksumType)), addresstype.EncodeType, addresstype.Alphabet)
 
 }
 
 func AddressDecode(address string, addresstype AddressType) ([]byte, error) {
-	if addresstype.encodeType == "bech32" {
-		ret, err := bech32.Decode(address, addresstype.alphabet)
+	if addresstype.EncodeType == "bech32" {
+		ret, err := bech32.Decode(address, addresstype.Alphabet)
 		if err != nil {
 			return nil, ErrorInvalidAddress
 		}
@@ -217,17 +217,17 @@ func AddressDecode(address string, addresstype AddressType) ([]byte, error) {
 		}
 		return ret, nil
 	}
-	if addresstype.encodeType == "base32PolyMod" {
-		ret, err := base32PolyMod.Decode(address, addresstype.alphabet)
+	if addresstype.EncodeType == "base32PolyMod" {
+		ret, err := base32PolyMod.Decode(address, addresstype.Alphabet)
 		if err != nil {
 			return nil, ErrorInvalidAddress
 		}
-		if len(ret) != addresstype.hashLen {
+		if len(ret) != addresstype.HashLen {
 			return nil, ErrorInvalidHashLength
 		}
 		return ret, nil
 	}
-	if addresstype.encodeType == "eip55" {
+	if addresstype.EncodeType == "eip55" {
 		ret, err := eip55.Eip55_decode(address)
 		if err != nil {
 			return nil, ErrorInvalidAddress
@@ -237,7 +237,7 @@ func AddressDecode(address string, addresstype AddressType) ([]byte, error) {
 		}
 		return ret, nil
 	}
-	if addresstype.encodeType == "ICX" {
+	if addresstype.EncodeType == "ICX" {
 		if address[0] != 'h' || address[1] != 'x' {
 			return nil, ErrorInvalidAddress
 		} else {
@@ -252,13 +252,13 @@ func AddressDecode(address string, addresstype AddressType) ([]byte, error) {
 			}
 		}
 	}
-	if addresstype.encodeType == "XMR" {
-		if addresstype.hashType == "" {
+	if addresstype.EncodeType == "XMR" {
+		if addresstype.HashType == "" {
 			if len(address) != 95 {
 				return nil, fmt.Errorf("address length is not 95,error!!!")
 			}
 		}
-		if addresstype.hashType == "payID" {
+		if addresstype.HashType == "payID" {
 			if len(address) != 106 {
 				return nil, fmt.Errorf("address length is not 106,error!!!")
 			}
@@ -268,7 +268,7 @@ func AddressDecode(address string, addresstype AddressType) ([]byte, error) {
 		remainder := len(address) - (cycle * 11)
 		for i := 0; i < cycle; i++ {
 			blockAddr := address[i*11 : (i+1)*11]
-			blockDecode, err := Base58Decode(blockAddr, NewBase58Alphabet(addresstype.alphabet))
+			blockDecode, err := Base58Decode(blockAddr, NewBase58Alphabet(addresstype.Alphabet))
 			if err != nil {
 				fmt.Printf("Base58 decode failed,block:%d,unexpected error:%v", i+1, err)
 				return nil, err
@@ -279,7 +279,7 @@ func AddressDecode(address string, addresstype AddressType) ([]byte, error) {
 				decodeRet = append(decodeRet, blockDecode[len(blockDecode)-8:]...)
 			}
 		}
-		lastBlockDecode, err := Base58Decode(address[(cycle*11):(cycle*11+remainder)], NewBase58Alphabet(addresstype.alphabet))
+		lastBlockDecode, err := Base58Decode(address[(cycle*11):(cycle*11+remainder)], NewBase58Alphabet(addresstype.Alphabet))
 		if err != nil {
 			fmt.Printf("The last block decode failed,unexpected error:%v", err)
 			return nil, err
@@ -289,11 +289,11 @@ func AddressDecode(address string, addresstype AddressType) ([]byte, error) {
 		} else {
 			decodeRet = append(decodeRet, lastBlockDecode[len(lastBlockDecode)-5:]...)
 		}
-		if verifyChecksum(decodeRet, addresstype.checksumType) == false {
+		if verifyChecksum(decodeRet, addresstype.ChecksumType) == false {
 			fmt.Printf("verify address checksum failed!!!")
 			return nil, ErrorInvalidAddress
 		}
-		ret, err := recoverData(decodeRet[:len(decodeRet)-4], addresstype.prefix, addresstype.suffix)
+		ret, err := recoverData(decodeRet[:len(decodeRet)-4], addresstype.Prefix, addresstype.Suffix)
 		if err != nil {
 			fmt.Printf("recover data failed!!!")
 			return nil, err
@@ -301,15 +301,15 @@ func AddressDecode(address string, addresstype AddressType) ([]byte, error) {
 		return ret, nil
 	}
 
-	if strings.EqualFold(addresstype.encodeType, "eos") {
+	if strings.EqualFold(addresstype.EncodeType, "eos") {
 		return decodeEOS(address, addresstype)
 	}
 
-	data, err := decodeData(address, addresstype.encodeType, addresstype.alphabet, addresstype.checksumType, addresstype.prefix, addresstype.suffix)
+	data, err := decodeData(address, addresstype.EncodeType, addresstype.Alphabet, addresstype.ChecksumType, addresstype.Prefix, addresstype.Suffix)
 	if err != nil {
 		return nil, err
 	}
-	if len(data) != addresstype.hashLen {
+	if len(data) != addresstype.HashLen {
 		return nil, ErrorInvalidHashLength
 	}
 	return data, nil

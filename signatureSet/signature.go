@@ -12,7 +12,7 @@ import (
 //signTxHash 签名交易单哈希
 func SignTxHash(symbol string, msg []byte, privateKey []byte, eccType uint32) ([]byte, error) {
 	var sig []byte
-	if strings.EqualFold(symbol, "ETH") {
+	if strings.EqualFold(symbol, "ETH") || strings.EqualFold(symbol, "TRUE") {
 		sig, err := owcrypt.ETHsignature(privateKey, msg)
 		if err != owcrypt.SUCCESS {
 			return nil, fmt.Errorf("ETH sign hash failed")
