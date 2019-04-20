@@ -963,7 +963,6 @@ func Test_VSYSAddress(t *testing.T) {
 	}
 }
 
-
 func Test_EOSAddress(t *testing.T) {
 	pubkey, _ := hex.DecodeString("02c0ded2bc1f1305fb0faac5e6c03ee3a1924234985427b6167ca569d13df435cf")
 	address := AddressEncode(pubkey, EOS_mainnetPublic)
@@ -1003,5 +1002,24 @@ func Test_EOSAddress(t *testing.T) {
 
 }
 
+func Test_AEAddress(t *testing.T) {
+	pubkey, _ := hex.DecodeString("6e6490ba9ffa3ed276048e23c52f09a7622e02111124e9c770d1a6ac11a723c6")
+	address := AddressEncode(pubkey, AE_mainnetAddress)
 
+	fmt.Println(address)
+	if address != "ak_qcqXt6ySgRPvBkNwEpNMvaKWzrhPZsoBHLvgg68qg9vRht62y" {
+		t.Error("eos address encode failed")
+		return
+	} else {
+		fmt.Println(address)
+	}
 
+	chk, err := AddressDecode(address, AE_mainnetAddress)
+	if err != nil {
+		t.Errorf("eos address decode failed! err: %v \n", err)
+		return
+	} else {
+		fmt.Println(hex.EncodeToString(chk))
+	}
+
+}
