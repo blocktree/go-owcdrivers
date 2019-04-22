@@ -44,7 +44,7 @@ func SignTxHash(symbol string, msg []byte, privateKey []byte, eccType uint32) ([
 		return sig, nil
 	}
 
-	sig, err := owcrypt.Signature(privateKey, nil, 0, msg, 32, eccType)
+	sig, err := owcrypt.Signature(privateKey, nil, 0, msg, uint16(len(msg)), eccType)
 	if err != owcrypt.SUCCESS {
 		return nil, fmt.Errorf("ECC sign hash failed")
 	}
