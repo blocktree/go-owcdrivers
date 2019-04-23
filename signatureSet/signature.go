@@ -2,18 +2,19 @@ package signatureSet
 
 import (
 	"fmt"
-	"math/big"
-	"strings"
-
 	"github.com/blocktree/go-owcdrivers/btcTransaction"
 	"github.com/blocktree/go-owcrypt"
+	"math/big"
+	"strings"
 )
 
 //signTxHash 签名交易单哈希
 func SignTxHash(symbol string, msg []byte, privateKey []byte, eccType uint32) ([]byte, error) {
 	var sig []byte
+	var sigErr uint16
+
 	if strings.EqualFold(symbol, "ETH") || strings.EqualFold(symbol, "TRUE") {
-		sig, err := owcrypt.ETHsignature(privateKey, msg)
+		sig, err := EthSignature(privateKey, msg)
 		if err != owcrypt.SUCCESS {
 			return nil, fmt.Errorf("ETH sign hash failed")
 		}
@@ -21,7 +22,7 @@ func SignTxHash(symbol string, msg []byte, privateKey []byte, eccType uint32) ([
 	}
 
 	if strings.EqualFold(symbol, "NAS") {
-		sig, err := owcrypt.NAS_signature(privateKey, msg)
+		sig, err := NasSignature(privateKey, msg)
 		if err != owcrypt.SUCCESS {
 			return nil, fmt.Errorf("NAS sign hash failed")
 		}
@@ -44,11 +45,19 @@ func SignTxHash(symbol string, msg []byte, privateKey []byte, eccType uint32) ([
 		return sig, nil
 	}
 
-	sig, err := owcrypt.Signature(privateKey, nil, 0, msg, 32, eccType)
-	if err != owcrypt.SUCCESS {
-		return nil, fmt.Errorf("ECC sign hash failed")
+	if eccType == owcrypt.ECC_CURVE_SECP256K1 {
+		sig, sigErr = owcrypt.Signature(privateKey, nil, 0, msg, uint16(len(msg)), eccType)
+		if sigErr != owcrypt.SUCCESS {
+			return nil, fmt.Errorf("ECC sign hash failed")
+		}
+		sig = serilizeS(sig)
+	} else {
+		sig, sigErr = owcrypt.Signature(privateKey, nil, 0, msg, uint16(len(msg)), eccType)
+		if sigErr != owcrypt.SUCCESS {
+			return nil, fmt.Errorf("ECC sign hash failed")
+		}
+
 	}
-	sig = serilizeS(sig)
 	return sig, nil
 }
 
