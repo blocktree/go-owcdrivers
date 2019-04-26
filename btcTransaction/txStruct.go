@@ -12,7 +12,7 @@ type Transaction struct {
 	Witness  bool
 }
 
-func newEmptyTransaction(vins []Vin, vouts []Vout, lockTime uint32, replaceable bool, symbol string, isTestNet bool) (*Transaction, error) {
+func newEmptyTransaction(vins []Vin, vouts []Vout, lockTime uint32, replaceable bool, addressPrefix AddressPrefix) (*Transaction, error) {
 	txIn, err := newTxInForEmptyTrans(vins)
 	if err != nil {
 		return nil, err
@@ -22,7 +22,7 @@ func newEmptyTransaction(vins []Vin, vouts []Vout, lockTime uint32, replaceable 
 		txIn[i].setSequence(lockTime, replaceable)
 	}
 
-	txOut, err := newTxOutForEmptyTrans(vouts, symbol, isTestNet)
+	txOut, err := newTxOutForEmptyTrans(vouts, addressPrefix)
 	if err != nil {
 		return nil, err
 	}

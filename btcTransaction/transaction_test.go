@@ -20,8 +20,10 @@ func Test_case1(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
+	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+
 	///////构建空交易单
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, "btc", true)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, addressPrefix)
 
 	if err != nil {
 		t.Error("构建空交易单失败")
@@ -41,7 +43,7 @@ func Test_case1(t *testing.T) {
 	segwit := false
 
 	/////////计算待签名交易单哈希
-	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if err != nil {
 		t.Error("创建待签交易单哈希失败")
 	} else {
@@ -94,7 +96,7 @@ func Test_case1(t *testing.T) {
 	}
 
 	// 验证交易单
-	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if pass {
 		fmt.Println("验证通过!")
 	} else {
@@ -121,8 +123,10 @@ func Test_case2(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
+	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+
 	/////////构建空交易单
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in1, in2}, []Vout{out}, lockTime, replaceable, "btc", true)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in1, in2}, []Vout{out}, lockTime, replaceable, addressPrefix)
 
 	if err != nil {
 		t.Error("构建空交易单失败")
@@ -143,7 +147,7 @@ func Test_case2(t *testing.T) {
 	segwit := false
 
 	////////构建用于签名的交易单哈希
-	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData1, unlockData2}, segwit, "btc", true)
+	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData1, unlockData2}, segwit, addressPrefix)
 	if err != nil {
 		t.Error("获取待签名交易单哈希失败")
 	} else {
@@ -198,7 +202,7 @@ func Test_case2(t *testing.T) {
 	}
 
 	// 验证交易单
-	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData1, unlockData2}, segwit, "btc", true)
+	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData1, unlockData2}, segwit, addressPrefix)
 	if pass {
 		fmt.Println("验证通过!")
 	} else {
@@ -221,8 +225,10 @@ func Test_case3(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
+	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+
 	///////构建空交易单
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, "btc", true)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, addressPrefix)
 
 	if err != nil {
 		t.Error("构建空交易单失败")
@@ -243,7 +249,7 @@ func Test_case3(t *testing.T) {
 
 	segwit := true
 	/////////计算待签名交易单哈希
-	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if err != nil {
 		t.Error("创建待签交易单哈希失败")
 	} else {
@@ -282,7 +288,7 @@ func Test_case3(t *testing.T) {
 	}
 
 	// 验证交易单
-	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if pass {
 		fmt.Println("验证通过!")
 	} else {
@@ -310,8 +316,10 @@ func Test_case4(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
+	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+
 	///////构建空交易单
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in1, in2}, []Vout{out}, lockTime, replaceable, "btc", true)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in1, in2}, []Vout{out}, lockTime, replaceable, addressPrefix)
 
 	if err != nil {
 		t.Error("构建空交易单失败")
@@ -337,7 +345,7 @@ func Test_case4(t *testing.T) {
 
 	segwit := true
 	/////////计算待签名交易单哈希
-	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData1, unlockData2}, segwit, "btc", true)
+	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData1, unlockData2}, segwit, addressPrefix)
 	if err != nil {
 		t.Error("创建待签交易单哈希失败")
 	} else {
@@ -395,7 +403,7 @@ func Test_case4(t *testing.T) {
 	}
 
 	// 验证交易单
-	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData1, unlockData2}, segwit, "btc", true)
+	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData1, unlockData2}, segwit, addressPrefix)
 	if pass {
 		fmt.Println("验证通过!")
 	} else {
@@ -424,8 +432,10 @@ func Test_case5(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
+	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+
 	///////构建空交易单
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in1, in2}, []Vout{out}, lockTime, replaceable, "btc", true)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in1, in2}, []Vout{out}, lockTime, replaceable, addressPrefix)
 
 	if err != nil {
 		t.Error("构建空交易单失败")
@@ -451,7 +461,7 @@ func Test_case5(t *testing.T) {
 
 	segwit := true
 	/////////计算待签名交易单哈希
-	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData1, unlockData2}, segwit, "btc", true)
+	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData1, unlockData2}, segwit, addressPrefix)
 	if err != nil {
 		t.Error("创建待签交易单哈希失败")
 	} else {
@@ -507,7 +517,7 @@ func Test_case5(t *testing.T) {
 	}
 
 	// 验证交易单
-	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData1, unlockData2}, segwit, "btc", true)
+	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData1, unlockData2}, segwit, addressPrefix)
 	if pass {
 		fmt.Println("验证通过!")
 	} else {
@@ -533,8 +543,10 @@ func Test_case6(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
+	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+
 	///////构建空交易单
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, "btc", true)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, addressPrefix)
 
 	if err != nil {
 		t.Error("构建空交易单失败")
@@ -555,7 +567,7 @@ func Test_case6(t *testing.T) {
 
 	segwit := true
 	/////////计算待签名交易单哈希
-	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if err != nil {
 		t.Error("创建待签交易单哈希失败")
 	} else {
@@ -593,7 +605,7 @@ func Test_case6(t *testing.T) {
 	}
 
 	// 验证交易单
-	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if pass {
 		fmt.Println("验证通过!")
 	} else {
@@ -615,8 +627,10 @@ func Test_case7(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
+	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+
 	///////构建空交易单
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, "btc", true)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, addressPrefix)
 
 	if err != nil {
 		t.Error("构建空交易单失败")
@@ -638,7 +652,7 @@ func Test_case7(t *testing.T) {
 	segwit := true
 
 	/////////计算待签名交易单哈希
-	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if err != nil {
 		t.Error("创建待签交易单哈希失败")
 	} else {
@@ -677,7 +691,7 @@ func Test_case7(t *testing.T) {
 	}
 
 	// 验证交易单
-	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if pass {
 		fmt.Println("验证通过!")
 	} else {
@@ -700,7 +714,9 @@ func Test_case8(t *testing.T) {
 
 	//填充成为2维数组，获取多重签名地址
 	segwit := true
-	address, redeem, err := CreateMultiSig(required, [][]byte{pubA, pubB, pubC}, segwit, "btc", true)
+	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+
+	address, redeem, err := CreateMultiSig(required, [][]byte{pubA, pubB, pubC}, segwit, addressPrefix)
 	if err != nil {
 		t.Error("创建多签地址失败！")
 	} else {
@@ -728,7 +744,7 @@ func Test_case8(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, "btc", true)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, addressPrefix)
 	if err != nil {
 		t.Error("构建空交易单失败")
 	} else {
@@ -744,7 +760,7 @@ func Test_case8(t *testing.T) {
 	unlockData := TxUnlock{inLock, inRedeem, inAmount, SigHashAll}
 
 	/////////计算待签名交易单哈希
-	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if err != nil {
 		t.Error("创建待签交易单哈希失败")
 	} else {
@@ -795,7 +811,7 @@ func Test_case8(t *testing.T) {
 	}
 
 	// 验证交易单
-	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if pass {
 		fmt.Println("验证通过!")
 	} else {
@@ -820,7 +836,10 @@ func Test_case9(t *testing.T) {
 	//填充成为2维数组，获取多重签名地址
 
 	segwit := true
-	address, redeem, err := CreateMultiSig(required, [][]byte{pubA, pubB, pubC}, segwit, "btc", true)
+
+	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+
+	address, redeem, err := CreateMultiSig(required, [][]byte{pubA, pubB, pubC}, segwit, addressPrefix)
 	if err != nil {
 		t.Error("创建多签地址失败！")
 	} else {
@@ -848,7 +867,7 @@ func Test_case9(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, "btc", true)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, addressPrefix)
 	if err != nil {
 		t.Error("构建空交易单失败")
 	} else {
@@ -864,7 +883,7 @@ func Test_case9(t *testing.T) {
 	unlockData := TxUnlock{inLock, inRedeem, inAmount, SigHashAll}
 
 	/////////计算待签名交易单哈希
-	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if err != nil {
 		t.Error("创建待签交易单哈希失败")
 	} else {
@@ -915,7 +934,7 @@ func Test_case9(t *testing.T) {
 	}
 
 	// 验证交易单
-	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if pass {
 		fmt.Println("验证通过!")
 	} else {
@@ -938,7 +957,10 @@ func Test_case10(t *testing.T) {
 
 	//填充成为2维数组，获取多重签名地址
 	segwit := false
-	address, redeem, err := CreateMultiSig(required, [][]byte{pubA, pubB, pubC}, segwit, "btc", true)
+
+	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+
+	address, redeem, err := CreateMultiSig(required, [][]byte{pubA, pubB, pubC}, segwit, addressPrefix)
 	if err != nil {
 		t.Error("创建多签地址失败！")
 	} else {
@@ -966,7 +988,7 @@ func Test_case10(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, "btc", true)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, addressPrefix)
 	if err != nil {
 		t.Error("构建空交易单失败")
 	} else {
@@ -982,7 +1004,7 @@ func Test_case10(t *testing.T) {
 	unlockData := TxUnlock{inLock, inRedeem, inAmount, SigHashAll}
 
 	/////////计算待签名交易单哈希
-	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if err != nil {
 		t.Error("创建待签交易单哈希失败")
 	} else {
@@ -1033,7 +1055,7 @@ func Test_case10(t *testing.T) {
 	}
 
 	// 验证交易单
-	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if pass {
 		fmt.Println("验证通过!")
 	} else {
@@ -1056,7 +1078,9 @@ func Test_case11(t *testing.T) {
 
 	//填充成为2维数组，获取多重签名地址
 	segwit := false
-	address, redeem, err := CreateMultiSig(required, [][]byte{pubA, pubB, pubC}, segwit, "btc", true)
+	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+
+	address, redeem, err := CreateMultiSig(required, [][]byte{pubA, pubB, pubC}, segwit, addressPrefix)
 	if err != nil {
 		t.Error("创建多签地址失败！")
 	} else {
@@ -1084,7 +1108,7 @@ func Test_case11(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, "btc", true)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, addressPrefix)
 	if err != nil {
 		t.Error("构建空交易单失败")
 	} else {
@@ -1100,7 +1124,7 @@ func Test_case11(t *testing.T) {
 	unlockData := TxUnlock{inLock, inRedeem, inAmount, SigHashAll}
 
 	/////////计算待签名交易单哈希
-	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if err != nil {
 		t.Error("创建待签交易单哈希失败")
 	} else {
@@ -1151,7 +1175,7 @@ func Test_case11(t *testing.T) {
 	}
 
 	// 验证交易单
-	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, "btc", true)
+	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, segwit, addressPrefix)
 	if pass {
 		fmt.Println("验证通过!")
 	} else {
@@ -1172,8 +1196,10 @@ func Test_tmp(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
+	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+
 	///////构建空交易单
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out1, out2}, lockTime, replaceable, "btc", true)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out1, out2}, lockTime, replaceable, addressPrefix)
 
 	if err != nil {
 		t.Error("构建空交易单失败")
@@ -1191,7 +1217,7 @@ func Test_tmp(t *testing.T) {
 	unlockData := TxUnlock{inLock, "", 0, SigHashAll}
 
 	/////////计算待签名交易单哈希
-	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, false, "btc", true)
+	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData}, false, addressPrefix)
 	if err != nil {
 		t.Error("创建待签交易单哈希失败")
 	} else {
@@ -1244,7 +1270,7 @@ func Test_tmp(t *testing.T) {
 	}
 
 	// 验证交易单
-	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, false, "btc", true)
+	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData}, false, addressPrefix)
 	if pass {
 		fmt.Println("验证通过!")
 	} else {
@@ -1269,8 +1295,10 @@ func Test_tmp2(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
+	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+
 	/////////构建空交易单
-	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in1, in2}, []Vout{out1, out2}, lockTime, replaceable, "btc", true)
+	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in1, in2}, []Vout{out1, out2}, lockTime, replaceable, addressPrefix)
 
 	if err != nil {
 		t.Error("构建空交易单失败")
@@ -1289,7 +1317,7 @@ func Test_tmp2(t *testing.T) {
 	unlockData2 := TxUnlock{in2Lock, "", uint64(0), SigHashAll}
 
 	////////构建用于签名的交易单哈希
-	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData1, unlockData2}, false, "btc", true)
+	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData1, unlockData2}, false, addressPrefix)
 	if err != nil {
 		t.Error("获取待签名交易单哈希失败")
 	} else {
@@ -1344,7 +1372,7 @@ func Test_tmp2(t *testing.T) {
 	}
 
 	// 验证交易单
-	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData1, unlockData2}, false, "btc", true)
+	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData1, unlockData2}, false, addressPrefix)
 	if pass {
 		fmt.Println("验证通过!")
 	} else {

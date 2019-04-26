@@ -1,19 +1,18 @@
 package btcTransaction
 
-const (
-	BTCMainNetP2PKHPrefix  = byte(0x00)
-	BTCTestNetP2PKHPrefix  = byte(0x6F)
-	BTCMainNetP2WPKHPrefix = byte(0x05)
-	BTCTestNetP2WPKHPrefix = byte(0xC4)
-	BTCMainNetBech32Prefix = "bc"
-	BTCTestNetBech32Prefix = "tb"
+type AddressPrefix struct {
+	P2PKHPrefix  byte
+	P2WPKHPrefix byte
+	Bech32Prefix string
+}
 
-	LTCMainNetP2PKHPrefix  = byte(0x30)
-	LTCTestNetP2PKHPrefix  = byte(0x6F)
-	LTCMainNetP2WPKHPrefix = byte(0x05)
-	LTCTestNetP2WPKHPrefix = byte(0xC4)
-	LTCMainNetBech32Prefix = "ltc"
-	LTCTestNetBech32Prefix = "tltc"
+var (
+	BTCMainnetAddressPrefix = AddressPrefix{byte(0x00), byte(0x05), "bc"}
+	BTCTestnetAddressPrefix = AddressPrefix{byte(0x6F), byte(0xC4), "tb"}
+	BCHMainnetAddressPrefix = AddressPrefix{byte(0x00), byte(0x05), "bc"}
+	BCHTestnetAddressPrefix = AddressPrefix{byte(0x6F), byte(0xC4), "tb"}
+	LTCMainnetAddressPrefix = AddressPrefix{byte(0x30), byte(0x05), "ltc"}
+	LTCTestnetAddressPrefix = AddressPrefix{byte(0x6F), byte(0xC4), "tltc"}
 )
 
 const (

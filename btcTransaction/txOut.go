@@ -10,7 +10,7 @@ type TxOut struct {
 	lockScript []byte
 }
 
-func newTxOutForEmptyTrans(vout []Vout, symbol string, isTestNet bool) ([]TxOut, error) {
+func newTxOutForEmptyTrans(vout []Vout, addressPrefix AddressPrefix) ([]TxOut, error) {
 	if vout == nil || len(vout) == 0 {
 		return nil, errors.New("No address to send when create an empty transaction!")
 	}
@@ -18,39 +18,10 @@ func newTxOutForEmptyTrans(vout []Vout, symbol string, isTestNet bool) ([]TxOut,
 	var prefixStr string
 	var p2pkhPrefixByte byte
 	var p2wpkhPrefixByte byte
-	if symbol == "btc" || symbol == "bch" {
-		if isTestNet {
-			prefixStr = BTCTestNetBech32Prefix
-			p2pkhPrefixByte = BTCTestNetP2PKHPrefix
-			p2wpkhPrefixByte = BTCTestNetP2WPKHPrefix
-		} else {
-			prefixStr = BTCMainNetBech32Prefix
-			p2pkhPrefixByte = BTCMainNetP2PKHPrefix
-			p2wpkhPrefixByte = BTCMainNetP2WPKHPrefix
-		}
-	} else if symbol == "ltc" {
-		if isTestNet {
-			prefixStr = LTCTestNetBech32Prefix
-			p2pkhPrefixByte = LTCTestNetP2PKHPrefix
-			p2wpkhPrefixByte = LTCTestNetP2WPKHPrefix
-		} else {
-			prefixStr = LTCMainNetBech32Prefix
-			p2pkhPrefixByte = LTCMainNetP2PKHPrefix
-			p2wpkhPrefixByte = LTCMainNetP2WPKHPrefix
-		}
-	} else {
-		//return nil, errors.New("Unknown coin type!")
-		//默认使用BTC的
-		if isTestNet {
-			prefixStr = BTCTestNetBech32Prefix
-			p2pkhPrefixByte = BTCTestNetP2PKHPrefix
-			p2wpkhPrefixByte = BTCTestNetP2WPKHPrefix
-		} else {
-			prefixStr = BTCMainNetBech32Prefix
-			p2pkhPrefixByte = BTCMainNetP2PKHPrefix
-			p2wpkhPrefixByte = BTCMainNetP2WPKHPrefix
-		}
-	}
+	prefixStr = addressPrefix.Bech32Prefix
+	p2pkhPrefixByte = addressPrefix.P2PKHPrefix
+	p2wpkhPrefixByte = addressPrefix.P2WPKHPrefix
+
 	for _, v := range vout {
 		amount := uint64ToLittleEndianBytes(v.Amount)
 

@@ -17,7 +17,7 @@ type txMultiSig struct {
 	sigPub    []SignaturePubkey
 }
 
-func CreateMultiSig(required byte, pubkeys [][]byte, SegwitON bool, symbol string, isTestNet bool) (string, string, error) {
+func CreateMultiSig(required byte, pubkeys [][]byte, SegwitON bool, addressPrefix AddressPrefix) (string, string, error) {
 	if required < 1 {
 		return "", "", errors.New("A multisignature address must require at least one key to redeem!")
 	}
@@ -56,26 +56,7 @@ func CreateMultiSig(required byte, pubkeys [][]byte, SegwitON bool, symbol strin
 		redeemHash = owcrypt.Hash(redeem, 0, owcrypt.HASH_ALG_HASH160)
 	}
 
-	if symbol == "btc" || symbol == "bch" {
-		if isTestNet {
-			return EncodeCheck(BTCMainNetP2PKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
-		}
-		return EncodeCheck(BTCTestNetP2PKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
-	} else if symbol == "ltc" {
-		if isTestNet {
-			return EncodeCheck(LTCMainNetP2PKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
-		}
-		return EncodeCheck(LTCTestNetP2PKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
-	} else {
-		//return "", "", errors.New("Unknown coin type!")
-
-		//默认使用BTC的
-		if isTestNet {
-			return EncodeCheck(BTCMainNetP2PKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
-		}
-		return EncodeCheck(BTCTestNetP2PKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
-	}
-
+	return EncodeCheck(addressPrefix.P2PKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
 }
 
 func getMultiDetails(redeem []byte) (byte, []string, error) {
