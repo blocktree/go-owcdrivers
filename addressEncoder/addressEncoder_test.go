@@ -1023,3 +1023,27 @@ func Test_AEAddress(t *testing.T) {
 	}
 
 }
+
+func Test_ATOMAddress(t *testing.T) {
+	hash, _ := hex.DecodeString("3335a8768bf87fbd1e554e71a82da2809110e190")
+	address := AddressEncode(hash, ATOM_mainnetAddress)
+
+	if address != "cosmos1xv66sa5tlplm68j4fec6stdzszg3pcvswag06j" {
+		t.Error("atom address encode failed!")
+	} else {
+		fmt.Println("atom address encode success!")
+		fmt.Println(address)
+	}
+
+	check, err := AddressDecode(address, ATOM_mainnetAddress)
+	if err != nil {
+		t.Error("atom address decode failed!")
+	} else {
+		for index := 0; index < 20; index++ {
+			if check[index] != hash[index] {
+				t.Error("atom address decode failed!")
+			}
+		}
+		fmt.Println("atom address decode success!")
+	}
+}

@@ -15,7 +15,7 @@ func Test_bech32_address(t *testing.T) {
 		fmt.Println(hex.EncodeToString(ret))
 	}
 
-	addresschk := Encode("bc", "qpzry9x8gf2tvdw0s3jn54khce6mua7l", ret)
+	addresschk := Encode("bc", "qpzry9x8gf2tvdw0s3jn54khce6mua7l", ret, nil)
 	if addresschk != address {
 		t.Error("encode error")
 	} else {

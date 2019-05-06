@@ -131,7 +131,7 @@ func calcHash(data []byte, hashType string) []byte {
 func AddressEncode(hash []byte, addresstype AddressType) string {
 
 	if addresstype.EncodeType == "bech32" {
-		return bech32.Encode(addresstype.ChecksumType, addresstype.Alphabet, hash)
+		return bech32.Encode(addresstype.ChecksumType, addresstype.Alphabet, hash, addresstype.Prefix)
 	}
 
 	if len(hash) != addresstype.HashLen {
