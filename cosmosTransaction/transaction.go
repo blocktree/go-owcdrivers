@@ -61,6 +61,8 @@ func SignTransactionHash(txHash string, prikey []byte) (string, error) {
 		return "", errors.New("Signature failed!")
 	}
 
+	sig = serilizeS(sig)
+
 	return hex.EncodeToString(sig), nil
 }
 
