@@ -56,12 +56,11 @@ func SignTransactionHash(txHash string, prikey []byte) (string, error) {
 	}
 
 	sig, ret := owcrypt.Signature(prikey, nil, 0, hash, 32, owcrypt.ECC_CURVE_SECP256K1)
+	sig = serilizeS(sig)
 
 	if ret != owcrypt.SUCCESS {
 		return "", errors.New("Signature failed!")
 	}
-
-	sig = serilizeS(sig)
 
 	return hex.EncodeToString(sig), nil
 }
@@ -74,6 +73,7 @@ func VerifyTransactionSig(emptyTrans, signature string, pubkey []byte) bool {
 	if err != nil {
 		return false
 	}
+
 	if owcrypt.Verify(pubkey, nil, 0, hash, 32, sig, owcrypt.ECC_CURVE_SECP256K1) != owcrypt.SUCCESS {
 		return false
 	}
@@ -89,7 +89,7 @@ func (ts TxStruct) CreateJsonForSend(signature string, pubkey []byte, keyType, s
 	}
 	sig := NewSig(sigBytes, ts.AccountNumber, ts.Sequence, pub)
 
-	tx := NewTx(ts.Message, ts.Memo, ts.Fee, sig)
+	tx := NewTx(ts.Message, ts.Memo, ts.Fee, []Sig{sig})
 
 	txSend := NewTxSend(tx, sendMode)
 

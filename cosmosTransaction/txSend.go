@@ -34,10 +34,10 @@ type Tx struct {
 	Message   []Message `json:"msg"`
 	Fee       FeeStruct `json:"fee"`
 	Memo      string    `json:"memo"`
-	Signature Sig       `json:"signature"`
+	Signature []Sig     `json:"signatures"`
 }
 
-func NewTx(message []Message, memo string, fee FeeStruct, signature Sig) Tx {
+func NewTx(message []Message, memo string, fee FeeStruct, signature []Sig) Tx {
 	return Tx{
 		Message:   message,
 		Fee:       fee,
