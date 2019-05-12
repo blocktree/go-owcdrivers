@@ -150,23 +150,24 @@ func Decode(input string, alphabet *Alphabet) ([]byte, error) {
 }
 
 //return prefix + hash + error
-func DecodeCheck(address string) (byte, []byte, error) {
+func DecodeCheck(address string) ([]byte, []byte, error) {
 	ret, err := Decode(address, BitcoinAlphabet)
 	if err != nil {
-		return 0, nil, errors.New("Invalid address!")
+		return nil, nil, errors.New("Invalid address!")
 	}
 	checksum := owcrypt.Hash(ret[:len(ret)-4], 0, owcrypt.HASh_ALG_DOUBLE_SHA256)[:4]
 	for i := 0; i < 4; i++ {
 		if checksum[i] != ret[len(ret)-4+i] {
-			return 0, nil, errors.New("Invalid address!")
+			return nil, nil, errors.New("Invalid address!")
 		}
 	}
 
-	return ret[0], ret[1 : len(ret)-4], nil
+	prefixLen := len(ret) - 4 - 0x14
+	return ret[:prefixLen], ret[prefixLen : len(ret)-4], nil
 }
 
-func EncodeCheck(prefix byte, hash []byte) string {
-	data := append([]byte{prefix}, hash...)
+func EncodeCheck(prefix []byte, hash []byte) string {
+	data := append(prefix, hash...)
 	checksum := owcrypt.Hash(data, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)[:4]
 	data = append(data, checksum...)
 	return Encode(data, BitcoinAlphabet)

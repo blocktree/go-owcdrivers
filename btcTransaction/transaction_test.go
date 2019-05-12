@@ -20,7 +20,7 @@ func Test_case1(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
-	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+	addressPrefix := AddressPrefix{[]byte{0x6f}, []byte{0xc4}, "tb"}
 
 	///////构建空交易单
 	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, addressPrefix)
@@ -123,7 +123,7 @@ func Test_case2(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
-	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+	addressPrefix := AddressPrefix{[]byte{0x6f}, []byte{0xc4}, "tb"}
 
 	/////////构建空交易单
 	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in1, in2}, []Vout{out}, lockTime, replaceable, addressPrefix)
@@ -225,7 +225,7 @@ func Test_case3(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
-	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+	addressPrefix := AddressPrefix{[]byte{0x6f}, []byte{0xc4}, "tb"}
 
 	///////构建空交易单
 	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, addressPrefix)
@@ -316,7 +316,7 @@ func Test_case4(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
-	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+	addressPrefix := AddressPrefix{[]byte{0x6f}, []byte{0xc4}, "tb"}
 
 	///////构建空交易单
 	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in1, in2}, []Vout{out}, lockTime, replaceable, addressPrefix)
@@ -432,7 +432,7 @@ func Test_case5(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
-	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+	addressPrefix := AddressPrefix{[]byte{0x6f}, []byte{0xc4}, "tb"}
 
 	///////构建空交易单
 	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in1, in2}, []Vout{out}, lockTime, replaceable, addressPrefix)
@@ -543,7 +543,7 @@ func Test_case6(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
-	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+	addressPrefix := AddressPrefix{[]byte{0x6f}, []byte{0xc4}, "tb"}
 
 	///////构建空交易单
 	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, addressPrefix)
@@ -627,7 +627,7 @@ func Test_case7(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
-	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+	addressPrefix := AddressPrefix{[]byte{0x6f}, []byte{0xc4}, "tb"}
 
 	///////构建空交易单
 	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out}, lockTime, replaceable, addressPrefix)
@@ -714,7 +714,7 @@ func Test_case8(t *testing.T) {
 
 	//填充成为2维数组，获取多重签名地址
 	segwit := true
-	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+	addressPrefix := AddressPrefix{[]byte{0x6f}, []byte{0xc4}, "tb"}
 
 	address, redeem, err := CreateMultiSig(required, [][]byte{pubA, pubB, pubC}, segwit, addressPrefix)
 	if err != nil {
@@ -837,7 +837,7 @@ func Test_case9(t *testing.T) {
 
 	segwit := true
 
-	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+	addressPrefix := AddressPrefix{[]byte{0x6f}, []byte{0xc4}, "tb"}
 
 	address, redeem, err := CreateMultiSig(required, [][]byte{pubA, pubB, pubC}, segwit, addressPrefix)
 	if err != nil {
@@ -958,7 +958,7 @@ func Test_case10(t *testing.T) {
 	//填充成为2维数组，获取多重签名地址
 	segwit := false
 
-	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+	addressPrefix := AddressPrefix{[]byte{0x6f}, []byte{0xc4}, "tb"}
 
 	address, redeem, err := CreateMultiSig(required, [][]byte{pubA, pubB, pubC}, segwit, addressPrefix)
 	if err != nil {
@@ -1078,7 +1078,7 @@ func Test_case11(t *testing.T) {
 
 	//填充成为2维数组，获取多重签名地址
 	segwit := false
-	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+	addressPrefix := AddressPrefix{[]byte{0x6f}, []byte{0xc4}, "tb"}
 
 	address, redeem, err := CreateMultiSig(required, [][]byte{pubA, pubB, pubC}, segwit, addressPrefix)
 	if err != nil {
@@ -1196,7 +1196,7 @@ func Test_tmp(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
-	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+	addressPrefix := AddressPrefix{[]byte{0x6f}, []byte{0xc4}, "tb"}
 
 	///////构建空交易单
 	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in}, []Vout{out1, out2}, lockTime, replaceable, addressPrefix)
@@ -1295,7 +1295,7 @@ func Test_tmp2(t *testing.T) {
 	//追加手续费支持
 	replaceable := false
 
-	addressPrefix := AddressPrefix{0x6f, 0xc4, "tb"}
+	addressPrefix := AddressPrefix{[]byte{0x6f}, []byte{0xc4}, "tb"}
 
 	/////////构建空交易单
 	emptyTrans, err := CreateEmptyRawTransaction([]Vin{in1, in2}, []Vout{out1, out2}, lockTime, replaceable, addressPrefix)

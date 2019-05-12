@@ -6,6 +6,18 @@ import (
 	"errors"
 )
 
+func byteArrayCompare(a, b []byte) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for index := 0; index < len(a); index++ {
+		if a[index] != b[index] {
+			return false
+		}
+	}
+	return true
+}
+
 //reverseBytes endian reverse
 func reverseBytes(s []byte) []byte {
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {

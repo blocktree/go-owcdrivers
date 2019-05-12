@@ -51,10 +51,11 @@ func (tx TxHash) GetMultiTxPubkeys() []string {
 
 func newTxHash(hash, lockscript, redeem []byte, inType, sigType byte, addressPrefix AddressPrefix) (*TxHash, error) {
 	var prefixStr string
-	var p2pkhPrefixByte byte
-	var p2wpkhPrefixByte byte
+	var p2pkhPrefixByte []byte
+	var p2wpkhPrefixByte []byte
 
 	prefixStr = addressPrefix.Bech32Prefix
+
 	p2pkhPrefixByte = addressPrefix.P2PKHPrefix
 	p2wpkhPrefixByte = addressPrefix.P2WPKHPrefix
 
