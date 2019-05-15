@@ -3,6 +3,7 @@ package vollarTransaction
 import (
 	"encoding/hex"
 	"errors"
+	"strings"
 
 	owcrypt "github.com/blocktree/go-owcrypt"
 )
@@ -125,30 +126,34 @@ func (ts TxStruct) GetHash() ([]string, error) {
 	return ret, nil
 }
 
-func DecodeTxStructRaw(trans string) (*TxStruct, error) {
+func DecodeTxStructRaw(trans string) (*TxStruct, []string, error) {
 	txStruct := TxStruct{}
-	txBytes, err := hex.DecodeString(trans)
+	dataArray := strings.Split(trans, ":")
+	if len(dataArray) <= 1 {
+		return nil, nil, errors.New("invalid transaction data!")
+	}
+	txBytes, err := hex.DecodeString(dataArray[0])
 	if err != nil {
-		return nil, errors.New("invalid transactions!")
+		return nil, nil, errors.New("invalid transactions!")
 	}
 	limit := len(txBytes)
 
 	index := 0
 
 	if index+4 > limit {
-		return nil, errors.New("invalid transaction data!")
+		return nil, nil, errors.New("invalid transaction data!")
 	}
 	txStruct.Version = txBytes[index : index+4]
 	index += 4
 
 	if index+1 > limit {
-		return nil, errors.New("invalid transaction data!")
+		return nil, nil, errors.New("invalid transaction data!")
 	}
 	txStruct.Flag = txBytes[index]
 	index++
 
 	if index+1 > limit {
-		return nil, errors.New("invalid transaction data!")
+		return nil, nil, errors.New("invalid transaction data!")
 	}
 	numVins := txBytes[index]
 	index++
@@ -156,24 +161,24 @@ func DecodeTxStructRaw(trans string) (*TxStruct, error) {
 	for i := 0; i < int(numVins); i++ {
 		in := TxIn{}
 		if index+32 > limit {
-			return nil, errors.New("invalid transaction data!")
+			return nil, nil, errors.New("invalid transaction data!")
 		}
 		in.TxID = txBytes[index : index+32]
 		index += 32
 		if index+4 > limit {
-			return nil, errors.New("invalid transaction data!")
+			return nil, nil, errors.New("invalid transaction data!")
 		}
 		in.Vout = txBytes[index : index+4]
 		index += 4
 		if index+1 > limit {
-			return nil, errors.New("invalid transaction data!")
+			return nil, nil, errors.New("invalid transaction data!")
 		}
 		if txBytes[index] != 0 {
-			return nil, errors.New("input signed transaction ,while only  empty transaction can be decoded!")
+			return nil, nil, errors.New("input signed transaction ,while only  empty transaction can be decoded!")
 		}
 		index++
 		if index+4 > limit {
-			return nil, errors.New("invalid transaction data!")
+			return nil, nil, errors.New("invalid transaction data!")
 		}
 		in.Sequence = txBytes[index : index+4]
 		index += 4
@@ -182,7 +187,7 @@ func DecodeTxStructRaw(trans string) (*TxStruct, error) {
 	}
 
 	if index+1 > limit {
-		return nil, errors.New("invalid transaction data!")
+		return nil, nil, errors.New("invalid transaction data!")
 	}
 	numVouts := txBytes[index]
 	index++
@@ -190,26 +195,26 @@ func DecodeTxStructRaw(trans string) (*TxStruct, error) {
 	for i := 0; i < int(numVouts); i++ {
 		out := TxOut{}
 		if index+8 > limit {
-			return nil, errors.New("invalid transaction data!")
+			return nil, nil, errors.New("invalid transaction data!")
 		}
 		out.Amount = txBytes[index : index+8]
 		index += 8
 		if index+1 > limit {
-			return nil, errors.New("invalid transaction data!")
+			return nil, nil, errors.New("invalid transaction data!")
 		}
 		out.Flag = txBytes[index]
 		index++
 		if index+1 > limit {
-			return nil, errors.New("invalid transaction data!")
+			return nil, nil, errors.New("invalid transaction data!")
 		}
 		lockScriptLen := int(txBytes[index])
 		if index+1+lockScriptLen > limit {
-			return nil, errors.New("invalid transaction data!")
+			return nil, nil, errors.New("invalid transaction data!")
 		}
 		out.LockScript = txBytes[index : index+1+lockScriptLen]
 		index += (lockScriptLen + 1)
 		if index+32 > limit {
-			return nil, errors.New("invalid transaction data!")
+			return nil, nil, errors.New("invalid transaction data!")
 		}
 		out.HashData = txBytes[index : index+32]
 		index += 32
@@ -218,7 +223,12 @@ func DecodeTxStructRaw(trans string) (*TxStruct, error) {
 	}
 
 	if index != limit {
-		return nil, errors.New("invalid transaction data!")
+		return nil, nil, errors.New("invalid transaction data!")
 	}
-	return &txStruct, nil
+
+	if len(txStruct.Vin) != len(dataArray)-1 {
+		return nil, nil, errors.New("invalid transaction data!")
+	}
+
+	return &txStruct, dataArray[1:], nil
 }

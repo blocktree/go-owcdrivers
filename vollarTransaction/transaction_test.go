@@ -52,10 +52,9 @@ func Test_transaction(t *testing.T) {
 		Pubkey:    pubkey,
 		Signature: signature,
 	}
-	lockScripts := []string{lockscript}
 
 	// 同时获取验签结果和最终合并交易单
-	pass, signedTrans, err := VerifyAndCombineRawTransaction(emptyTrans, []SigPub{sigPub}, lockScripts)
+	pass, signedTrans, err := VerifyAndCombineRawTransaction(emptyTrans, []SigPub{sigPub})
 
 	if err != nil {
 		t.Error("verify failed!")

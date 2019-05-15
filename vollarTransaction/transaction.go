@@ -29,7 +29,11 @@ func CreateEmptyRawTransactionAndHash(vins []Vin, vouts []Vout) (string, []strin
 	if err != nil {
 		return "", nil, err
 	}
-	return hex.EncodeToString(txStruct.ToBytes()), hashes, nil
+	lockScripts := ""
+	for _, in := range vins {
+		lockScripts += ":" + in.LockScript
+	}
+	return hex.EncodeToString(txStruct.ToBytes()) + lockScripts, hashes, nil
 }
 
 func SignRawTransaction(hash string, prikey []byte) ([]byte, error) {
@@ -46,8 +50,8 @@ func SignRawTransaction(hash string, prikey []byte) ([]byte, error) {
 	return sig, nil
 }
 
-func VerifyAndCombineRawTransaction(emptyTrans string, sigPub []SigPub, lockScripts []string) (bool, string, error) {
-	trans, err := DecodeTxStructRaw(emptyTrans)
+func VerifyAndCombineRawTransaction(emptyTrans string, sigPub []SigPub) (bool, string, error) {
+	trans, lockScripts, err := DecodeTxStructRaw(emptyTrans)
 	if err != nil {
 		return false, "", err
 	}
