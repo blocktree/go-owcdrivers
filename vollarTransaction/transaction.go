@@ -47,7 +47,7 @@ func SignRawTransaction(hash string, prikey []byte) ([]byte, error) {
 		return nil, errors.New("sign failed!")
 	}
 
-	return sig, nil
+	return serilizeS(sig), nil
 }
 
 func VerifyAndCombineRawTransaction(emptyTrans string, sigPub []SigPub) (bool, string, error) {
@@ -84,7 +84,7 @@ func VerifyAndCombineRawTransaction(emptyTrans string, sigPub []SigPub) (bool, s
 	}
 
 	txBytes := trans.ToBytes()
-	for index := 0; index < 83; index++ {
+	for index := 0; index < 82+len(trans.Vin); index++ {
 		txBytes = append(txBytes, byte(0))
 	}
 	return pass, hex.EncodeToString(txBytes), nil
