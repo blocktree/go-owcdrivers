@@ -44,7 +44,7 @@ func SignTransaction(hash string, prikey []byte) ([]byte, error) {
 	if retCode != owcrypt.SUCCESS {
 		return nil, errors.New("Sign Failed!")
 	}
-
+	signature = serilizeS(signature)
 	return signature, nil
 }
 
