@@ -65,7 +65,7 @@ var (
 	//DOGE_singleSignAddressP2PKH = AddressType{"base58", BTCAlphabet, "doubleSHA256", "h160", 20, []byte{0x16}, nil}
 	DOGE_multiSignAddressP2PKH = AddressType{"base58", BTCAlphabet, "doubleSHA256", "h160", 20, []byte{0x16}, nil}
 	//ONT stuff
-	ONT_Address = AddressType{"base58", OntAlphabet, "doubleSHA256", "h160", 20, []byte{0x16}, nil}
+	ONT_Address = AddressType{"base58", OntAlphabet, "doubleSHA256", "h160", 20, []byte{0x17}, nil}
 	//XRP stuff
 	XRP_Address = AddressType{"base58", XRPAlphabet, "doubleSHA256", "h160", 20, []byte{0x00}, nil}
 	//BTM stuff
