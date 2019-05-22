@@ -3,6 +3,7 @@ package fiiiTransaction
 import (
 	"encoding/binary"
 	"encoding/hex"
+	"strings"
 
 	owcrypt "github.com/blocktree/go-owcrypt"
 )
@@ -50,7 +51,7 @@ func (tm *TransactionMsg) Complete() {
 		txBytes = append(txBytes, out.ToBytes()...)
 	}
 
-	tm.Hash = hex.EncodeToString(owcrypt.Hash(txBytes, 0, owcrypt.HASH_ALG_SHA256))
+	tm.Hash = strings.ToUpper(hex.EncodeToString(owcrypt.Hash(txBytes, 0, owcrypt.HASH_ALG_SHA256)))
 
 	tm.Size = len(txBytes) + 4 /*version*/ + 32 /*hash*/
 

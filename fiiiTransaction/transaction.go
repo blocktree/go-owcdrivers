@@ -33,7 +33,7 @@ func CreateEmptyTransactionAndMessage(inputs []Vin, outputs []Vout, version int,
 	txMsg := TransactionMsg{}
 
 	txMsg.Version = version
-	txMsg.Timestamp = time.Now().UnixNano() / 1000
+	txMsg.Timestamp = time.Now().UnixNano() / 1000000
 	txMsg.LockTime = locktime
 	txMsg.ExpiredTime = expiredtime
 	txMsg.InputCount = len(inputs)
