@@ -3,28 +3,25 @@ package aliencoinTransaction
 import (
 	"encoding/hex"
 	"errors"
-	"github.com/blocktree/go-owcrypt"
 	"strings"
+
+	"github.com/blocktree/go-owcrypt"
 )
 
 var DefaultTxVersion = []byte{0x01, 0x00, 0x00, 0x00}
 var DefaultSigTypeBytes = []byte{0x01, 0x00, 0x00, 0x00}
 
 type TxStruct struct {
-	Version      []byte // 01000000
+	Version []byte // 01000000
 	//TimeInterval []byte
-	Vin          []TxIn
-	Vout         []TxOut
-	LockTime     []byte
+	Vin      []TxIn
+	Vout     []TxOut
+	LockTime []byte
 }
 
 func NewTxStruct(vins []Vin, vouts []Vout, lockTime uint32) (*TxStruct, error) {
 	ret := TxStruct{Version: DefaultTxVersion}
 
-	//timeuntil := uint32(time.Now().Unix())
-	//timeuntil += timeInterval
-
-	//ret.TimeInterval = uint32ToLittleEndianBytes(timeuntil)
 	ret.LockTime = uint32ToLittleEndianBytes(lockTime)
 
 	for _, in := range vins {
@@ -49,7 +46,6 @@ func (ts TxStruct) ToBytes() []byte {
 	ret := []byte{}
 
 	ret = append(ret, ts.Version...)
-	//ret = append(ret, ts.TimeInterval...)
 	ret = append(ret, byte(len(ts.Vin)))
 	for _, in := range ts.Vin {
 		ret = append(ret, in.ToBytes()...)
@@ -69,7 +65,6 @@ func (ts TxStruct) GetHash() ([]string, error) {
 	for i := 0; i < len(ts.Vin); i++ {
 		data := []byte{}
 		data = append(data, ts.Version...)
-		//data = append(data, ts.TimeInterval...)
 		data = append(data, byte(len(ts.Vin)))
 		for index, in := range ts.Vin {
 			data = append(data, in.TxID...)
@@ -115,12 +110,6 @@ func DecodeTxStructRaw(trans string) (*TxStruct, []string, error) {
 	}
 	txStruct.Version = txBytes[index : index+4]
 	index += 4
-
-	if index+4 > limit {
-		return nil, nil, errors.New("invalid transaction data!")
-	}
-	//txStruct.TimeInterval = txBytes[index : index+4]
-	//index += 4
 
 	if index+1 > limit {
 		return nil, nil, errors.New("invalid transaction data!")

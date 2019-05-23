@@ -16,7 +16,7 @@ func Test_send(t *testing.T) {
 	to1 := "ASoPDMzv6C6ZkZaeYCFMaHgGzSUKezRze2"
 	amount1 := uint64(31798399988116)
 	to2 := "AQhxgsCGDUq8oiWCK96RAaeDyJmQ924irK"
-	amount2 := uint64(1000)
+	amount2 := uint64(100000000000)
 
 	// 构建输入
 	vins := []Vin{Vin{txid, vout, lockScript}}
@@ -43,7 +43,7 @@ func Test_send(t *testing.T) {
 		t.Error("failed to sign!")
 	} else {
 		// only for test
-		signature, _ := hex.DecodeString("178d596dff077d60aeedd654b611e0e186211e0a2f776d22e28008a7694f197d3250f8d4f99a70cb7bf92bb3b3aaa3925115749b6ce1c4f2d8b03935f43d5c4f")
+		signature, _ = hex.DecodeString("178d596dff077d60aeedd654b611e0e186211e0a2f776d22e28008a7694f197d3250f8d4f99a70cb7bf92bb3b3aaa3925115749b6ce1c4f2d8b03935f43d5c4f")
 		fmt.Println("签名结果:\n", hex.EncodeToString(signature))
 	}
 

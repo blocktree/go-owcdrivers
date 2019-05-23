@@ -5,8 +5,8 @@ import (
 )
 
 const (
-	p2pkhPrefix = byte(0x1E)
-	p2shPrefix  = byte(0x21)
+	p2pkhPrefix = byte(0x17)
+	p2shPrefix  = byte(0x30)
 )
 
 type TxOut struct {
