@@ -60,7 +60,7 @@ func SignTxHash(symbol string, msg []byte, privateKey []byte, eccType uint32) ([
 		return sig, nil
 	}
 
-	if eccType == owcrypt.ECC_CURVE_SECP256K1 {
+	if eccType == owcrypt.ECC_CURVE_SECP256K1 || eccType == owcrypt.ECC_CURVE_SECP256R1 {
 		sig, sigErr = owcrypt.Signature(privateKey, nil, 0, msg, uint16(len(msg)), eccType)
 		if sigErr != owcrypt.SUCCESS {
 			return nil, fmt.Errorf("ECC sign hash failed")
