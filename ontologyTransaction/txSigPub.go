@@ -65,7 +65,7 @@ func (sp SigPub) toBytes() []byte {
 	pub = append([]byte{byte(len(pub))}, pub...)
 
 	ret = append(ret, pub...)
-	ret = append([]byte{0x01}, ret...)
+	//ret = append([]byte{0x01}, ret...)
 	return ret
 }
 
@@ -74,13 +74,13 @@ func decodeSigPubBytes(sp []byte) (*SigPub, error) {
 	limit := len(sp)
 	index := 0
 
-	if index+1 > limit {
-		return nil, errors.New("Invalid signature & public key data!")
-	}
-	if sp[index] != 0x01 {
-		return nil, errors.New("Invalid signature & public key data!")
-	}
-	index++
+	// if index+1 > limit {
+	// 	return nil, errors.New("Invalid signature & public key data!")
+	// }
+	// if sp[index] != 0x01 {
+	// 	return nil, errors.New("Invalid signature & public key data!")
+	// }
+	// index++
 
 	if index+2 > limit {
 		return nil, errors.New("Invalid signature & public key data!")

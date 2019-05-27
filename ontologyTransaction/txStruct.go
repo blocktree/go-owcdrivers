@@ -89,7 +89,11 @@ func (t Transaction) ToBytes() ([]byte, error) {
 		ret = append(ret, 0x00)
 	} else {
 		if t.SigDatas[0].Nrequired == 0 {
-			ret = append(ret, t.SigDatas[0].SigPubs[0].toBytes()...)
+			ret = append(ret, byte(len(t.SigDatas[0].SigPubs)))
+			for _, sp := range t.SigDatas[0].SigPubs {
+				ret = append(ret, sp.toBytes()...)
+			}
+
 		} else {
 			// TODO
 		}
@@ -199,7 +203,23 @@ func DecodeRawTransaction(txBytes []byte) (*Transaction, error) {
 		}
 		tx.SigDatas = append(tx.SigDatas, SigData{0, []SigPub{*sigpub}})
 	} else {
-		// TODO
+		sigLen := int(txBytes[index])
+		index++
+
+		for i := 0; i < sigLen; i++ {
+			if index+102 > limit {
+				return nil, errors.New("Invalid transaction data!")
+			}
+			sigpub, err := decodeSigPubBytes(txBytes[index : index+102])
+			if err != nil {
+				return nil, err
+			}
+			tx.SigDatas = append(tx.SigDatas, SigData{0, []SigPub{*sigpub}})
+			index += 102
+		}
+		if index != limit {
+			return nil, errors.New("Invalid transaction data!")
+		}
 	}
 
 	return &tx, nil
