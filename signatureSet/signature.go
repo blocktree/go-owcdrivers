@@ -2,7 +2,6 @@ package signatureSet
 
 import (
 	"fmt"
-	"github.com/blocktree/ddmchain-adapter/ddmchain_txsigner"
 	"github.com/blocktree/go-owcdrivers/btcTransaction"
 	"github.com/blocktree/go-owcrypt"
 	"math/big"
@@ -17,7 +16,7 @@ func SignTxHash(symbol string, msg []byte, privateKey []byte, eccType uint32) ([
 	//查找是否有注册交易签名工具
 	signer := GetTxSigner(symbol)
 	if signer != nil {
-		return ddmchain_txsigner.Default.SignTransactionHash(msg, privateKey, eccType)
+		return signer.SignTransactionHash(msg, privateKey, eccType)
 	}
 
 	if strings.EqualFold(symbol, "ETH") {
@@ -60,7 +59,7 @@ func SignTxHash(symbol string, msg []byte, privateKey []byte, eccType uint32) ([
 		return sig, nil
 	}
 
-	if eccType == owcrypt.ECC_CURVE_SECP256K1 || eccType == owcrypt.ECC_CURVE_SECP256R1 {
+	if eccType == owcrypt.ECC_CURVE_SECP256K1 {
 		sig, sigErr = owcrypt.Signature(privateKey, nil, 0, msg, uint16(len(msg)), eccType)
 		if sigErr != owcrypt.SUCCESS {
 			return nil, fmt.Errorf("ECC sign hash failed")
