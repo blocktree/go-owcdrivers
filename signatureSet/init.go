@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego/config"
 	"github.com/blocktree/ddmchain-adapter/ddmchain_txsigner"
 	"github.com/blocktree/eosio-adapter/eos_txsigner"
+	"github.com/blocktree/ontology-adapter/ontology_txsigner"
 	"github.com/blocktree/openwallet/log"
 	"github.com/blocktree/openwallet/openwallet"
 	"strings"
@@ -13,6 +14,7 @@ func init() {
 	//注册交易签名工具
 	RegTxSigner("DDM", ddmchain_txsigner.Default)
 	RegTxSigner("EOS", eos_txsigner.Default)
+	RegTxSigner("ONT", ontology_txsigner.Default)
 }
 
 
