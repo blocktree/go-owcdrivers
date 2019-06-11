@@ -5,6 +5,7 @@ import (
 	"github.com/blocktree/ddmchain-adapter/ddmchain_txsigner"
 	"github.com/blocktree/eosio-adapter/eos_txsigner"
 	"github.com/blocktree/ontology-adapter/ontology_txsigner"
+	"github.com/blocktree/futurepia-adapter/futurepia_txsigner"
 	"github.com/blocktree/openwallet/log"
 	"github.com/blocktree/openwallet/openwallet"
 	"strings"
@@ -15,6 +16,7 @@ func init() {
 	RegTxSigner("DDM", ddmchain_txsigner.Default)
 	RegTxSigner("EOS", eos_txsigner.Default)
 	RegTxSigner("ONT", ontology_txsigner.Default)
+	RegTxSigner("PIA", futurepia_txsigner.Default)
 }
 
 
