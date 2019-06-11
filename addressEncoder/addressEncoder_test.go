@@ -1047,3 +1047,21 @@ func Test_ATOMAddress(t *testing.T) {
 		fmt.Println("atom address decode success!")
 	}
 }
+
+func Test_ELA_Address(t *testing.T) {
+	address := "Eb1r8zaS3qbsRFH4j4GADshJCqFZ84ZM8u"
+
+	hash, err := AddressDecode(address, ELA_Address)
+	if err != nil {
+		t.Error(err)
+	} else {
+		if hex.EncodeToString(hash) != "c3ec22c32fd1f5a14cb6467c7b7728f34a6b3d76" {
+			t.Error("ela address decode failed!")
+		}
+	}
+
+	chk := AddressEncode(hash, ELA_Address)
+	if chk != address {
+		t.Error("ela address encode failed!")
+	}
+}

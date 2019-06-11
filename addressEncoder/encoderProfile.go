@@ -175,4 +175,7 @@ var (
 	//ATOM stuff
 	ATOM_mainnetAddress = AddressType{"bech32", ATOMBech32Alphabet, "cosmos", "h160", 20, nil, nil}
 	ATOM_testnetAddress = AddressType{"bech32", ATOMBech32Alphabet, "cosmos", "h160", 20, nil, nil}
+
+	//ELA stuff
+	ELA_Address = AddressType{"base58", BTCAlphabet, "doubleSHA256", "h160", 20, []byte{0x21}, nil}
 )
