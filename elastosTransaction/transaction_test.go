@@ -30,13 +30,13 @@ func Test_01(t *testing.T) {
 
 	//构造输出
 	out1 := Vout{
-		AssetID: AssetID_ALE,
+		AssetID: AssetID_ELA,
 		Amount:  amount1,
 		Address: to1,
 	}
 
 	out2 := Vout{
-		AssetID: AssetID_ALE,
+		AssetID: AssetID_ELA,
 		Amount:  amount2,
 		Address: to2,
 	}
@@ -101,11 +101,11 @@ func Test_02(t *testing.T) {
 
 	to1 := "EQaC7tZvmbiKoyQc1bTzEePFKS6t99wTLg"
 	amount1 := uint64(89571000)
-	out1 := Vout{AssetID_ALE, amount1, to1}
+	out1 := Vout{AssetID_ELA, amount1, to1}
 
 	to2 := "EbTiNod8a7ePdeE2hH61aEPTmgyLtWbJxv"
 	amount2 := uint64(52000000000)
-	out2 := Vout{AssetID_ALE, amount2, to2}
+	out2 := Vout{AssetID_ELA, amount2, to2}
 
 	vouts := []Vout{out1, out2}
 
