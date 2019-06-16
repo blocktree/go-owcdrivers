@@ -178,4 +178,7 @@ var (
 
 	//ELA stuff
 	ELA_Address = AddressType{"base58", BTCAlphabet, "doubleSHA256", "h160", 20, []byte{0x21}, nil}
+
+	//WICC stuff
+	WICC_mainnetAddressP2PKH = AddressType{"base58", BTCAlphabet, "doubleSHA256", "h160", 20, []byte{0x49}, nil}
 )
