@@ -43,13 +43,13 @@ func SignTxHash(symbol string, msg []byte, privateKey []byte, eccType uint32) ([
 		return sig, nil
 	}
 
-	if strings.EqualFold(symbol, "VSYS") {
-		sig, err := VSYSSignature(privateKey, msg)
-		if err != owcrypt.SUCCESS {
-			return nil, fmt.Errorf("VSYS sign hash failed")
-		}
-		return sig, nil
-	}
+	//if strings.EqualFold(symbol, "VSYS") {
+	//	sig, err := VSYSSignature(privateKey, msg)
+	//	if err != owcrypt.SUCCESS {
+	//		return nil, fmt.Errorf("VSYS sign hash failed")
+	//	}
+	//	return sig, nil
+	//}
 
 	if strings.EqualFold(symbol, "TRX") {
 		sig, err := TronSignature(privateKey, msg)
