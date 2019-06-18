@@ -4,10 +4,12 @@ import (
 	"github.com/astaxie/beego/config"
 	"github.com/blocktree/ddmchain-adapter/ddmchain_txsigner"
 	"github.com/blocktree/eosio-adapter/eos_txsigner"
-	"github.com/blocktree/ontology-adapter/ontology_txsigner"
 	"github.com/blocktree/futurepia-adapter/futurepia_txsigner"
+	"github.com/blocktree/ontology-adapter/ontology_txsigner"
 	"github.com/blocktree/openwallet/log"
 	"github.com/blocktree/openwallet/openwallet"
+	"github.com/assetsadapterstore/tivalue-adapter/tivalue_txsigner"
+	"github.com/blocktree/virtualeconomy-adapter/virtualeconomy_txsigner"
 	"strings"
 )
 
@@ -17,6 +19,8 @@ func init() {
 	RegTxSigner("EOS", eos_txsigner.Default)
 	RegTxSigner("ONT", ontology_txsigner.Default)
 	RegTxSigner("PIA", futurepia_txsigner.Default)
+	RegTxSigner("VSYS", virtualeconomy_txsigner.Default)
+	RegTxSigner("TV", tivalue_txsigner.Default)
 }
 
 
