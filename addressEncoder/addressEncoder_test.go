@@ -963,6 +963,17 @@ func Test_VSYSAddress(t *testing.T) {
 	}
 }
 
+func Test_TVAddress(t *testing.T) {
+	pubkey, _ := hex.DecodeString("4c6efab3d1e53892eb5aa3c62a5c76c3af7dea5e66c1243741d70d42d5ac5d06")
+	hash := owcrypt.Hash(pubkey, 32, owcrypt.HASH_ALG_BLAKE2B)
+	hash = owcrypt.Hash(hash, 32, owcrypt.HASH_ALG_KECCAK256)[:20]
+	fmt.Println(hex.EncodeToString(hash))
+
+	address := AddressEncode(hash, TV_mainnetAddress)
+
+	fmt.Println(address)
+}
+
 func Test_EOSAddress(t *testing.T) {
 	pubkey, _ := hex.DecodeString("02c0ded2bc1f1305fb0faac5e6c03ee3a1924234985427b6167ca569d13df435cf")
 	address := AddressEncode(pubkey, EOS_mainnetPublic)
