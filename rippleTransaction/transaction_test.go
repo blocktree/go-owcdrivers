@@ -32,6 +32,7 @@ func TestTransaction(t *testing.T) {
 		fmt.Println("signature data : \n", signature)
 	}
 
+	//
 	pass, signedTrans := VerifyAndCombinRawTransaction(emptyTrans, signature, pubkey)
 	if pass {
 		fmt.Println("signed transaction : \n", signedTrans)
