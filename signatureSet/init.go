@@ -10,6 +10,7 @@ import (
 	"github.com/blocktree/openwallet/openwallet"
 	"github.com/assetsadapterstore/tivalue-adapter/tivalue_txsigner"
 	"github.com/blocktree/virtualeconomy-adapter/virtualeconomy_txsigner"
+	"github.com/blocktree/waykichain-adapter/waykichain_txsigner"
 	"strings"
 )
 
@@ -21,6 +22,7 @@ func init() {
 	RegTxSigner("PIA", futurepia_txsigner.Default)
 	RegTxSigner("VSYS", virtualeconomy_txsigner.Default)
 	RegTxSigner("TV", tivalue_txsigner.Default)
+	RegTxSigner("WICC", waykichain_txsigner.Default)
 }
 
 

@@ -12,5 +12,6 @@ require (
 	github.com/blocktree/ontology-adapter v1.0.8
 	github.com/blocktree/openwallet v1.4.3
 	github.com/blocktree/virtualeconomy-adapter v1.1.5
+	github.com/blocktree/waykichain-adapter v1.0.3
 	github.com/tidwall/gjson v1.2.1
 )
