@@ -13,6 +13,8 @@ const (
 	ST_AMOUNT  uint8 = 6
 	ST_VL      uint8 = 7
 	ST_ACCOUNT uint8 = 8
+	ST_OBJECT  uint8 = 14
+	ST_ARRAY   uint8 = 15
 )
 
 var (
@@ -32,4 +34,11 @@ var encodings = map[string]enc{
 	"Account":            enc{ST_ACCOUNT, 1},
 	"Owner":              enc{ST_ACCOUNT, 2},
 	"Destination":        enc{ST_ACCOUNT, 3},
+	"Memos":              enc{ST_ARRAY, 9},
+	"Memo":               enc{ST_OBJECT, 10},
+	"MemoType":           enc{ST_VL, 12},
+	"MemoData":           enc{ST_VL, 13},
+	"MemoFormat":         enc{ST_VL, 14},
+	"EndOfObject":        enc{ST_OBJECT, 1},
+	"EndOfArray":         enc{ST_ARRAY, 1},
 }

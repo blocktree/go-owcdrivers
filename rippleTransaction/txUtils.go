@@ -112,3 +112,7 @@ func serilizeS(sig []byte) []byte {
 	}
 	return sig
 }
+
+func memoToBytes(memo string) []byte {
+	return append([]byte{byte(len(memo))}, []byte(memo)...)
+}

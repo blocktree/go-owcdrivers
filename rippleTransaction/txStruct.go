@@ -20,6 +20,7 @@ type TxStruct struct {
 	TxnSignature       []byte
 	Account            []byte
 	Destination        []byte
+	Memos              []byte
 }
 
 func getTransactionTypeBytes(txType uint16) []byte {
@@ -98,7 +99,31 @@ func getAccountBytes(address, typo string) ([]byte, error) {
 	return append(enc, hashBytes...), nil
 }
 
-func NewTxStruct(from, pubkey string, sequence uint32, to string, amount, fee uint64, signature string, lastLedgerSequence uint32) (*TxStruct, error) {
+func getMemosBytes(memoType, memoData, memoFormat string) []byte {
+	if memoData != "" {
+		memoBytes := getEncBytes(encodings["Memos"])
+		memoBytes = append(memoBytes, getEncBytes(encodings["Memo"])...)
+
+		if memoType != "" {
+			memoBytes = append(memoBytes, getEncBytes(encodings["MemoType"])...)
+			memoBytes = append(memoBytes, memoToBytes(memoType)...)
+		}
+
+		memoBytes = append(memoBytes, getEncBytes(encodings["MemoData"])...)
+		memoBytes = append(memoBytes, memoToBytes(memoData)...)
+
+		if memoFormat != "" {
+			memoBytes = append(memoBytes, getEncBytes(encodings["MemoFormat"])...)
+			memoBytes = append(memoBytes, memoToBytes(memoFormat)...)
+		}
+		memoBytes = append(memoBytes, getEncBytes(encodings["EndOfObject"])...)
+		memoBytes = append(memoBytes, getEncBytes(encodings["EndOfArray"])...)
+		return memoBytes
+	}
+	return nil
+}
+
+func NewTxStruct(from, pubkey string, sequence uint32, to string, amount, fee uint64, signature string, lastLedgerSequence uint32, memoType, memoData, memoFormat string) (*TxStruct, error) {
 	var (
 		txStruct TxStruct
 		err      error
@@ -135,6 +160,8 @@ func NewTxStruct(from, pubkey string, sequence uint32, to string, amount, fee ui
 		return nil, err
 	}
 
+	txStruct.Memos = getMemosBytes(memoType, memoData, memoFormat)
+
 	return &txStruct, nil
 }
 
@@ -151,6 +178,7 @@ func (tx TxStruct) ToEmptyRawWiths() string {
 	ret = []byte{}
 	ret = append(ret, tx.Account...)
 	ret = append(ret, tx.Destination...)
+	ret = append(ret, tx.Memos...)
 	last := hex.EncodeToString(ret)
 	return pre + "s" + last
 }
@@ -167,6 +195,7 @@ func (tx TxStruct) ToBytes() []byte {
 	ret = append(ret, tx.TxnSignature...)
 	ret = append(ret, tx.Account...)
 	ret = append(ret, tx.Destination...)
+	ret = append(ret, tx.Memos...)
 	return ret
 }
 

@@ -14,8 +14,11 @@ func TestTransaction(t *testing.T) {
 	amount := uint64(2000000000)
 	fee := uint64(10000)
 	lastLedgerSequence := uint32(353535)
+	memoType := "client"
+	memoData := "111"
+	memoFormat := "text/plain"
 
-	emptyTrans, hash, err := CreateEmptyRawTransactionAndHash(from, pubkey, sequence, to, amount, fee, lastLedgerSequence)
+	emptyTrans, hash, err := CreateEmptyRawTransactionAndHash(from, pubkey, sequence, to, amount, fee, lastLedgerSequence, memoType, memoData, memoFormat)
 	if err != nil {
 		t.Error(err)
 	} else {
