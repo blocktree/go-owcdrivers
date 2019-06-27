@@ -19,14 +19,6 @@ type CommonTx struct {
 	Amount      []byte
 }
 
-type RegisterAccountTx struct {
-	TxType      byte
-	Version     []byte
-	ValidHeight []byte
-	UserID      []byte
-	Fee         []byte
-}
-
 func NewCommonTx(fromUserID, toAddress string, amount, fee, validHeight int64) (*CommonTx, error) {
 	var commonTx CommonTx
 
@@ -92,6 +84,14 @@ func (tx CommonTx) GetHash() []byte {
 	return owcrypt.Hash(txBytes, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
 }
 
+type RegisterAccountTx struct {
+	TxType      byte
+	Version     []byte
+	ValidHeight []byte
+	UserID      []byte
+	Fee         []byte
+}
+
 func NewRegisterAccountTx(fromPubkey string, fee, validHeight int64) (*RegisterAccountTx, error) {
 	var registerAccountTx RegisterAccountTx
 
@@ -139,13 +139,93 @@ func (tx RegisterAccountTx) GetHash() []byte {
 	return owcrypt.Hash(txBytes, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
 }
 
+type CallContractTx struct {
+	TxType      byte
+	Version     []byte
+	ValidHeight []byte
+	FromUserID  []byte
+	AppID       []byte
+	Fee         []byte
+	Amount      []byte
+	ContractHex []byte
+}
+
+func NewCallContractTx(fromUserID, appID, contractHex string, validHeight, fee, amount int64) (*CallContractTx, error) {
+	var contractTx CallContractTx
+
+	contractTx.TxType = TxType_CONTRACT
+	contractTx.Version = int64ToUvarint(Version)
+	if validHeight < 0 {
+		return nil, errors.New("Negative valid height!")
+	}
+	contractTx.ValidHeight = int64ToUvarint(validHeight)
+	if !isRegIdStr(fromUserID) {
+		return nil, errors.New("Invalid from register ID!")
+	}
+	ids := strings.Split(fromUserID, "-")
+	idBytes := []byte{}
+	for _, id := range ids {
+		data, _ := strconv.ParseInt(id, 10, 64)
+		idBytes = append(idBytes, int64ToUvarint(data)...)
+	}
+	contractTx.FromUserID = append([]byte{byte(len(idBytes))}, idBytes...)
+
+	if !isRegIdStr(appID) {
+		return nil, errors.New("Invalid from register ID!")
+	}
+	ids = strings.Split(appID, "-")
+	idBytes = []byte{}
+	for _, id := range ids {
+		data, _ := strconv.ParseInt(id, 10, 64)
+		idBytes = append(idBytes, int64ToUvarint(data)...)
+	}
+	contractTx.AppID = append([]byte{byte(len(idBytes))}, idBytes...)
+
+	contractTx.Fee = int64ToUvarint(fee)
+
+	contractTx.Amount = int64ToUvarint(amount)
+
+	contract, err := hex.DecodeString(contractHex)
+	if err != nil {
+		return nil, errors.New("Invalid contract hex!")
+	}
+	contractTx.ContractHex = append([]byte{byte(len(contract))}, contract...)
+
+	return &contractTx, nil
+}
+
+func (tx CallContractTx) ToBytes() []byte {
+	txBytes := make([]byte, 0)
+	txBytes = append(txBytes, tx.TxType)
+	txBytes = append(txBytes, tx.Version...)
+	txBytes = append(txBytes, tx.ValidHeight...)
+	txBytes = append(txBytes, tx.FromUserID...)
+	txBytes = append(txBytes, tx.AppID...)
+	txBytes = append(txBytes, tx.Fee...)
+	txBytes = append(txBytes, tx.Amount...)
+	txBytes = append(txBytes, tx.ContractHex...)
+	return txBytes
+}
+
+func (tx CallContractTx) GetHash() []byte {
+	txBytes := make([]byte, 0)
+	txBytes = append(txBytes, tx.Version...)
+	txBytes = append(txBytes, tx.TxType)
+	txBytes = append(txBytes, tx.ValidHeight...)
+	txBytes = append(txBytes, tx.FromUserID...)
+	txBytes = append(txBytes, tx.AppID...)
+	txBytes = append(txBytes, tx.Fee...)
+	txBytes = append(txBytes, tx.Amount...)
+	txBytes = append(txBytes, tx.ContractHex...)
+	return owcrypt.Hash(txBytes, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
+}
 func getHashFromEmptyRawTrans(emptyTrans string) ([]byte, error) {
 	txBytes, err := hex.DecodeString(emptyTrans)
 	if err != nil {
 		return nil, errors.New("Invalid transaction hex data!")
 	}
 
-	if (txBytes[0] != TxType_COMMON && txBytes[0] != TxType_REGACCT) || txBytes[1] != byte(Version) {
+	if (txBytes[0] != TxType_COMMON && txBytes[0] != TxType_REGACCT && txBytes[0] != TxType_CONTRACT) || txBytes[1] != byte(Version) {
 		return nil, errors.New("Invalid transaction hex data!")
 	}
 

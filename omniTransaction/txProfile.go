@@ -1,5 +1,16 @@
 package omniTransaction
 
+type AddressPrefix struct {
+	P2PKHPrefix  []byte
+	P2WPKHPrefix []byte
+	Bech32Prefix string
+}
+
+var (
+	BTCMainnetAddressPrefix = AddressPrefix{[]byte{0x00}, []byte{0x05}, "bc"}
+	BTCTestnetAddressPrefix = AddressPrefix{[]byte{0x6F}, []byte{0xC4}, "tb"}
+)
+
 // Omni transaction type
 const (
 	SimpleSend             = 0
@@ -41,12 +52,6 @@ const (
 	EcoSystemTest = byte(2)
 
 	DefaultEcoSystem = EcoSystemTest
-)
-
-const (
-	P2PKHPrefix  = byte(0x6F)
-	P2WPKHPrefix = byte(0xC4)
-	Bech32Prefix = "tb"
 )
 
 const (

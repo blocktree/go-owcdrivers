@@ -13,7 +13,7 @@ func Test_register_account(t *testing.T) {
 	fee := int64(10000)
 
 	// 创建注册交易单与哈希
-	emptyTrans, hash, err := CreateEmptyRawTransactionAndHash(publicKey, "", 0, fee, validHeight, TxType_REGACCT)
+	emptyTrans, hash, err := CreateEmptyRawTransactionAndHash(publicKey, "", "", 0, fee, validHeight, TxType_REGACCT)
 	if err != nil {
 		t.Error(err)
 	} else {
@@ -57,7 +57,7 @@ func Test_common_tx(t *testing.T) {
 	fee := int64(10000)
 
 	// 构建交易单和哈希
-	emptyTrans, hash, err := CreateEmptyRawTransactionAndHash(fromUserID, ToAddress, amount, fee, validHeight, TxType_COMMON)
+	emptyTrans, hash, err := CreateEmptyRawTransactionAndHash(fromUserID, ToAddress, "", amount, fee, validHeight, TxType_COMMON)
 	if err != nil {
 		t.Error(err)
 	} else {
@@ -71,6 +71,49 @@ func Test_common_tx(t *testing.T) {
 		t.Error(err)
 	} else {
 		//signature, _ = hex.DecodeString("2c0016b98229a160c4219469b67d81ee1c01bc83f467161d83ebddcfa72c0daf578a3af264847f4f942f4082c073dd578b3576bf25b96e8f48a97dd5a98e2b00")
+		fmt.Println("签名结果:\n", hex.EncodeToString(signature))
+	}
+
+	//验签与交易单合并
+	sigPub := SigPub{
+		PublicKey: publicKey,
+		Signature: signature,
+	}
+	pass, signedTrans := VerifyAndCombineRawTransaction(emptyTrans, sigPub)
+	if !pass {
+		t.Error("verify failed!")
+	} else {
+		// if signedTrans != "0301f33103801e01144abc43807e950927431390c3cf9a0d3f20c8c5c3cd10cd100046304402202c0016b98229a160c4219469b67d81ee1c01bc83f467161d83ebddcfa72c0daf0220578a3af264847f4f942f4082c073dd578b3576bf25b96e8f48a97dd5a98e2b00" {
+		// 	t.Error("transaction raw hex wrong!")
+		// }
+
+		fmt.Println("合并之后的交易单:\n", signedTrans)
+	}
+}
+
+func Test_call_contract(t *testing.T) {
+	privateKey, _ := hex.DecodeString("988c6b6ddcd4d101c8279d27890246664b6535ea2f278a8c8d6fd519f14ae77b")
+	publicKey, _ := hex.DecodeString("02798c0f8319260879303b5059efb3fdb057517c8e3d0fcccc627b4bb92c34d35d")
+	validHeight := int64(22365)
+	fromUserID := "7849-1"
+	appID := "20988-1"
+	fee := int64(100000)
+	amount := int64(10000)
+	contractHex := "f017"
+	// 构建交易单和哈希
+	emptyTrans, hash, err := CreateEmptyRawTransactionAndHash(fromUserID, contractHex, appID, amount, fee, validHeight, TxType_CONTRACT)
+	if err != nil {
+		t.Error(err)
+	} else {
+		fmt.Println("空交易单:\n", emptyTrans)
+		fmt.Println("待签哈希:\n", hash)
+	}
+	// 交易单签名
+	signature, err := SignRawTransaction(hash, privateKey)
+	if err != nil {
+		t.Error(err)
+	} else {
+		signature, _ = hex.DecodeString("288cf9698f3fb4fb1257110c31f72f4b288ee4efcbebc15e55f39fe604d45b1162bec5e0fbc4e5112cd438bf2a0afff125592f2dfc95a9dac69d767982221e25")
 		fmt.Println("签名结果:\n", hex.EncodeToString(signature))
 	}
 

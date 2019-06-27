@@ -17,7 +17,7 @@ type txMultiSig struct {
 	sigPub    []SignaturePubkey
 }
 
-func CreateMultiSig(required byte, pubkeys [][]byte) (string, string, error) {
+func CreateMultiSig(required byte, pubkeys [][]byte, addressPrefix AddressPrefix) (string, string, error) {
 	if required < 1 {
 		return "", "", errors.New("A multisignature address must require at least one key to redeem!")
 	}
@@ -55,7 +55,7 @@ func CreateMultiSig(required byte, pubkeys [][]byte) (string, string, error) {
 	} else {
 		redeemHash = owcrypt.Hash(redeem, 0, owcrypt.HASH_ALG_HASH160)
 	}
-	return EncodeCheck(P2WPKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
+	return EncodeCheck(addressPrefix.P2PKHPrefix, redeemHash), hex.EncodeToString(redeem), nil
 }
 
 func getMultiDetails(redeem []byte) (byte, []string, error) {

@@ -9,9 +9,10 @@ import (
 
 // fromUserID - user id when txType is TxType_COMMON
 // fromUserID - publick key hex when txType is TxType_REGACCT
-func CreateEmptyRawTransactionAndHash(fromUserID, toAddress string, amount, fee, validHeight int64, txType byte) (string, string, error) {
+// to - contract Hex when txType is TxType_CONTRACT
+func CreateEmptyRawTransactionAndHash(fromUserID, to, appID string, amount, fee, validHeight int64, txType byte) (string, string, error) {
 	if txType == TxType_COMMON {
-		txCommon, err := NewCommonTx(fromUserID, toAddress, amount, fee, validHeight)
+		txCommon, err := NewCommonTx(fromUserID, to, amount, fee, validHeight)
 		if err != nil {
 			return "", "", err
 		}
@@ -23,6 +24,13 @@ func CreateEmptyRawTransactionAndHash(fromUserID, toAddress string, amount, fee,
 		}
 
 		return hex.EncodeToString(txRegisterAccount.ToBytes()), hex.EncodeToString(txRegisterAccount.GetHash()), nil
+	} else if txType == TxType_CONTRACT {
+		txContract, err := NewCallContractTx(fromUserID, appID, to, validHeight, fee, amount)
+		if err != nil {
+			return "", "", err
+		}
+
+		return hex.EncodeToString(txContract.ToBytes()), hex.EncodeToString(txContract.GetHash()), nil
 	}
 	return "", "", errors.New("Unknown transaction type")
 }

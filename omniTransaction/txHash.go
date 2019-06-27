@@ -49,13 +49,21 @@ func (tx TxHash) GetMultiTxPubkeys() []string {
 	return ret
 }
 
-func newTxHash(hash, lockscript, redeem []byte, inType, sigType byte) (*TxHash, error) {
+func newTxHash(hash, lockscript, redeem []byte, inType, sigType byte, addressPrefix AddressPrefix) (*TxHash, error) {
+	var prefixStr string
+	var p2pkhPrefixByte []byte
+	var p2wpkhPrefixByte []byte
+
+	prefixStr = addressPrefix.Bech32Prefix
+
+	p2pkhPrefixByte = addressPrefix.P2PKHPrefix
+	p2wpkhPrefixByte = addressPrefix.P2WPKHPrefix
 	if inType == TypeP2PKH {
-		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{EncodeCheck(P2PKHPrefix, lockscript[3:23]), sigType, SignaturePubkey{nil, nil}}, nil}, nil
+		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{EncodeCheck(p2pkhPrefixByte, lockscript[3:23]), sigType, SignaturePubkey{nil, nil}}, nil}, nil
 	} else if inType == TypeP2WPKH {
-		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{EncodeCheck(P2WPKHPrefix, lockscript[2:22]), sigType, SignaturePubkey{nil, nil}}, nil}, nil
+		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{EncodeCheck(p2wpkhPrefixByte, lockscript[2:22]), sigType, SignaturePubkey{nil, nil}}, nil}, nil
 	} else if inType == TypeBech32 {
-		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{Bech32Encode(Bech32Prefix, BTCBech32Alphabet, lockscript[2:]), sigType, SignaturePubkey{nil, nil}}, nil}, nil
+		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{Bech32Encode(prefixStr, BTCBech32Alphabet, lockscript[2:]), sigType, SignaturePubkey{nil, nil}}, nil}, nil
 	} else if inType == TypeMultiSig {
 		nRequired, pubkeys, err := getMultiDetails(redeem)
 		if err != nil {
@@ -234,7 +242,7 @@ func (t Transaction) getBytesForSig(lockBytes, redeemBytes []byte, inType, sigTy
 	return sigBytes, nil
 }
 
-func (t Transaction) getHashesForSig(unlockData []TxUnlock, SegwitON bool) ([]TxHash, error) {
+func (t Transaction) getHashesForSig(unlockData []TxUnlock, SegwitON bool, addressPrefix AddressPrefix) ([]TxHash, error) {
 	hashes := []TxHash{}
 	if t.Vins == nil || len(t.Vins) != len(unlockData) {
 		return nil, errors.New("The number of Keys and UTXOs are not match!")
@@ -259,7 +267,7 @@ func (t Transaction) getHashesForSig(unlockData []TxUnlock, SegwitON bool) ([]Tx
 
 		hash := owcrypt.Hash(sigBytes, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
 
-		txHash, err := newTxHash(hash, lockBytes, redeemBytes, inType, unlockData[i].SigType)
+		txHash, err := newTxHash(hash, lockBytes, redeemBytes, inType, unlockData[i].SigType, addressPrefix)
 		if err != nil {
 			return nil, err
 		}

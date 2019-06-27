@@ -148,7 +148,7 @@ func createPayloadFreezeTokens(propertyID uint32, amount uint64, address string)
 	if err != nil {
 		return nil
 	}
-	ret = append(ret, pre)
+	ret = append(ret, pre...)
 	ret = append(ret, addressByte...)
 
 	return ret
@@ -169,7 +169,7 @@ func createPayloadUnfreezeTokens(propertyID uint32, amount uint64, address strin
 	if err != nil {
 		return nil
 	}
-	ret = append(ret, pre)
+	ret = append(ret, pre...)
 	ret = append(ret, addressByte...)
 
 	return ret

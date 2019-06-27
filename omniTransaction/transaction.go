@@ -24,8 +24,8 @@ type TxUnlock struct {
 	SigType      byte
 }
 
-func CreateEmptyRawTransaction(vins []Vin, vouts []Vout, omniDetail OmniStruct, lockTime uint32, replaceable bool) (string, error) {
-	emptyTrans, err := newEmptyTransaction(vins, vouts, omniDetail, lockTime, replaceable)
+func CreateEmptyRawTransaction(vins []Vin, vouts []Vout, omniDetail OmniStruct, lockTime uint32, replaceable bool, addressPrefix AddressPrefix) (string, error) {
+	emptyTrans, err := newEmptyTransaction(vins, vouts, omniDetail, lockTime, replaceable, addressPrefix)
 	if err != nil {
 		return "", err
 	}
@@ -38,7 +38,7 @@ func CreateEmptyRawTransaction(vins []Vin, vouts []Vout, omniDetail OmniStruct, 
 	return hex.EncodeToString(txBytes), nil
 }
 
-func CreateRawTransactionHashForSig(txHex string, unlockData []TxUnlock) ([]TxHash, error) {
+func CreateRawTransactionHashForSig(txHex string, unlockData []TxUnlock, addressPrefix AddressPrefix) ([]TxHash, error) {
 	txBytes, err := hex.DecodeString(txHex)
 	if err != nil {
 		return nil, errors.New("Invalid transaction hex string!")
@@ -49,7 +49,7 @@ func CreateRawTransactionHashForSig(txHex string, unlockData []TxUnlock) ([]TxHa
 		return nil, err
 	}
 
-	return emptyTrans.getHashesForSig(unlockData, false)
+	return emptyTrans.getHashesForSig(unlockData, false, addressPrefix)
 }
 
 func SignRawTransactionHash(txHash string, prikey []byte) (*SignaturePubkey, error) {
@@ -162,7 +162,7 @@ func InsertSignatureIntoEmptyTransaction(txHex string, txHashes []TxHash, unlock
 	return hex.EncodeToString(ret), nil
 }
 
-func VerifyRawTransaction(txHex string, unlockData []TxUnlock) bool {
+func VerifyRawTransaction(txHex string, unlockData []TxUnlock, addressPrefix AddressPrefix) bool {
 	txBytes, err := hex.DecodeString(txHex)
 	if err != nil {
 		return false
@@ -179,7 +179,7 @@ func VerifyRawTransaction(txHex string, unlockData []TxUnlock) bool {
 
 	emptyTrans := signedTrans.cloneEmpty()
 
-	txHash, err := emptyTrans.getHashesForSig(unlockData, false)
+	txHash, err := emptyTrans.getHashesForSig(unlockData, false, addressPrefix)
 	if err != nil {
 		return false
 	}

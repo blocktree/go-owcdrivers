@@ -26,6 +26,7 @@ func init() {
 	RegTxSigner("TV", tivalue_txsigner.Default)
 	RegTxSigner("WICC", waykichain_txsigner.Default)
 	RegTxSigner("XRP", ripple_txsigner.Default)
+	//RegTxSigner("MOAC", moacchain_txsigner.Default)
 }
 
 // 交易签名注册组
