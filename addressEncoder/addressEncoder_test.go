@@ -8,6 +8,19 @@ import (
 	"github.com/blocktree/go-owcrypt"
 )
 
+func Test_ttt(t *testing.T) {
+	hash, _ := hex.DecodeString("7554d4fb989c873b8e84da7197b728086e9c6f56")
+	fmt.Println(AddressEncode(hash, BTC_mainnetAddressP2PKH))
+
+	hash, _ = hex.DecodeString("132f3a72f4d3559226bbaa45bcb7ede4d533bd7e")
+	fmt.Println(AddressEncode(hash, BTC_mainnetAddressP2PKH))
+
+	hash, _ = AddressDecode("1MZZuJRkn4zA3VmDZPopzWZ7M9G3LqsXW3", BTC_mainnetAddressP2PKH)
+	fmt.Println(hex.EncodeToString(hash))
+
+	hash, _ = AddressDecode("1BhPgfzoNqoUeWniegWhgbqPuf9vnCrVGH", BTC_mainnetAddressP2PKH)
+	fmt.Println(hex.EncodeToString(hash))
+}
 func Test_btc_address(t *testing.T) {
 	m_p2pkh_hash160 := []byte{0x62, 0x31, 0xf1, 0x00, 0x5e, 0x86, 0xc0, 0x3d, 0x5f, 0xbd, 0x41, 0x77, 0x69, 0x85, 0xd0, 0x94, 0xcc, 0xb6, 0x82, 0xd3}
 	m_p2sh_hash160 := []byte{0x6c, 0x2a, 0xc3, 0xce, 0x63, 0x85, 0x1b, 0x90, 0x50, 0x4f, 0x75, 0xc5, 0xf3, 0x97, 0x87, 0x48, 0x22, 0xb5, 0x29, 0xc6}
