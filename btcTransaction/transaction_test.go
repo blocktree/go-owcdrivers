@@ -1452,7 +1452,7 @@ func Test_DER(t *testing.T) {
 			fmt.Println(hex.EncodeToString(sigPub.Pubkey))
 
 			// 签名结果返回给服务器
-			// 拼接
+			// 拼 接
 			// 服务器收到签名结果后，回填TxHash结构体
 			transHash[0].Normal.SigPub = *sigPub
 			break
