@@ -14,6 +14,7 @@ import (
 	"github.com/blocktree/ripple-adapter/ripple_txsigner"
 	"github.com/blocktree/virtualeconomy-adapter/virtualeconomy_txsigner"
 	"github.com/blocktree/waykichain-adapter/waykichain_txsigner"
+	"github.com/blocktree/nulsio-adapter/nulsio_txsigner"
 )
 
 func init() {
@@ -26,6 +27,7 @@ func init() {
 	RegTxSigner("TV", tivalue_txsigner.Default)
 	RegTxSigner("WICC", waykichain_txsigner.Default)
 	RegTxSigner("XRP", ripple_txsigner.Default)
+	RegTxSigner("NULS", nulsio_txsigner.Default)
 	//RegTxSigner("MOAC", moacchain_txsigner.Default)
 }
 
