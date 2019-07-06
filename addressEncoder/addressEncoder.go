@@ -18,6 +18,11 @@ var (
 	ErrorInvalidAddress    = errors.New("Invalid address!")
 )
 
+// CalcChecksum return calculated checksum
+func CalcChecksum(data []byte, chkType string) []byte {
+	return calcChecksum(data, chkType)
+}
+
 func calcChecksum(data []byte, chkType string) []byte {
 	if chkType == "doubleSHA256" {
 		return owcrypt.Hash(data, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)[:4]
@@ -40,6 +45,11 @@ func calcChecksum(data []byte, chkType string) []byte {
 	return nil
 }
 
+// VerifyChecksum return checksum result
+func VerifyChecksum(data []byte, chkType string) bool {
+	return verifyChecksum(data, chkType)
+}
+
 func verifyChecksum(data []byte, chkType string) bool {
 	checksum := calcChecksum(data[:len(data)-4], chkType)
 	for i := 0; i < 4; i++ {
@@ -48,6 +58,11 @@ func verifyChecksum(data []byte, chkType string) bool {
 		}
 	}
 	return true
+}
+
+// CatData cat two bytes data
+func CatData(data1 []byte, data2 []byte) []byte {
+	return catData(data1, data2)
 }
 
 func catData(data1 []byte, data2 []byte) []byte {
@@ -76,11 +91,21 @@ func recoverData(data, prefix, suffix []byte) ([]byte, error) {
 	return data[len(prefix) : len(data)-len(suffix)], nil
 }
 
+// EncodeData return encoded data
+func EncodeData(data []byte, encodeType string, alphabet string) string {
+	return encodeData(data, encodeType, alphabet)
+}
+
 func encodeData(data []byte, encodeType string, alphabet string) string {
 	if encodeType == "base58" {
 		return Base58Encode(data, NewBase58Alphabet(alphabet))
 	}
 	return ""
+}
+
+// DecodeData return decoded data
+func DecodeData(data, encodeType, alphabet, checkType string, prefix, suffix []byte) ([]byte, error) {
+	return decodeData(data, encodeType, alphabet, checkType, prefix, suffix)
 }
 
 func decodeData(data, encodeType, alphabet, checkType string, prefix, suffix []byte) ([]byte, error) {
