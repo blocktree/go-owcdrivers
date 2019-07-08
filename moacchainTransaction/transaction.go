@@ -6,7 +6,6 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/blocktree/go-owcdrivers/signatureSet"
 	owcrypt "github.com/blocktree/go-owcrypt"
 )
 
@@ -27,7 +26,7 @@ func SignRawTransaction(hash string, privateKey []byte) ([]byte, error) {
 		return nil, errors.New("Invalid hash string!")
 	}
 
-	signature, retCode := signatureSet.MoacSignature(privateKey, hashBytes)
+	signature, retCode := MoacSignature(privateKey, hashBytes)
 	if retCode != owcrypt.SUCCESS {
 		return nil, errors.New("Failed to sign transaction!")
 	}
