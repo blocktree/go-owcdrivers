@@ -802,3 +802,48 @@ func Test_chkX(t *testing.T) {
 
 	}
 }
+
+func Test_multi(t *testing.T) {
+	// 各client持有seed，并产生账户索引下的第一个非强化扩展，作为多签扩展的parent
+	// 账户索引为  m'/44'/7744'/0'
+	parentPath := "m/44'/7744'/0'/0"
+
+	// client A
+	// seed
+	seedA, _ := hex.DecodeString("FF747E55458A51830E5BCEB1A11D81392A0F0461B16EBDBA5432F6F7C36D1E906598D4459E5533BDF5D9EB31E3119F2A064AEF1B8432027BB5017966D4706167")
+	// 父扩展密钥
+	parentA, err := DerivedPrivateKeyWithPath(seedA, parentPath, owcrypt.ECC_CURVE_SECP256K1)
+	if err != nil {
+		t.Error(err)
+	} else {
+		fmt.Println("parent key of client A is : \n", parentA.GetPublicKey().OWEncode())
+	}
+
+	// client B
+	// seed
+	seedB, _ := hex.DecodeString("AB4454DED39B44E4117D8DCD5EE3CA31152E3F7F8EF5D200C8F76446385C97B52313BA488A0B5C1405536FD087E7B8A94A852ACC10D51023107A4439E462DBEF")
+	// 父扩展密钥
+	parentB, err := DerivedPrivateKeyWithPath(seedB, parentPath, owcrypt.ECC_CURVE_SECP256K1)
+	if err != nil {
+		t.Error(err)
+	} else {
+		fmt.Println("parent key of client B is : \n", parentB.GetPublicKey().OWEncode())
+	}
+
+	// client C
+	// seed
+	seedC, _ := hex.DecodeString("F3D99BF9DE88FA73D2C3E52ABCED5624957097330226361BFEA96D90BDF40F67EE5ABFA22CAE9B769E7767E4B6282512BFFBA3B1BD6BFADCFFAADA6A8A2EED81")
+	// 父扩展密钥
+	parentC, err := DerivedPrivateKeyWithPath(seedC, parentPath, owcrypt.ECC_CURVE_SECP256K1)
+	if err != nil {
+		t.Error(err)
+	} else {
+		fmt.Println("parent key of client C is : \n", parentC.GetPublicKey().OWEncode())
+	}
+}
+
+func Test_chain(t *testing.T) {
+	key, _ := OWDecode("owpubeyoV6FsPHxyPwSA6LecMZYFzyJUd2mS9MH8LycSsZ312fCtMe4Xq5nKGzwx7TgZspQ12PebUgFX4HfWUMaRMrj5i8oVVqJRYEAPmAVEKVgv9xnMJQ")
+	child, _ := key.GenPublicChild(0)
+	fmt.Println(hex.EncodeToString(child.GetPublicKeyBytes()))
+}
