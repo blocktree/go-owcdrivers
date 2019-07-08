@@ -9,6 +9,7 @@ require (
 	github.com/blocktree/eosio-adapter v1.0.0
 	github.com/blocktree/futurepia-adapter v1.0.9
 	github.com/blocktree/go-owcrypt v1.0.2
+	github.com/blocktree/moacchain-adapter v1.0.2
 	github.com/blocktree/nulsio-adapter v1.0.9
 	github.com/blocktree/ontology-adapter v1.0.8
 	github.com/blocktree/openwallet v1.4.5

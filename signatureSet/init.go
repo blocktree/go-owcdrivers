@@ -8,13 +8,13 @@ import (
 	"github.com/blocktree/ddmchain-adapter/ddmchain_txsigner"
 	"github.com/blocktree/eosio-adapter/eos_txsigner"
 	"github.com/blocktree/futurepia-adapter/futurepia_txsigner"
+	"github.com/blocktree/moacchain-adapter/moacchain_txsigner"
 	"github.com/blocktree/nulsio-adapter/nulsio_txsigner"
 	"github.com/blocktree/ontology-adapter/ontology_txsigner"
 	"github.com/blocktree/openwallet/log"
 	"github.com/blocktree/openwallet/openwallet"
 	"github.com/blocktree/ripple-adapter/ripple_txsigner"
 	"github.com/blocktree/virtualeconomy-adapter/virtualeconomy_txsigner"
-	"github.com/blocktree/waykichain-adapter/moacchain_txsigner"
 	"github.com/blocktree/waykichain-adapter/waykichain_txsigner"
 )
 
