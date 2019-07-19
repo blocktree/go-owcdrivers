@@ -19,21 +19,21 @@ func SignTxHash(symbol string, msg []byte, privateKey []byte, eccType uint32) ([
 		return signer.SignTransactionHash(msg, privateKey, eccType)
 	}
 
-	if strings.EqualFold(symbol, "ETH") {
-		sig, err := EthSignature(privateKey, msg)
-		if err != owcrypt.SUCCESS {
-			return nil, fmt.Errorf("ETH sign hash failed")
-		}
-		return sig, nil
-	}
-
-	if strings.EqualFold(symbol, "TRUE") {
-		sig, err := EthSignature(privateKey, msg)
-		if err != owcrypt.SUCCESS {
-			return nil, fmt.Errorf("ETH sign hash failed")
-		}
-		return sig, nil
-	}
+	//if strings.EqualFold(symbol, "ETH") {
+	//	sig, err := EthSignature(privateKey, msg)
+	//	if err != owcrypt.SUCCESS {
+	//		return nil, fmt.Errorf("ETH sign hash failed")
+	//	}
+	//	return sig, nil
+	//}
+	//
+	//if strings.EqualFold(symbol, "TRUE") {
+	//	sig, err := EthSignature(privateKey, msg)
+	//	if err != owcrypt.SUCCESS {
+	//		return nil, fmt.Errorf("ETH sign hash failed")
+	//	}
+	//	return sig, nil
+	//}
 
 	if strings.EqualFold(symbol, "NAS") {
 		sig, err := NasSignature(privateKey, msg)

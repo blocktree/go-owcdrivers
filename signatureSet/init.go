@@ -1,6 +1,7 @@
 package signatureSet
 
 import (
+	"github.com/blocktree/ethereum-adapter/ethereum_txsigner"
 	"strings"
 
 	"github.com/assetsadapterstore/tivalue-adapter/tivalue_txsigner"
@@ -30,6 +31,9 @@ func init() {
 	RegTxSigner("XRP", ripple_txsigner.Default)
 	RegTxSigner("NULS", nulsio_txsigner.Default)
 	RegTxSigner("MOAC", moacchain_txsigner.Default)
+	RegTxSigner("ETH", ethereum_txsigner.Default)
+	RegTxSigner("TRUE", ethereum_txsigner.Default)
+	RegTxSigner("VCC", ethereum_txsigner.Default)
 }
 
 // 交易签名注册组
