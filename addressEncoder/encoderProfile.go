@@ -109,8 +109,6 @@ var (
 	XTZ_mainnetPrivate_spsk  = AddressType{"base58", XTZAlphabet, "doubleSHA256", "", 32, []byte{0x11, 0xA2, 0xE0, 0xC9}, nil}
 	XTZ_mainnetPrivate_p2sk  = AddressType{"base58", XTZAlphabet, "doubleSHA256", "blake2b160", 32, []byte{0x10, 0x51, 0xEE, 0xBD}, nil}
 
-	//HC stuff
-	HC_mainnetPublicAddress = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x09, 0x7F}, nil}
 	//ETH stuff
 	ETH_mainnetPublicAddress = AddressType{"eip55", "", "", "keccak256", 32, nil, nil}
 
@@ -185,4 +183,33 @@ var (
 	//TV stuff
 	TV_mainnetAddress = AddressType{"base58", VSYSAlphabet, "blake2b_and_keccak256_first_twenty", "blake2b_and_keccak256_first_twenty", 20, []byte{0x1D, 0x3B}, nil}
 	TV_testnetAddress = AddressType{"base58", VSYSAlphabet, "blake2b_and_keccak256_first_twenty", "blake2b_and_keccak256_first_twenty", 20, []byte{0x1D, 0x54}, nil}
+
+	//HC stuff
+	HC_mainnetPublicAddress     = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x09, 0x7F}, nil}
+	HC_mainnetAddressP2PK       = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x19, 0xa4}, nil} //PubKeyAddrID,stars with Hk
+	HC_mainnetAddressP2PKBliss  = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x07, 0xc3}, nil} //PubKeyAddrID,stars with Hk
+	HC_mainnetAddressP2PKH      = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x09, 0x7f}, nil} //PubKeyHashAddrID, stars with Hs
+	HC_mainnetAddressPKHEdwards = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x09, 0x60}, nil} //PKHEdwardsAddrID,starts with He
+	HC_mainnetAddressPKHSchnorr = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x09, 0x41}, nil} //PKHSchnorrAddrID,starts with HS
+	HC_mainnetAddressPKHBliss   = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x09, 0x58}, nil} //PKHSchnorrAddrID,starts with Hb
+	HC_mainnetAddressP2SH       = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x09, 0x5a}, nil} //ScriptHashAddrID,starts with Hc
+	HC_mainnetAddressPrivate    = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x19, 0xab}, nil} // PrivateKeyID, starts with Hm
+
+	HC_testnetAddressP2PK         = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x28, 0xf7}, nil} //PubKeyAddrID, starts with Tk
+	HC_testnetAddressP2PKBliss    = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x0c, 0x66}, nil} //PubKeyAddrID, starts with Tk
+	HC_testnetAddressP2PKH        = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x0f, 0x21}, nil} //PubKeyHashAddrID,starts with Ts
+	HC_testnetAddressPKHEdwards   = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x0f, 0x01}, nil} //PKHEdwardsAddrID,starts with Te
+	HC_testnetAddressP2PKHSchnorr = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x0e, 0xe3}, nil} //PKHSchnorrAddrID,starts with TS
+	HC_testnetAddressPKHBliss     = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x0e, 0xf9}, nil} //PKHSchnorrAddrID,starts with Tb
+	HC_testnetAddressP2SH         = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x0e, 0xfc}, nil} //ScriptHashAddrID,starts with Tc
+	HC_testnetAddressPrivate      = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x23, 0x0e}, nil} //PrivateKeyID,starts with Pt
+
+	HC_simnetAddressP2PK       = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x27, 0x6f}, nil} //PubKeyAddrID,starts with Sk
+	HC_simnetAddressP2PKBliss  = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x0b, 0xef}, nil} //PubKeyAddrID,starts with Sk
+	HC_simnetAddressP2PKH      = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x0e, 0x91}, nil} //PubKeyHashAddrID,starts with Ss
+	HC_simnetAddressPKHEdwards = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x0e, 0x71}, nil} //PKHEdwardsAddrID,starts with Se
+	HC_simnetAddressPKHSchnorr = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x0e, 0x53}, nil} //PKHSchnorrAddrID,starts with SS
+	HC_simnetAddressPKHBliss   = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x0e, 0x69}, nil} //PKHBlissAddrID,starts with Sb
+	HC_simnetAddressP2SH       = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x0e, 0x6c}, nil} //ScriptHashAddrID,starts with Sc
+	HC_simnetAddressPrivate    = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x23, 0x07}, nil} //PrivateKeyID, starts with Ps
 )
