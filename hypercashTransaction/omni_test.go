@@ -7,7 +7,7 @@ import (
 )
 
 func Test_1a234edc111a06d623210a25f3b6e8c41335bff4b2d5c048723a5cd9be530dc9(t *testing.T) {
-	// 模逆链上交易 1a234edc111a06d623210a25f3b6e8c41335bff4b2d5c048723a5cd9be530dc9
+	// 模拟链上交易 1a234edc111a06d623210a25f3b6e8c41335bff4b2d5c048723a5cd9be530dc9
 	// 该交易发送1个ENTCASH
 	// 包含一个输入 3个输出
 

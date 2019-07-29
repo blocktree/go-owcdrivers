@@ -177,7 +177,6 @@ func VerifyAndCombineTransaction(emptyTrans string, sigPub []*SigPub) (bool, str
 			}
 		}
 		witnessHash := owcrypt.Hash(witnessBytes, 0, owcrypt.HASH_ALG_BLAKE256)
-
 		hashData := uint32ToLittleEndianBytes(uint32(SigHashAll))
 		hashData = append(hashData, prefixHash...)
 		hashData = append(hashData, witnessHash...)
