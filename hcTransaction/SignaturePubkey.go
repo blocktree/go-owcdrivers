@@ -50,6 +50,7 @@ func calcSignaturePubkey(txHash, prikey []byte) (*SignaturePubkey, error) {
 
 	return &SignaturePubkey{sig, pub}, nil
 }
+
 func (sp SignaturePubkey) encodeSignatureToScript(sigType byte) []byte {
 	r := sp.Signature[:32]
 	s := sp.Signature[32:]

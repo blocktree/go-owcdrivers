@@ -847,3 +847,28 @@ func Test_chain(t *testing.T) {
 	child, _ := key.GenPublicChild(0)
 	fmt.Println(hex.EncodeToString(child.GetPublicKeyBytes()))
 }
+
+func Test_ed25519_chain(t *testing.T){
+	// 各client持有seed，并产生账户索引下的第一个非强化扩展，作为多签扩展的parent
+	// 账户索引为  m'/44'/7744'/0'
+	parentPath := "m/44'/7744'/0'/0"
+
+	// client A
+	// seed
+	seedA, _ := hex.DecodeString("FF747E55458A51830E5BCEB1A11D81392A0F0461B16EBDBA5432F6F7C36D1E906598D4459E5533BDF5D9EB31E3119F2A064AEF1B8432027BB5017966D4706167")
+	// 父扩展密钥
+	parentA, err := DerivedPrivateKeyWithPath(seedA, parentPath, owcrypt.ECC_CURVE_ED25519)
+	if err != nil {
+		t.Error(err)
+	} else {
+		fmt.Println("parent key of client A is : \n", parentA.GetPublicKey().OWEncode())
+	}
+
+	key,_ := OWDecode("owpubeyoV6GSdfnQAvzdhrSLs8BpssT5Vj4Q32zDbDRDk5NM2Zf2zZdhbh5bEMFuYmt4njskFHmvMroQYZ8Y3osqmydCKpbqGPPvfY5phaKW911tA2g5zZ")
+	fmt.Println("pubkey :  \n",hex.EncodeToString(key.GetPublicKeyBytes()))
+
+	share,_ := GetMultiSigShareData("owpubeyoV6GSdfnQAvzdhrSLs8BpssT5Vj4Q32zDbDRDk5NM2Zf2zZdhbh5bEMFuYmt4njskFHmvMroQYZ8Y3osqmydCKpbqGPPvfY5phaKW911tA2g5zZ")
+	fmt.Println("share data :\n",share)
+	test, _ := ChainDecode(share)
+	fmt.Println("check :  \n", hex.EncodeToString(test.Pubkey))
+}

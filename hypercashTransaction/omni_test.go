@@ -1,0 +1,96 @@
+package hypercashTransaction
+
+import (
+	"encoding/hex"
+	"fmt"
+	"testing"
+)
+
+func Test_1a234edc111a06d623210a25f3b6e8c41335bff4b2d5c048723a5cd9be530dc9(t *testing.T) {
+	// 模逆链上交易 1a234edc111a06d623210a25f3b6e8c41335bff4b2d5c048723a5cd9be530dc9
+	// 该交易发送1个ENTCASH
+	// 包含一个输入 3个输出
+
+
+	// 构建输入
+	in := Vin{
+		TxID: "b8f7b641aef3c62e071a3d993d2bf886bc00afc25c60ce2a2c89937b44a6097c",
+		Vout: 2,
+		Tree: TxTreeRegular,
+		Amount: 47797600,
+		LockScript: "76a91441548ade23379f050d6e71ec115d870ee845aeec88ac",
+		BlockHeight: 203754,
+		BlockIndex: 1,
+	}
+
+	ins := []Vin{in}
+
+
+	omniCost := uint64(1000000) // 最少向目标地址转入的金额
+	// 构建输出
+	// 转入地址
+	to := Vout{
+		Amount: omniCost,
+		PkScriptVersion:DefaultPkScriptVersion,
+		Address: "HsNhaCPcJRPT5q2y6L7ViUg3JgjfayCEXfr",
+	}
+
+	//找零地址
+	change := Vout{
+		Amount: 46769000,
+		PkScriptVersion:DefaultPkScriptVersion,
+		Address: "HsHbmqZLdhQmBGgPH9sCvXzphdA8JZQqkHY",
+	}
+
+	// omni币种
+	propertyID := PropertyID_ENTCASH
+	// omni金额
+	amount := uint64(100000000)
+
+
+	locktime := uint32(0)
+	expiry := NoExpiryValue
+
+	// 创建空交易单与待签哈希
+	emptyTrans, hashes, err := CreateOmniEmptyTransactionAndHash(ins, &to, &change, amount, propertyID, locktime, expiry)
+
+	if err != nil {
+		t.Error("创建空交易单失败！")
+		return
+	} else {
+		fmt.Println("空交易单为 : \n", emptyTrans)
+		fmt.Println("待签哈希为 : \n", hashes[0])
+	}
+
+
+	// 对交易签名
+	prikey := []byte{0x80, 0xbc, 0x39, 0x8d, 0x7c, 0x4a, 0x67, 0x4d, 0xaa, 0x97, 0x75, 0x66, 0xc2, 0xe6, 0xcd, 0x50, 0x40, 0x52, 0x00, 0x27, 0xe5, 0x7f, 0xe8, 0x06, 0xdf, 0xaa, 0x86, 0x8d, 0xf4, 0xcc, 0x43, 0xab}
+
+	signature, err := SignTransaction(hashes[0], prikey)
+	if err != nil {
+		t.Error("签名交易单失败！")
+		return
+	} else {
+		// for test only
+		signature = []byte{0xfe,0x81,0x83,0xfa,0x73,0xa0,0xc0,0x53,0xb4,0xcc,0x93,0xbb,0xea,0x69,0x4f,0x96,0xf3,0x19,0xcc,0x59,0xb3,0x88,0x73,0xc0,0x99,0xef,0x03,0x12,0xcc,0xfc,0x79,0x70,0x1f,0x98,0x5c,0x80,0xc7,0x2b,0x0f,0x78,0xe6,0x60,0x21,0xf9,0xf6,0x5e,0x65,0x40,0x2b,0x3f,0x32,0x85,0xb6,0x58,0x24,0x92,0xca,0x5b,0x3f,0xbd,0x19,0xf7,0xd8,0xb7}
+		fmt.Println("签名结果为 : \n", hex.EncodeToString(signature))
+	}
+
+	// 验证与合并交易单
+	pubkey := []byte{0x02,0x9c,0x65,0x30,0x20,0xae,0xeb,0x00,0x7a,0x5e,0x0d,0x1c,0xfb,0x1f,0x28,0xd0,0x7d,0xd2,0x59,0xba,0xd4,0x5f,0xd0,0x8a,0xb6,0x89,0x59,0x27,0x99,0x59,0x1a,0xc3,0x49}
+
+	// 构建签名体
+	sigPubs := []*SigPub{
+		{
+			Signature: signature,
+			PublicKey: pubkey,
+		},
+	}
+
+	pass, signedTrans := VerifyAndCombineTransaction(emptyTrans, sigPubs)
+	if pass {
+		fmt.Println("合并之后的交易单为 : \n", signedTrans)
+	} else {
+		t.Error("验签失败！")
+	}
+}

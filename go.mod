@@ -17,5 +17,6 @@ require (
 	github.com/blocktree/ripple-adapter v1.0.3
 	github.com/blocktree/virtualeconomy-adapter v1.1.5
 	github.com/blocktree/waykichain-adapter v1.0.3
+	github.com/pkg/errors v0.8.1
 	github.com/tidwall/gjson v1.2.1
 )
