@@ -1,8 +1,10 @@
 package hypercashTransaction
 
 import (
+	"encoding/hex"
 	"github.com/blocktree/go-owcrypt"
 	"github.com/pkg/errors"
+	"strings"
 )
 
 type TxStruct struct {
@@ -109,3 +111,52 @@ func (tx *TxStruct) GetHash(index uint64) ([]byte, error) {
 	return owcrypt.Hash(data, 0, owcrypt.HASH_ALG_BLAKE256), nil
 }
 
+func GetVinList(emptyTrans string) ([]Vin, error) {
+	trans := strings.Split(emptyTrans, ":")
+	if len(trans) <= 1 {
+		return nil, errors.New("Invalid transaction hex!")
+	}
+
+	tx, err := hex.DecodeString(trans[0])
+	if err != nil {
+		return nil, errors.New("Invalid transaction hex!")
+	}
+
+	limit := len(tx)
+
+	index := 0
+
+	if index + 4 > limit {
+		return nil, errors.New("Invalid transaction hex!")
+	}
+	index += 4
+
+	if index + 1 > limit {
+		return nil, errors.New("Invalid transaction hex!")
+	}
+	count := int(tx[index])
+	index ++
+	if count <= 0 || count != len(trans) - 1{
+		return nil, errors.New("Invalid transaction hex!")
+	}
+	ret := make([]Vin, 0)
+	for i := 0; i < count; i ++ {
+		if index + 32 > limit {
+			return nil, errors.New("Invalid transaction hex!")
+		}
+		txid := reverseBytesToHex(tx[index:index+32])
+		index += 32
+		if index + 9 > limit {
+			return nil, errors.New("Invalid transaction hex!")
+		}
+		vout := littleEndianBytesToUint32(tx[index:index+4])
+		index += 9
+
+		ret = append(ret, Vin{
+			TxID:txid,
+			Vout:vout,
+		})
+	}
+
+	return ret, nil
+}
