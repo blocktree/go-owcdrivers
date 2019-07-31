@@ -6,6 +6,7 @@ import "math/big"
 type SigPub struct {
 	Signature []byte
 	PublicKey []byte
+	Address   string
 }
 
 func serilizeS(sig []byte) []byte {
