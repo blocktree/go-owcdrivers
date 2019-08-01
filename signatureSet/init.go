@@ -1,11 +1,13 @@
 package signatureSet
 
 import (
-	"github.com/blocktree/ethereum-adapter/ethereum_txsigner"
 	"strings"
+
+	"github.com/blocktree/ethereum-adapter/ethereum_txsigner"
 
 	"github.com/assetsadapterstore/tivalue-adapter/tivalue_txsigner"
 	"github.com/astaxie/beego/config"
+	bts_txsigner "github.com/blocktree/bitshares-adapter/txsigner"
 	"github.com/blocktree/ddmchain-adapter/ddmchain_txsigner"
 	"github.com/blocktree/eosio-adapter/eos_txsigner"
 	"github.com/blocktree/futurepia-adapter/futurepia_txsigner"
@@ -34,6 +36,8 @@ func init() {
 	RegTxSigner("ETH", ethereum_txsigner.Default)
 	RegTxSigner("TRUE", ethereum_txsigner.Default)
 	RegTxSigner("VCC", ethereum_txsigner.Default)
+	RegTxSigner("BTS", bts_txsigner.Default)
+	RegTxSigner("BAR", bts_txsigner.Default)
 }
 
 // 交易签名注册组
