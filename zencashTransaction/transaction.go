@@ -3,8 +3,6 @@ package zencashTransaction
 import (
 	"encoding/hex"
 	"errors"
-	"fmt"
-
 	"github.com/blocktree/go-owcrypt"
 )
 
@@ -169,7 +167,6 @@ func VerifyRawTransaction(txHex string, unlockData []TxUnlock, SegwitON bool, ad
 		th, _ := hex.DecodeString(t.Hash)
 		if t.NRequired == 0 {
 			pubkey := owcrypt.PointDecompress(t.Normal.SigPub.Pubkey, owcrypt.ECC_CURVE_SECP256K1)[1:]
-			fmt.Println("public key : ",hex.EncodeToString(pubkey))
 			if owcrypt.Verify(pubkey, nil, 0, th, 32, t.Normal.SigPub.Signature, owcrypt.ECC_CURVE_SECP256K1) != owcrypt.SUCCESS {
 				return false
 			}
