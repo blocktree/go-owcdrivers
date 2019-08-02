@@ -5,7 +5,7 @@ go 1.12
 require (
 	github.com/assetsadapterstore/tivalue-adapter v1.0.3
 	github.com/astaxie/beego v1.11.1
-	github.com/blocktree/bitshares-adapter v1.0.1
+	github.com/blocktree/bitshares-adapter v1.0.5
 	github.com/blocktree/ddmchain-adapter v1.0.5
 	github.com/blocktree/eosio-adapter v1.0.0
 	github.com/blocktree/ethereum-adapter v1.1.10
