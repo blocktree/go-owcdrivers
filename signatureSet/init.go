@@ -19,6 +19,7 @@ import (
 	"github.com/blocktree/ripple-adapter/ripple_txsigner"
 	"github.com/blocktree/virtualeconomy-adapter/virtualeconomy_txsigner"
 	"github.com/blocktree/waykichain-adapter/waykichain_txsigner"
+	"github.com/blocktree/arkecosystem-adapter/arkecosystem_txsigner"
 )
 
 func init() {
@@ -38,6 +39,8 @@ func init() {
 	RegTxSigner("VCC", ethereum_txsigner.Default)
 	RegTxSigner("BTS", bts_txsigner.Default)
 	RegTxSigner("BAR", bts_txsigner.Default)
+	RegTxSigner("ARK", arkecosystem_txsigner.Default)
+
 }
 
 // 交易签名注册组
