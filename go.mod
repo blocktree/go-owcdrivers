@@ -5,6 +5,7 @@ go 1.12
 require (
 	github.com/assetsadapterstore/tivalue-adapter v1.0.3
 	github.com/astaxie/beego v1.11.1
+	github.com/binance-chain/go-sdk v1.0.8
 	github.com/blocktree/arkecosystem-adapter v1.0.4
 	github.com/blocktree/bitshares-adapter v1.0.5
 	github.com/blocktree/ddmchain-adapter v1.0.5
@@ -20,5 +21,7 @@ require (
 	github.com/blocktree/virtualeconomy-adapter v1.1.5
 	github.com/blocktree/waykichain-adapter v1.0.3
 	github.com/pkg/errors v0.8.1
+	github.com/prometheus/common v0.6.0
+	github.com/tendermint/tendermint v0.31.2-rc0
 	github.com/tidwall/gjson v1.2.1
 )
