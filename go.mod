@@ -13,7 +13,7 @@ require (
 	github.com/blocktree/futurepia-adapter v1.0.12
 	github.com/blocktree/go-owcrypt v1.0.3
 	github.com/blocktree/moacchain-adapter v1.0.3
-	github.com/blocktree/nulsio-adapter v1.1.5
+	github.com/blocktree/nulsio-adapter v1.1.7
 	github.com/blocktree/ontology-adapter v1.0.8
 	github.com/blocktree/openwallet v1.4.8
 	github.com/blocktree/ripple-adapter v1.0.13
