@@ -1089,3 +1089,21 @@ func Test_ELA_Address(t *testing.T) {
 		t.Error("ela address encode failed!")
 	}
 }
+
+
+func Test_BNB_Address(t *testing.T) {
+	address := "bnb1p89xmrejmqpwmkye4z2pwtrw49n2vykf3nax33"
+
+	hash, err := AddressDecode(address, BNB_mainnetAddress)
+	if err != nil {
+		t.Error(err)
+	} else {
+		fmt.Println(hex.EncodeToString(hash))
+	}
+
+	check := AddressEncode(hash, BNB_mainnetAddress)
+
+	if check != address {
+		t.Error(err)
+	}
+}

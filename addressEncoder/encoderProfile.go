@@ -212,4 +212,7 @@ var (
 	HC_simnetAddressPKHBliss   = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x0e, 0x69}, nil} //PKHBlissAddrID,starts with Sb
 	HC_simnetAddressP2SH       = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x0e, 0x6c}, nil} //ScriptHashAddrID,starts with Sc
 	HC_simnetAddressPrivate    = AddressType{"base58", HCAlphabet, "doubleBlake256", "h160", 20, []byte{0x23, 0x07}, nil} //PrivateKeyID, starts with Ps
+
+
+	BNB_mainnetAddress = AddressType{"bech32", BTCBech32Alphabet, "bnb", "h160", 20, nil, nil}
 )
