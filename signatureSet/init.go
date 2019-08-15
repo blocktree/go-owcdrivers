@@ -40,6 +40,7 @@ func init() {
 	RegTxSigner("BTS", bts_txsigner.Default)
 	RegTxSigner("BAR", bts_txsigner.Default)
 	RegTxSigner("ARK", arkecosystem_txsigner.Default)
+	RegTxSigner("SINOC", ethereum_txsigner.Default)
 
 }
 
