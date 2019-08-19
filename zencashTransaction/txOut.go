@@ -7,8 +7,8 @@ import (
 )
 
 type TxOut struct {
-	amount      []byte
-	lockScript  []byte
+	amount     []byte
+	lockScript []byte
 }
 
 func newTxOutForEmptyTrans(vout []Vout, addressPrefix AddressPrefix, blockHash string, blockHeight uint64) ([]TxOut, error) {
@@ -32,7 +32,7 @@ func newTxOutForEmptyTrans(vout []Vout, addressPrefix AddressPrefix, blockHash s
 	zerocount := 0
 	for _, v := range tmp {
 		if v == 0 {
-			zerocount ++
+			zerocount++
 		} else {
 			break
 		}
@@ -51,7 +51,7 @@ func newTxOutForEmptyTrans(vout []Vout, addressPrefix AddressPrefix, blockHash s
 			redeem = append([]byte{byte(len(redeem))}, redeem...)
 			redeem = append([]byte{0x00}, redeem...)
 
-			ret = append(ret, TxOut{amount:amount, lockScript:redeem})
+			ret = append(ret, TxOut{amount: amount, lockScript: redeem})
 		}
 
 		prefix, hash, err := DecodeCheck(v.Address)
@@ -75,12 +75,16 @@ func newTxOutForEmptyTrans(vout []Vout, addressPrefix AddressPrefix, blockHash s
 			hash = append(hash, OpCodeCheckBlockAtHeight)
 		} else if byteArrayCompare(prefix, p2wpkhPrefixByte) {
 			hash = append(hash, OpCodeEqual)
+			hash = append(hash, 0x20)
+			hash = append(hash, blockHashBytes...)
+			hash = append(hash, byte(len(blockHeightBytes)))
+			hash = append(hash, blockHeightBytes...)
+			hash = append(hash, OpCodeCheckBlockAtHeight)
 		} else {
 			return nil, errors.New("Invalid address to send!")
 		}
 
-
-		ret = append(ret, TxOut{amount:amount, lockScript:hash})
+		ret = append(ret, TxOut{amount: amount, lockScript: hash})
 	}
 	return ret, nil
 }

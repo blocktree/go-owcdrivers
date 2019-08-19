@@ -7,7 +7,7 @@ type AddressPrefix struct {
 }
 
 var (
-	ZENMainnetAddressPrefix = AddressPrefix{[]byte{0x20, 0x89}, nil, "bc"}
+	ZENMainnetAddressPrefix = AddressPrefix{[]byte{0x20, 0x89}, []byte{0x20, 0x96}, "bc"}
 )
 
 const (
@@ -28,16 +28,16 @@ const (
 )
 
 const (
-	OpCodeHash160     = byte(0xA9)
-	OpCodeEqual       = byte(0x87)
-	OpCodeEqualVerify = byte(0x88)
-	OpCodeCheckSig    = byte(0xAC)
-	OpCodeDup         = byte(0x76)
-	OpCode_1          = byte(0x51)
-	OpCheckMultiSig   = byte(0xAE)
-	OpPushData1       = byte(0x4C)
-	OpPushData2       = byte(0x4D)
-	OpPushData3       = byte(0x4E)
+	OpCodeHash160            = byte(0xA9)
+	OpCodeEqual              = byte(0x87)
+	OpCodeEqualVerify        = byte(0x88)
+	OpCodeCheckSig           = byte(0xAC)
+	OpCodeDup                = byte(0x76)
+	OpCode_1                 = byte(0x51)
+	OpCheckMultiSig          = byte(0xAE)
+	OpPushData1              = byte(0x4C)
+	OpPushData2              = byte(0x4D)
+	OpPushData3              = byte(0x4E)
 	OpCodeCheckBlockAtHeight = byte(0xB4)
 )
 
