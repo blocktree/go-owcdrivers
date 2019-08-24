@@ -1090,7 +1090,6 @@ func Test_ELA_Address(t *testing.T) {
 	}
 }
 
-
 func Test_BNB_Address(t *testing.T) {
 	address := "bnb1p89xmrejmqpwmkye4z2pwtrw49n2vykf3nax33"
 
@@ -1106,4 +1105,14 @@ func Test_BNB_Address(t *testing.T) {
 	if check != address {
 		t.Error(err)
 	}
+}
+
+func Test_ltc_new_address(t *testing.T) {
+	hash := []byte{0x53, 0x24, 0xdd, 0x86, 0xce, 0xc0, 0x9c, 0x9b, 0xd1, 0x32, 0x53, 0xcf, 0x28, 0x8f, 0xbc, 0x9b, 0x5b, 0x65, 0xae, 0xe7}
+
+	address := AddressEncode(hash, LTC_mainnetAddressP2SH)
+	fmt.Println(address)
+
+	address = AddressEncode(hash, LTC_mainnetAddressP2SH2)
+	fmt.Println(address)
 }

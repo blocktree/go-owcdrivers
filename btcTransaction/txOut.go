@@ -18,9 +18,11 @@ func newTxOutForEmptyTrans(vout []Vout, addressPrefix AddressPrefix) ([]TxOut, e
 	var prefixStr string
 	var p2pkhPrefixByte []byte
 	var p2wpkhPrefixByte []byte
+	var p2shPrefixBytes []byte
 	prefixStr = addressPrefix.Bech32Prefix
 	p2pkhPrefixByte = addressPrefix.P2PKHPrefix
 	p2wpkhPrefixByte = addressPrefix.P2WPKHPrefix
+	p2shPrefixBytes = addressPrefix.P2SHPrefix
 
 	for _, v := range vout {
 		amount := uint64ToLittleEndianBytes(v.Amount)
@@ -51,7 +53,7 @@ func newTxOutForEmptyTrans(vout []Vout, addressPrefix AddressPrefix) ([]TxOut, e
 		if byteArrayCompare(prefix, p2pkhPrefixByte) {
 			hash = append(hash, OpCodeEqualVerify, OpCodeCheckSig)
 			hash = append([]byte{OpCodeDup}, hash...)
-		} else if byteArrayCompare(prefix, p2wpkhPrefixByte) {
+		} else if byteArrayCompare(prefix, p2wpkhPrefixByte) || byteArrayCompare(prefix, p2shPrefixBytes) {
 			hash = append(hash, OpCodeEqual)
 		} else {
 			return nil, errors.New("Invalid address to send!")
