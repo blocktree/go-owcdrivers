@@ -37,6 +37,8 @@ func newTxOutForEmptyTrans(vout []Vout, addressPrefix AddressPrefix) ([]TxOut, e
 			redeem = append([]byte{0x00}, redeem...)
 
 			ret = append(ret, TxOut{amount, redeem})
+
+			continue
 		}
 
 		prefix, hash, err := DecodeCheck(v.Address)

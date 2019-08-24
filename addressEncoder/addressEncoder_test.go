@@ -1115,4 +1115,8 @@ func Test_ltc_new_address(t *testing.T) {
 
 	address = AddressEncode(hash, LTC_mainnetAddressP2SH2)
 	fmt.Println(address)
+
+	check, err := AddressDecode("ltc1q5c9vun5ctq377nfkznaxlj7nh5a0esm90n89t7", LTC_mainnetAddressBech32V0)
+	fmt.Println(err)
+	fmt.Println(hex.EncodeToString(check))
 }
