@@ -42,6 +42,7 @@ func init() {
 	RegTxSigner("ARK", arkecosystem_txsigner.Default)
 	RegTxSigner("SINOC", ethereum_txsigner.Default)
 	RegTxSigner("TGC", eos_txsigner.Default)
+	RegTxSigner("ABBC", eos_txsigner.Default)
 
 }
 
