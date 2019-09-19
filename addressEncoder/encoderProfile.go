@@ -179,6 +179,7 @@ var (
 
 	//WICC stuff
 	WICC_mainnetAddressP2PKH = AddressType{"base58", BTCAlphabet, "doubleSHA256", "h160", 20, []byte{0x49}, nil}
+	WICC_testnetAddressP2PKH = AddressType{"base58", BTCAlphabet, "doubleSHA256", "h160", 20, []byte{0x87}, nil}
 
 	//TV stuff
 	TV_mainnetAddress = AddressType{"base58", VSYSAlphabet, "blake2b_and_keccak256_first_twenty", "blake2b_and_keccak256_first_twenty", 20, []byte{0x1D, 0x3B}, nil}
@@ -215,4 +216,7 @@ var (
 
 
 	BNB_mainnetAddress = AddressType{"bech32", BTCBech32Alphabet, "bnb", "h160", 20, nil, nil}
+
+	BSV_mainnetAddressP2PKH = AddressType{"base58", BTCAlphabet, "doubleSHA256", "h160", 20, []byte{0x00}, nil}
+	BSV_mainnetAddressP2SH = AddressType{"base58", BTCAlphabet, "doubleSHA256", "h160", 20, []byte{0x05}, nil}
 )

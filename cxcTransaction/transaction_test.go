@@ -6,6 +6,139 @@ import (
 	"testing"
 )
 
+func Test_5d80843d91cb9e2db0671998cba9c49405d5eabe109bad13be98910c0bc96fd8(t *testing.T) {
+	// 前置交易ID和UTXO对应的索引
+	in1 := Vin{"f21f0615d84fa548b3a2da700d9980014b199168507dc8bbbc36a8a490031203", uint32(20)}
+	in2 := Vin{"7d08cc7ead309f5935bd0b9f3677bb00e33c70d4526e33bd5ba6e993d0debbd6", uint32(78)}
+	// Asset目标地址和发送金额
+	to := AssetTransfer{
+		FirstSellTxID:"80d92f1a6a49bf477304ec052c46498d",
+		Address:"1ENBn6XET7M9hsY5bDw8GUwm4SFx8Qn15e",
+		Amount:uint64(10000000),
+	}
+	//找零地址
+	change := Vout{"1AuVT8gWSiHNASV5unCW3PQeL34EaoZCMp", uint64(3648104)}
+
+	//锁定时间
+	lockTime := uint32(0)
+
+	//追加手续费支持
+	replaceable := false
+
+	addressPrefix := AddressPrefix{[]byte{0}, []byte{0x05}, "tb"}
+
+	///////构建空交易单
+	emptyTrans, err := CreateEmptyAssetRawTransaction([]Vin{in1, in2}, to, change, lockTime, replaceable, addressPrefix)
+
+	if err != nil {
+		t.Error("构建空交易单失败")
+	} else {
+		fmt.Println("空交易单：")
+		fmt.Println(emptyTrans)
+	}
+
+	//获取in的锁定脚本和amount
+	//获取地址用于区分签名哈希
+	// 填充TxUnlock结构体
+	inLock1 := "76a9146ca682eaf84fbc74738384aca0cc07737316caed88ac1c73706b718d49462c05ec047347bf496a1a2fd980809698000000000075"
+
+	//指向此类型地址的UTXO，获取签名哈希需要锁定脚本,赎回脚本应设置为 ""
+	unlockData1 := TxUnlock{inLock1, "", 0, SigHashAll}
+
+	inLock2 := "76a9146ca682eaf84fbc74738384aca0cc07737316caed88ac"
+
+	//指向此类型地址的UTXO，获取签名哈希需要锁定脚本,赎回脚本应设置为 ""
+	unlockData2 := TxUnlock{inLock2, "", 0, SigHashAll}
+
+	segwit := false
+
+	/////////计算待签名交易单哈希
+	transHash, err := CreateRawTransactionHashForSig(emptyTrans, []TxUnlock{unlockData1, unlockData2}, segwit, addressPrefix)
+	if err != nil {
+		t.Error("创建待签交易单哈希失败")
+	} else {
+		for i, t := range transHash {
+			fmt.Println("第", i+1, "个交易单哈希值为")
+			fmt.Println(t)
+		}
+	}
+
+	//////////////////////------//////////////////////
+	//判断是否是多重签名
+	if transHash[0].IsMultisig() {
+		//获取地址
+		//address := transHash[0].GetMultiTxPubkeys() //返回hex数组
+	} else {
+		//获取地址
+		//address := transHash[0].GetNormalTxAddress() //返回hex串
+	}
+	//获取hash值
+	hash1 := transHash[0].GetTxHashHex()
+	// 通过地址和hash值来确定发送给哪个客户端进行签名
+	//////////////////////------//////////////////////
+
+	// 结果hash发送给客户端，客户端根据对应的地址可以找到私钥进行签名
+	inPrikey1 := []byte{0x80, 0xbc, 0x39, 0x8d, 0x7c, 0x4a, 0x67, 0x4d, 0xaa, 0x97, 0x75, 0x66, 0xc2, 0xe6, 0xcd, 0x50, 0x40, 0x52, 0x00, 0x27, 0xe5, 0x7f, 0xe8, 0x06, 0xdf, 0xaa, 0x86, 0x8d, 0xf4, 0xcc, 0x43, 0xab}
+
+	//签名
+	sigPub1, err := SignRawTransactionHash(hash1, inPrikey1)
+	if err != nil {
+		t.Error("hash签名失败")
+	} else {
+		fmt.Println("hash签名结果为")
+		sigPub1.Signature, _ = hex.DecodeString("45e2e4a5afaf0fee636514c485268ded29c2810016458bac93614cf884bd46d023e74f61b9e720ad8a538b9433a999a89a7820b21acd4d41dba0941c06e559f5")
+		fmt.Println(hex.EncodeToString(sigPub1.Signature))
+		fmt.Println("对应的公钥为")
+		sigPub1.Pubkey, _ = hex.DecodeString("02a19ab7b8485533fb69a8edf3d69c86d702cb5281c0bf3ae393ec07fd8445d9c3")
+		fmt.Println(hex.EncodeToString(sigPub1.Pubkey))
+	}
+
+	//获取hash值
+	hash2 := transHash[1].GetTxHashHex()
+	// 通过地址和hash值来确定发送给哪个客户端进行签名
+	//////////////////////------//////////////////////
+
+	// 结果hash发送给客户端，客户端根据对应的地址可以找到私钥进行签名
+	inPrikey2 := []byte{0x80, 0xbc, 0x39, 0x8d, 0x7c, 0x4a, 0x67, 0x4d, 0xaa, 0x97, 0x75, 0x66, 0xc2, 0xe6, 0xcd, 0x50, 0x40, 0x52, 0x00, 0x27, 0xe5, 0x7f, 0xe8, 0x06, 0xdf, 0xaa, 0x86, 0x8d, 0xf4, 0xcc, 0x43, 0xab}
+
+	//签名
+	sigPub2, err := SignRawTransactionHash(hash2, inPrikey2)
+	if err != nil {
+		t.Error("hash签名失败")
+	} else {
+		fmt.Println("hash签名结果为")
+		sigPub2.Signature, _ = hex.DecodeString("0765210b73db584cc1014f8405b8d5c44164cdef1bb61a11d72437cdae0a134b3cc29f487fb6eb1612c772df1e5d31e4bfceeb02ae9d06d3d08166df4f4c0b4f")
+		fmt.Println(hex.EncodeToString(sigPub2.Signature))
+		fmt.Println("对应的公钥为")
+		sigPub2.Pubkey, _ = hex.DecodeString("02a19ab7b8485533fb69a8edf3d69c86d702cb5281c0bf3ae393ec07fd8445d9c3")
+		fmt.Println(hex.EncodeToString(sigPub2.Pubkey))
+	}
+
+
+	// 签名结果返回给服务器
+	// 拼接
+	// 服务器收到签名结果后，回填TxHash结构体
+	transHash[0].Normal.SigPub = *sigPub1
+	transHash[1].Normal.SigPub = *sigPub2
+
+	//交易单合并
+	signedTrans, err := InsertSignatureIntoEmptyTransaction(emptyTrans, transHash, []TxUnlock{unlockData1, unlockData2}, segwit)
+	if err != nil {
+		t.Error("插入交易单失败")
+	} else {
+		fmt.Println("合并之后的交易单")
+		fmt.Println(signedTrans)
+	}
+
+	// 验证交易单
+	pass := VerifyRawTransaction(signedTrans, []TxUnlock{unlockData1, unlockData2}, segwit, addressPrefix)
+	if pass {
+		fmt.Println("验证通过!")
+	} else {
+		t.Error("验证失败!")
+	}
+}
+
 //案例一：
 //输入为单个 P2PKH
 func Test_case1(t *testing.T) {

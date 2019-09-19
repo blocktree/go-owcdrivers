@@ -1,4 +1,4 @@
-package cxcTransaction
+package bitcoinsvTransaction
 
 import (
 	"errors"
@@ -33,11 +33,7 @@ func newEmptyTransaction(vins []Vin, vouts []Vout, lockTime uint32, replaceable 
 	return &Transaction{version, txIn, txOut, locktime, false}, nil
 }
 
-func newAssetTxOut(to AssetTransfer) (*TxOut, error) {
-	return nil, nil
-}
-
-func newEmptyAssetTransaction(vins []Vin, to AssetTransfer, change Vout, lockTime uint32, replaceable bool, addressPrefix AddressPrefix) (*Transaction, error) {
+func newOmniEmptyTransaction(vins []Vin, vouts []Vout, omniDetail OmniStruct, lockTime uint32, replaceable bool, addressPrefix AddressPrefix) (*Transaction, error) {
 	txIn, err := newTxInForEmptyTrans(vins)
 	if err != nil {
 		return nil, err
@@ -47,17 +43,11 @@ func newEmptyAssetTransaction(vins []Vin, to AssetTransfer, change Vout, lockTim
 		txIn[i].setSequence(lockTime, replaceable)
 	}
 
-	assetOut, err := getTransferAssetWithPayload(to, addressPrefix)
+	txOut, err := newOmniTxOutForEmptyTrans(vouts, omniDetail, addressPrefix)
 	if err != nil {
 		return nil, err
 	}
 
-	txOut, err := newTxOutForEmptyTrans([]Vout{change}, addressPrefix)
-	if err != nil {
-		return nil, err
-	}
-
-	txOut = append([]TxOut{*assetOut}, txOut...)
 	version := uint32ToLittleEndianBytes(DefaultTxVersion)
 	locktime := uint32ToLittleEndianBytes(lockTime)
 

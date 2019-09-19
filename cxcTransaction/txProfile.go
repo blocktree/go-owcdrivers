@@ -21,6 +21,7 @@ const (
 	DefaultTxVersion     = uint32(1)
 	DefaultHashType      = uint32(1)
 	MaxScriptElementSize = 520
+	AssetTransferSign 	 = "spkq"
 )
 
 const (
@@ -45,6 +46,7 @@ const (
 	OpPushData1       = byte(0x4C)
 	OpPushData2       = byte(0x4D)
 	OpPushData3       = byte(0x4E)
+	OpDrop            = byte(0x75)
 )
 
 var (

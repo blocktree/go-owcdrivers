@@ -1,8 +1,9 @@
-package cxcTransaction
+package bitcoinsvTransaction
 
 import (
 	"encoding/hex"
 	"errors"
+
 	"github.com/blocktree/go-owcrypt"
 )
 
@@ -25,12 +26,6 @@ type TxUnlock struct {
 	SigType byte
 }
 
-type AssetTransfer struct {
-	FirstSellTxID string
-	Address string
-	Amount uint64
-}
-
 func CreateEmptyRawTransaction(vins []Vin, vouts []Vout, lockTime uint32, replaceable bool, addressPrefix AddressPrefix) (string, error) {
 
 	emptyTrans, err := newEmptyTransaction(vins, vouts, lockTime, replaceable, addressPrefix)
@@ -46,8 +41,8 @@ func CreateEmptyRawTransaction(vins []Vin, vouts []Vout, lockTime uint32, replac
 	return hex.EncodeToString(txBytes), nil
 }
 
-func CreateEmptyAssetRawTransaction(vins []Vin, to AssetTransfer, change Vout, lockTime uint32, replaceable bool, addressPrefix AddressPrefix) (string, error) {
-	emptyTrans, err := newEmptyAssetTransaction(vins, to, change, lockTime, replaceable, addressPrefix)
+func CreateEmptyOmniRawTransaction(vins []Vin, vouts []Vout, omniDetail OmniStruct, lockTime uint32, replaceable bool, addressPrefix AddressPrefix)  (string, error) {
+	emptyTrans, err := newOmniEmptyTransaction(vins, vouts, omniDetail, lockTime, replaceable, addressPrefix)
 	if err != nil {
 		return "", err
 	}

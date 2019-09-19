@@ -1120,3 +1120,18 @@ func Test_ltc_new_address(t *testing.T) {
 	fmt.Println(err)
 	fmt.Println(hex.EncodeToString(check))
 }
+
+func Test_wicc_address(t *testing.T) {
+	testnet_addr := "wiEEFm8v9UqCucynQWw1sdk57iBf57jjYF"
+
+	hash, err := AddressDecode(testnet_addr, WICC_testnetAddressP2PKH)
+
+	fmt.Println(err)
+	fmt.Println(hex.EncodeToString(hash))
+
+	hash = []byte{0x53, 0x24, 0xdd, 0x86, 0xce, 0xc0, 0x9c, 0x9b, 0xd1, 0x32, 0x53, 0xcf, 0x28, 0x8f, 0xbc, 0x9b, 0x5b, 0x65, 0xae, 0xe7}
+
+	testnet_addr = AddressEncode(hash, WICC_testnetAddressP2PKH)
+
+	fmt.Println(testnet_addr)
+}

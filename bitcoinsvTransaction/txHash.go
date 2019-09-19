@@ -1,9 +1,10 @@
-package cxcTransaction
+package bitcoinsvTransaction
 
 import (
 	"encoding/hex"
 	"errors"
-	"github.com/blocktree/go-owcrypt"
+
+	owcrypt "github.com/blocktree/go-owcrypt"
 )
 
 type NormalTx struct {
@@ -49,11 +50,10 @@ func (tx TxHash) GetMultiTxPubkeys() []string {
 }
 
 func newTxHash(hash, lockscript, redeem []byte, inType, sigType byte, addressPrefix AddressPrefix) (*TxHash, error) {
-	var prefixStr string
+
 	var p2pkhPrefixByte []byte
 	var p2wpkhPrefixByte []byte
 
-	prefixStr = addressPrefix.Bech32Prefix
 
 	p2pkhPrefixByte = addressPrefix.P2PKHPrefix
 	p2wpkhPrefixByte = addressPrefix.P2WPKHPrefix
@@ -62,8 +62,6 @@ func newTxHash(hash, lockscript, redeem []byte, inType, sigType byte, addressPre
 		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{EncodeCheck(p2pkhPrefixByte, lockscript[3:23]), sigType, SignaturePubkey{nil, nil}}, nil}, nil
 	} else if inType == TypeP2WPKH {
 		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{EncodeCheck(p2wpkhPrefixByte, lockscript[2:22]), sigType, SignaturePubkey{nil, nil}}, nil}, nil
-	} else if inType == TypeBech32 {
-		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{Bech32Encode(prefixStr, BTCBech32Alphabet, lockscript[2:]), sigType, SignaturePubkey{nil, nil}}, nil}, nil
 	} else if inType == TypeMultiSig {
 		nRequired, pubkeys, err := getMultiDetails(redeem)
 		if err != nil {
@@ -83,12 +81,12 @@ func checkScriptType(scriptPubkey, redeemScript string) ([]byte, []byte, byte, e
 	if err != nil {
 		return nil, nil, 0, errors.New("Invalid scriptPubkey data!")
 	}
-	if (len(script) == 25 || len(script) == 55) && script[0] == OpCodeDup && script[1] == OpCodeHash160 && script[2] == 0x14 && script[23] == OpCodeEqualVerify && script[24] == OpCodeCheckSig {
-		if redeemScript != "" {
-			return nil, nil, 0, errors.New("Found redeemScript when unlock a p2pkh input!")
-		}
+	if len(script) == 25 && script[0] == OpCodeDup && script[1] == OpCodeHash160 && script[2] == 0x14 && script[23] == OpCodeEqualVerify && script[24] == OpCodeCheckSig {
+		//if redeemScript != "" {
+		//	return nil, nil, 0, errors.New("Found redeemScript when unlock a p2pkh input!")
+		//}
 		return script, nil, TypeP2PKH, nil
-	} else if (len(script) == 23 || len(script) == 53) && script[0] == OpCodeHash160 && script[1] == 0x14 && script[22] == OpCodeEqual {
+	} else if len(script) == 23 && script[0] == OpCodeHash160 && script[1] == 0x14 && script[22] == OpCodeEqual {
 		redeem, err := hex.DecodeString(redeemScript)
 		if err != nil {
 			return nil, nil, 0, errors.New("Invalid redeemScript for a P2SH type input!")
@@ -184,21 +182,21 @@ func (t Transaction) getSegwitBytesForSig(reddemBytes, txid, vout, sequence []by
 func (t Transaction) getBytesForSig(lockBytes, redeemBytes []byte, inType, sigType byte, index int, amount uint64, SegwitON bool) ([]byte, error) {
 	sigBytes := []byte{}
 	var err error
-	if inType == TypeP2PKH {
+	//if inType == TypeP2PKH {
+	//	if sigType == SigHashAll {
+	//		t.Vins[index].scriptPub = lockBytes
+	//		sigBytes, err = t.encodeToBytes(SegwitON)
+	//		if err != nil {
+	//			return nil, err
+	//		}
+	//	} else {
+	//		// TODO
+	//		return nil, errors.New("The sigType inputed is not supported yet!")
+	//	}
+	//} else
+	if inType == TypeP2WPKH || inType == TypeP2PKH {
 		if sigType == SigHashAll {
-			t.Vins[index].scriptPub = lockBytes
-			sigBytes, err = t.encodeToBytes(SegwitON)
-
-			if err != nil {
-				return nil, err
-			}
-		} else {
-			// TODO
-			return nil, errors.New("The sigType inputed is not supported yet!")
-		}
-	} else if inType == TypeP2WPKH {
-		if sigType == SigHashAll {
-			sigBytes, err = t.getSegwitBytesForSig(redeemBytes, t.Vins[index].TxID, t.Vins[index].Vout, t.Vins[index].sequence, sigType, amount)
+			sigBytes, err = t.getSegwitBytesForSig(lockBytes, t.Vins[index].TxID, t.Vins[index].Vout, t.Vins[index].sequence, sigType, amount)
 			if err != nil {
 				return nil, err
 			}
@@ -238,7 +236,7 @@ func (t Transaction) getBytesForSig(lockBytes, redeemBytes []byte, inType, sigTy
 		}
 	}
 
-	sigBytes = append(sigBytes, uint32ToLittleEndianBytes(DefaultHashType)...)
+	sigBytes = append(sigBytes, uint32ToLittleEndianBytes(uint32(SigHashAll))...)
 	return sigBytes, nil
 }
 
