@@ -7,6 +7,7 @@ import (
 
 	"github.com/assetsadapterstore/tivalue-adapter/tivalue_txsigner"
 	"github.com/astaxie/beego/config"
+	"github.com/blocktree/arkecosystem-adapter/arkecosystem_txsigner"
 	bts_txsigner "github.com/blocktree/bitshares-adapter/txsigner"
 	"github.com/blocktree/ddmchain-adapter/ddmchain_txsigner"
 	"github.com/blocktree/eosio-adapter/eos_txsigner"
@@ -19,7 +20,6 @@ import (
 	"github.com/blocktree/ripple-adapter/ripple_txsigner"
 	"github.com/blocktree/virtualeconomy-adapter/virtualeconomy_txsigner"
 	"github.com/blocktree/waykichain-adapter/waykichain_txsigner"
-	"github.com/blocktree/arkecosystem-adapter/arkecosystem_txsigner"
 )
 
 func init() {
@@ -43,6 +43,7 @@ func init() {
 	RegTxSigner("SINOC", ethereum_txsigner.Default)
 	RegTxSigner("TGC", eos_txsigner.Default)
 	RegTxSigner("ABBC", eos_txsigner.Default)
+	RegTxSigner("GST", eos_txsigner.Default)
 
 }
 
