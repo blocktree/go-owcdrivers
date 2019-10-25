@@ -37,7 +37,7 @@ func newAssetTxOut(to AssetTransfer) (*TxOut, error) {
 	return nil, nil
 }
 
-func newEmptyAssetTransaction(vins []Vin, to AssetTransfer, change Vout, lockTime uint32, replaceable bool, addressPrefix AddressPrefix) (*Transaction, error) {
+func newEmptyAssetTransaction(vins []Vin, to []AssetTransfer, change Vout, lockTime uint32, replaceable bool, addressPrefix AddressPrefix) (*Transaction, error) {
 	txIn, err := newTxInForEmptyTrans(vins)
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func newEmptyAssetTransaction(vins []Vin, to AssetTransfer, change Vout, lockTim
 		return nil, err
 	}
 
-	txOut = append([]TxOut{*assetOut}, txOut...)
+	txOut = append(*assetOut, txOut...)
 	version := uint32ToLittleEndianBytes(DefaultTxVersion)
 	locktime := uint32ToLittleEndianBytes(lockTime)
 

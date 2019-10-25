@@ -46,7 +46,7 @@ func CreateEmptyRawTransaction(vins []Vin, vouts []Vout, lockTime uint32, replac
 	return hex.EncodeToString(txBytes), nil
 }
 
-func CreateEmptyAssetRawTransaction(vins []Vin, to AssetTransfer, change Vout, lockTime uint32, replaceable bool, addressPrefix AddressPrefix) (string, error) {
+func CreateEmptyAssetRawTransaction(vins []Vin, to []AssetTransfer, change Vout, lockTime uint32, replaceable bool, addressPrefix AddressPrefix) (string, error) {
 	emptyTrans, err := newEmptyAssetTransaction(vins, to, change, lockTime, replaceable, addressPrefix)
 	if err != nil {
 		return "", err

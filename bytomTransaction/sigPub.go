@@ -44,7 +44,7 @@ func calcSignaturePubkey(hash, prikey []byte) (*SigPub, error) {
 
 	sp.Signature = sig
 
-	pub := owcrypt.Point_mulBaseG(prikey, owcrypt.ECC_CURVE_ED25519_NORMAL)
+	pub := owcrypt.Point_mulBaseG(prikey, owcrypt.ECC_CURVE_ED25519)
 
 	sp.Pubkey = pub
 

@@ -28,7 +28,7 @@ func Test_5d80843d91cb9e2db0671998cba9c49405d5eabe109bad13be98910c0bc96fd8(t *te
 	addressPrefix := AddressPrefix{[]byte{0}, []byte{0x05}, "tb"}
 
 	///////构建空交易单
-	emptyTrans, err := CreateEmptyAssetRawTransaction([]Vin{in1, in2}, to, change, lockTime, replaceable, addressPrefix)
+	emptyTrans, err := CreateEmptyAssetRawTransaction([]Vin{in1, in2}, []AssetTransfer{to}, change, lockTime, replaceable, addressPrefix)
 
 	if err != nil {
 		t.Error("构建空交易单失败")
