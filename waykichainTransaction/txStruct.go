@@ -219,13 +219,104 @@ func (tx CallContractTx) GetHash() []byte {
 	txBytes = append(txBytes, tx.ContractHex...)
 	return owcrypt.Hash(txBytes, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
 }
+
+// 仅实现了单币种转账
+type UcoinTransferTx struct {
+	TxType      byte
+	Version     []byte
+	ValidHeight []byte
+	FromUserID  []byte
+	FeeSymbol   []byte
+	FeeAmount   []byte
+	To          []byte
+	CoinName    []byte
+	CoinAmount  []byte
+}
+
+func NewUcoinTransferTx(fromUserID, toAddress, coin string, validHeight, fee, amount int64) (*UcoinTransferTx, error) {
+	var ucoinTransferTx UcoinTransferTx
+
+	ucoinTransferTx.TxType = TxType_UcoinTransfer
+	ucoinTransferTx.Version = int64ToUvarint(Version)
+
+	if validHeight < 0 {
+		return nil, errors.New("Negative valid height!")
+	}
+	ucoinTransferTx.ValidHeight = int64ToUvarint(validHeight)
+
+	ids := strings.Split(fromUserID, "-")
+	idBytes := []byte{}
+	for _, id := range ids {
+		data, _ := strconv.ParseInt(id, 10, 64)
+		idBytes = append(idBytes, int64ToUvarint(data)...)
+	}
+	ucoinTransferTx.FromUserID = append([]byte{byte(len(idBytes))}, idBytes...)
+
+	ucoinTransferTx.FeeSymbol = append([]byte{byte(len(DefaultFeeSymbol))}, []byte(DefaultFeeSymbol)...)
+
+	ucoinTransferTx.FeeAmount = int64ToUvarint(fee)
+
+	destID, err := GetProgramHashFromAddress(toAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	ucoinTransferTx.To = append([]byte{byte(len(destID))}, destID...)
+
+	if coin == "" {
+		return nil, errors.New("Invalid coin name!")
+	}
+
+	ucoinTransferTx.CoinName = append([]byte{byte(len(coin))}, []byte(coin)...)
+
+	ucoinTransferTx.CoinAmount = int64ToUvarint(amount)
+
+	return &ucoinTransferTx, nil
+}
+
+func (tx UcoinTransferTx) ToBytes() []byte {
+	txBytes := make([]byte, 0)
+
+	txBytes = append(txBytes, tx.TxType)
+	txBytes = append(txBytes, tx.Version...)
+	txBytes = append(txBytes, tx.ValidHeight...)
+	txBytes = append(txBytes, tx.FromUserID...)
+	txBytes = append(txBytes, tx.FeeSymbol...)
+	txBytes = append(txBytes, tx.FeeAmount...)
+	txBytes = append(txBytes, 0x01) // output count, fixed to 1
+	txBytes = append(txBytes, tx.To...)
+	txBytes = append(txBytes, tx.CoinName...)
+	txBytes = append(txBytes, tx.CoinAmount...)
+	txBytes = append(txBytes, 0x00) // don't support memo
+
+	return txBytes
+}
+
+func (tx UcoinTransferTx) GetHash() []byte {
+	txBytes := make([]byte, 0)
+
+	txBytes = append(txBytes, tx.Version...)
+	txBytes = append(txBytes, tx.TxType)
+	txBytes = append(txBytes, tx.ValidHeight...)
+	txBytes = append(txBytes, tx.FromUserID...)
+	txBytes = append(txBytes, tx.FeeSymbol...)
+	txBytes = append(txBytes, tx.FeeAmount...)
+	txBytes = append(txBytes, 0x01) // output count, fixed to 1
+	txBytes = append(txBytes, tx.To...)
+	txBytes = append(txBytes, tx.CoinName...)
+	txBytes = append(txBytes, tx.CoinAmount...)
+	txBytes = append(txBytes, 0x00) // don't support memo
+
+	return owcrypt.Hash(txBytes, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
+}
+
 func getHashFromEmptyRawTrans(emptyTrans string) ([]byte, error) {
 	txBytes, err := hex.DecodeString(emptyTrans)
 	if err != nil {
 		return nil, errors.New("Invalid transaction hex data!")
 	}
 
-	if (txBytes[0] != TxType_COMMON && txBytes[0] != TxType_REGACCT && txBytes[0] != TxType_CONTRACT) || txBytes[1] != byte(Version) {
+	if (txBytes[0] != TxType_COMMON && txBytes[0] != TxType_REGACCT && txBytes[0] != TxType_CONTRACT && txBytes[0] != TxType_UcoinTransfer) || txBytes[1] != byte(Version) {
 		return nil, errors.New("Invalid transaction hex data!")
 	}
 

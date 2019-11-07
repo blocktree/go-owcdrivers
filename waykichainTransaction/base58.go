@@ -189,7 +189,7 @@ func GetProgramHashFromAddress(address string) ([]byte, error) {
 		}
 	}
 
-	if ret[0] != AddressPrefix {
+	if ret[0] != AddressPrefix && ret[0] != AddressPrefixTestNet{
 		return nil, errors.New("Invalid address!")
 	}
 
