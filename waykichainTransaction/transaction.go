@@ -10,6 +10,8 @@ import (
 // fromUserID - user id when txType is TxType_COMMON
 // fromUserID - publick key hex when txType is TxType_REGACCT
 // to - contract Hex when txType is TxType_CONTRACT
+// appID - contract regID when txType is TxType_CONTRACT
+// appID - coin name when txType is TxType_UcoinTransfer
 func CreateEmptyRawTransactionAndHash(fromUserID, to, appID string, amount, fee, validHeight int64, txType byte) (string, string, error) {
 	if txType == TxType_COMMON {
 		txCommon, err := NewCommonTx(fromUserID, to, amount, fee, validHeight)
@@ -31,6 +33,13 @@ func CreateEmptyRawTransactionAndHash(fromUserID, to, appID string, amount, fee,
 		}
 
 		return hex.EncodeToString(txContract.ToBytes()), hex.EncodeToString(txContract.GetHash()), nil
+	} else if txType == TxType_UcoinTransfer {
+		txUcoinTransfer, err := NewUcoinTransferTx(fromUserID, to, appID,validHeight, fee, amount)
+		if err != nil {
+			return "", "", err
+		}
+
+		return hex.EncodeToString(txUcoinTransfer.ToBytes()), hex.EncodeToString(txUcoinTransfer.GetHash()), nil
 	}
 	return "", "", errors.New("Unknown transaction type")
 }

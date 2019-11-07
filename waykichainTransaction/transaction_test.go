@@ -133,3 +133,48 @@ func Test_call_contract(t *testing.T) {
 		fmt.Println("合并之后的交易单:\n", signedTrans)
 	}
 }
+
+
+
+
+
+
+func Test_UcoinTransfer(t *testing.T) {
+	privateKey, _ := hex.DecodeString("2d9a6bd47cf56860856f453c4b472494c25db3c1484b9b3065679fc0351fd2dd")
+	publicKey, _  := hex.DecodeString("036c5397f3227a1e209952829d249b7ad0f615e43b763ac15e3a6f52627a10df21")
+	validHeight := int64(297449)
+	fromUserID := "0-1"
+	ToAddress := "wNDue1jHcgRSioSDL4o1AzXz3D72gCMkP6"
+	coin := "WICC"
+	amount := int64(1000000)
+	fee := int64(1000000)
+
+	// 构建交易单和哈希
+	emptyTrans, hash, err := CreateEmptyRawTransactionAndHash(fromUserID, ToAddress, coin, amount, fee, validHeight, TxType_UcoinTransfer)
+	if err != nil {
+		t.Error(err)
+	} else {
+		fmt.Println("空交易单:\n", emptyTrans)
+		fmt.Println("待签哈希:\n", hash)
+	}
+
+	// 交易单签名
+	signature, err := SignRawTransaction(hash, privateKey)
+	if err != nil {
+		t.Error(err)
+	} else {
+		fmt.Println("签名结果:\n", hex.EncodeToString(signature))
+	}
+
+	//验签与交易单合并
+	sigPub := SigPub{
+		PublicKey: publicKey,
+		Signature: signature,
+	}
+	pass, signedTrans := VerifyAndCombineRawTransaction(emptyTrans, sigPub)
+	if !pass {
+		t.Error("verify failed!")
+	} else {
+		fmt.Println("合并之后的交易单:\n", signedTrans)
+	}
+}
