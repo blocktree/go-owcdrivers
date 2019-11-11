@@ -46,6 +46,7 @@ func init() {
 	RegTxSigner("GST", eos_txsigner.Default)
 	RegTxSigner("BETH", ethereum_txsigner.Default)
 	RegTxSigner("NTN", ethereum_txsigner.Default)
+	RegTxSigner("XWC", bts_txsigner.Default)
 }
 
 // 交易签名注册组
