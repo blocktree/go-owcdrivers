@@ -183,6 +183,13 @@ func Test_btc_bech32_testnet_address(t *testing.T) {
 	}
 }
 
+func Test_bch_new(t *testing.T) {
+	address := "bitcoincash:pz5gaqmezdq3uajw82rt9zth8st76cn5kvrlrxyt6j"
+	hash, err := AddressDecode(address, BCH_mainnetAddressCash)
+	fmt.Println(err)
+	fmt.Println(hex.EncodeToString(hash))
+}
+
 func Test_bch_address(t *testing.T) {
 	cashAddress := "bitcoincash:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a"
 	cashHash := []byte{0, 0x76, 0xa0, 0x40, 0x53, 0xbd, 0xa0, 0xa8, 0x8b, 0xda, 0x51, 0x77, 0xb8, 0x6a, 0x15, 0xc3, 0xb2, 0x9f, 0x55, 0x98, 0x73}

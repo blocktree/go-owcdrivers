@@ -26,6 +26,7 @@ var encodings = map[string]enc{
 	"TransactionType":    enc{ST_UINT16, 2},
 	"Flags":              enc{ST_UINT32, 2},
 	"Sequence":           enc{ST_UINT32, 4},
+	"DestinationTag":     enc{ST_UINT32, 14},
 	"LastLedgerSequence": enc{ST_UINT32, 27},
 	"Amount":             enc{ST_AMOUNT, 1},
 	"Fee":                enc{ST_AMOUNT, 8},

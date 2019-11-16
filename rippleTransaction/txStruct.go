@@ -20,6 +20,7 @@ type TxStruct struct {
 	TxnSignature       []byte
 	Account            []byte
 	Destination        []byte
+	DestinationTag     []byte
 	Memos              []byte
 }
 
@@ -41,6 +42,13 @@ func getSequenceBytes(sequence uint32) []byte {
 	sequenceBytes := make([]byte, 4)
 	binary.BigEndian.PutUint32(sequenceBytes, sequence)
 	return append(enc, sequenceBytes...)
+}
+
+func getDestinationTagBytes(tag uint32) []byte {
+	enc := getEncBytes(encodings["DestinationTag"])
+	tagBytes := make([]byte, 4)
+	binary.BigEndian.PutUint32(tagBytes, tag)
+	return append(enc, tagBytes...)
 }
 
 func getLastLedgerSequenceBytes(ledgerSequence uint32) []byte {
@@ -123,7 +131,7 @@ func getMemosBytes(memoType, memoData, memoFormat string) []byte {
 	return nil
 }
 
-func NewTxStruct(from, pubkey string, sequence uint32, to string, amount, fee uint64, signature string, lastLedgerSequence uint32, memoType, memoData, memoFormat string) (*TxStruct, error) {
+func NewTxStruct(from, pubkey string, sequence uint32, to string, amount, fee uint64, signature string, destinationTag, lastLedgerSequence uint32, memoType, memoData, memoFormat string) (*TxStruct, error) {
 	var (
 		txStruct TxStruct
 		err      error
@@ -132,6 +140,7 @@ func NewTxStruct(from, pubkey string, sequence uint32, to string, amount, fee ui
 	txStruct.TransactionType = getTransactionTypeBytes(PAYMENT)
 	txStruct.Flags = getFlagsBytes(TxCanonicalSignature)
 	txStruct.Sequence = getSequenceBytes(sequence)
+	txStruct.DestinationTag = getDestinationTagBytes(destinationTag)
 	txStruct.LastLedgerSequence = getLastLedgerSequenceBytes(lastLedgerSequence)
 	txStruct.Amount, err = getAmountBytes(amount)
 	if err != nil {
@@ -170,6 +179,7 @@ func (tx TxStruct) ToEmptyRawWiths() string {
 	ret = append(ret, tx.TransactionType...)
 	ret = append(ret, tx.Flags...)
 	ret = append(ret, tx.Sequence...)
+	ret = append(ret, tx.DestinationTag...)
 	ret = append(ret, tx.LastLedgerSequence...)
 	ret = append(ret, tx.Amount...)
 	ret = append(ret, tx.Fee...)
@@ -188,6 +198,7 @@ func (tx TxStruct) ToBytes() []byte {
 	ret = append(ret, tx.TransactionType...)
 	ret = append(ret, tx.Flags...)
 	ret = append(ret, tx.Sequence...)
+	ret = append(ret, tx.DestinationTag...)
 	ret = append(ret, tx.LastLedgerSequence...)
 	ret = append(ret, tx.Amount...)
 	ret = append(ret, tx.Fee...)
