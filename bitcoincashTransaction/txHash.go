@@ -3,6 +3,7 @@ package bitcoincashTransaction
 import (
 	"encoding/hex"
 	"errors"
+	"github.com/blocktree/go-owcdrivers/addressEncoder"
 
 	owcrypt "github.com/blocktree/go-owcrypt"
 )
@@ -51,15 +52,13 @@ func (tx TxHash) GetMultiTxPubkeys() []string {
 
 func newTxHash(hash, lockscript, redeem []byte, inType, sigType byte, addressPrefix AddressPrefix) (*TxHash, error) {
 
-	var p2pkhPrefixByte []byte
 	var p2wpkhPrefixByte []byte
 
 
-	p2pkhPrefixByte = addressPrefix.P2PKHPrefix
 	p2wpkhPrefixByte = addressPrefix.P2WPKHPrefix
 
 	if inType == TypeP2PKH {
-		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{EncodeCheck(p2pkhPrefixByte, lockscript[3:23]), sigType, SignaturePubkey{nil, nil}}, nil}, nil
+		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{addressEncoder.AddressEncode(append([]byte{0x00}, lockscript[3:23]...), addressEncoder.BCH_mainnetAddressCash), sigType, SignaturePubkey{nil, nil}}, nil}, nil
 	} else if inType == TypeP2WPKH {
 		return &TxHash{hex.EncodeToString(hash), 0, &NormalTx{EncodeCheck(p2wpkhPrefixByte, lockscript[2:22]), sigType, SignaturePubkey{nil, nil}}, nil}, nil
 	} else if inType == TypeMultiSig {
