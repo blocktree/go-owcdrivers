@@ -219,4 +219,7 @@ var (
 
 	BSV_mainnetAddressP2PKH = AddressType{"base58", BTCAlphabet, "doubleSHA256", "h160", 20, []byte{0x00}, nil}
 	BSV_mainnetAddressP2SH = AddressType{"base58", BTCAlphabet, "doubleSHA256", "h160", 20, []byte{0x05}, nil}
+
+	EVA_mainnetAddress = AddressType{"bech32", ATOMBech32Alphabet, "eva", "h160", 20, nil, nil}
+	EVA_testnetAddress = AddressType{"bech32", ATOMBech32Alphabet, "eva", "h160", 20, nil, nil}
 )

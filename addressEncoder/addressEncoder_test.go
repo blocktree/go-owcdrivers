@@ -1,6 +1,7 @@
 package addressEncoder
 
 import (
+	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 	"testing"
@@ -1078,6 +1079,39 @@ func Test_ATOMAddress(t *testing.T) {
 		fmt.Println("atom address decode success!")
 	}
 }
+
+func Test_EVA_address(t *testing.T) {
+	address := "eva1pn80qt83wzk9w4gs3muc8hw26cexlgav75mar0"
+
+	hash, err := AddressDecode(address, EVA_mainnetAddress)
+
+	if err != nil {
+		t.Error("")
+	} else {
+		fmt.Println(hex.EncodeToString(hash))
+	}
+
+	pubstr := "AsFSyLhmG2sDmw0LEGNkMSLswgWDJ2LPI8T4XTS+ANzv"
+	pubkey, _ := base64.StdEncoding.DecodeString(pubstr)
+
+	fmt.Println(hex.EncodeToString(pubkey))
+
+	fmt.Println(hex.EncodeToString(owcrypt.Hash(pubkey, 0, owcrypt.HASH_ALG_HASH160)))
+
+	txhash, _ := hex.DecodeString("1d2a12a9806c2c9479cb20a50f8e7ae7268c983275830b3dc2b81a060da722c5")
+
+	sig, _ := hex.DecodeString("0d972368ccda4354c0bac2105c761705ec9c345b1f54c190adb187f9a04607e907ac5e693fb390c98c063f30af1327971b1ca72a6c2514cfa3e902cdb48eab85")
+
+	pubkey = owcrypt.PointDecompress(pubkey, owcrypt.ECC_CURVE_SECP256K1)[1:]
+	pass := owcrypt.Verify(pubkey, nil, 0, txhash, 32, sig, owcrypt.ECC_CURVE_SECP256K1)
+
+	fmt.Println(pass)
+
+
+	pubtest, _ := base64.StdEncoding.DecodeString("A9aahDKgvMJW/Yjz8JHKcPpdP070HfOy05tTb+fpnEXB")
+	fmt.Println(hex.EncodeToString(pubtest))
+}
+
 
 func Test_ELA_Address(t *testing.T) {
 	address := "Eb1r8zaS3qbsRFH4j4GADshJCqFZ84ZM8u"
