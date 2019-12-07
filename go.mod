@@ -16,12 +16,13 @@ require (
 	github.com/blocktree/moacchain-adapter v1.0.3
 	github.com/blocktree/nulsio-adapter v1.1.7
 	github.com/blocktree/ontology-adapter v1.0.8
-	github.com/blocktree/openwallet v1.4.8
+	github.com/blocktree/openwallet v1.5.4
+	github.com/blocktree/rcproto-adapter v1.0.0
 	github.com/blocktree/ripple-adapter v1.0.13
 	github.com/blocktree/virtualeconomy-adapter v1.1.5
 	github.com/blocktree/waykichain-adapter v1.0.3
+	github.com/google/gofuzz v1.0.0 // indirect
 	github.com/pkg/errors v0.8.1
-	github.com/prometheus/common v0.6.0
 	github.com/tendermint/tendermint v0.31.2-rc0
 	github.com/tidwall/gjson v1.2.1
 )
