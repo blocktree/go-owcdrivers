@@ -17,10 +17,10 @@ import (
 	"github.com/blocktree/ontology-adapter/ontology_txsigner"
 	"github.com/blocktree/openwallet/log"
 	"github.com/blocktree/openwallet/openwallet"
+	"github.com/blocktree/rcproto-adapter/rcproto_txsigner"
 	"github.com/blocktree/ripple-adapter/ripple_txsigner"
 	"github.com/blocktree/virtualeconomy-adapter/virtualeconomy_txsigner"
 	"github.com/blocktree/waykichain-adapter/waykichain_txsigner"
-	"github.com/blocktree/rcproto-adapter/rcproto_txsigner"
 )
 
 func init() {
@@ -49,6 +49,7 @@ func init() {
 	RegTxSigner("NTN", ethereum_txsigner.Default)
 	RegTxSigner("XWC", bts_txsigner.Default)
 	RegTxSigner("RCP", rcproto_txsigner.Default)
+	RegTxSigner("ACC", eos_txsigner.Default)
 }
 
 // 交易签名注册组
