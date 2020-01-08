@@ -621,7 +621,7 @@ func Test_ed25519_extend(t *testing.T) {
 
 	}
 
-	path = "m/44'/88'/1'/0/2"
+	path = "m/44'/88'/1'/0/0"
 	cpri, err := DerivedPrivateKeyWithPath(seed[:], path, owcrypt.ECC_CURVE_ED25519)
 	if err != nil {
 		t.Error("产生失败！")
@@ -631,6 +631,9 @@ func Test_ed25519_extend(t *testing.T) {
 
 	}
 
+	ck, _ := owcrypt.GenPubkey(cpri.key, owcrypt.ECC_CURVE_ED25519)
+
+	fmt.Println(hex.EncodeToString(ck))
 	// path = "/0"
 	// prikey, err := pkey.GenPublicChild(0)
 	// if err != nil {
