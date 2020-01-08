@@ -25,12 +25,11 @@ func SignRawTransaction(hash string, privateKey []byte) ([]byte, error) {
 	if err != nil || len(hashBytes) != 32 {
 		return nil, errors.New("Invalid hash string!")
 	}
-
-	signature, retCode := MoacSignature(privateKey, hashBytes)
+	signature, v, retCode := owcrypt.Signature(privateKey, nil, hashBytes, owcrypt.ECC_CURVE_SECP256K1)
 	if retCode != owcrypt.SUCCESS {
 		return nil, errors.New("Failed to sign transaction!")
 	}
-	return signature, nil
+	return append(signature, v), nil
 }
 
 func VerifyAndCombineRawTransaction(emptyTrans, signature, publicKey string, isTestNet bool) (bool, string) {
@@ -47,7 +46,7 @@ func VerifyAndCombineRawTransaction(emptyTrans, signature, publicKey string, isT
 	if retCode != owcrypt.SUCCESS || strings.ToLower(hex.EncodeToString(owcrypt.PointCompress(pub, owcrypt.ECC_CURVE_SECP256K1))) != strings.ToLower(publicKey) {
 		return false, ""
 	}
-	if owcrypt.SUCCESS != owcrypt.Verify(pub, nil, 0, hash, 32, sig, owcrypt.ECC_CURVE_SECP256K1) {
+	if owcrypt.SUCCESS != owcrypt.Verify(pub, nil, hash, sig[:64], owcrypt.ECC_CURVE_SECP256K1) {
 		return false, ""
 	}
 	if len(txBytes) < 57 {

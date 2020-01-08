@@ -25,7 +25,7 @@ func CalcChecksum(data []byte, chkType string) []byte {
 
 func calcChecksum(data []byte, chkType string) []byte {
 	if chkType == "doubleSHA256" {
-		return owcrypt.Hash(data, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)[:4]
+		return owcrypt.Hash(data, 0, owcrypt.HASH_ALG_DOUBLE_SHA256)[:4]
 	}
 	if chkType == "doubleBlake256" {
 		return blake256.DoubleBlake256(data)[:4]

@@ -62,12 +62,13 @@ func SignTransaction(emptyTrans string, prikey []byte) (*SignaturePubkey, error)
 		return nil, errors.New("Invalid empty transaction hex!")
 	}
 
-	sig, ret := owcrypt.Signature(prikey, nil, 0, txBytes, uint16(len(txBytes)), owcrypt.ECC_CURVE_X25519)
+	sig,_, ret := owcrypt.Signature(prikey, nil, txBytes, owcrypt.ECC_CURVE_X25519)
 	if ret != owcrypt.SUCCESS {
 		return nil, errors.New("Failed to sign the transaction!")
 	}
 
-	pub := owcrypt.Point_mulBaseG(prikey, owcrypt.ECC_CURVE_X25519)
+	pub := owcrypt.Point_mulBaseG(prikey, owcrypt.ECC_CURVE_ED25519)
+	pub, _ = owcrypt.CURVE25519_convert_Ed_to_X(pub)
 
 	// cpub, err := owcrypt.CURVE25519_convert_X_to_Ed(pub)
 	// if err != nil {
@@ -86,7 +87,7 @@ func VerifyTransaction(emptyTrans string, sp *SignaturePubkey) bool {
 		return false
 	}
 
-	pass := owcrypt.Verify(sp.PublicKey, nil, 0, txBytes, uint16(len(txBytes)), sp.Signature, owcrypt.ECC_CURVE_X25519)
+	pass := owcrypt.Verify(sp.PublicKey, nil, txBytes, sp.Signature, owcrypt.ECC_CURVE_X25519)
 
 	if pass != owcrypt.SUCCESS {
 		return false

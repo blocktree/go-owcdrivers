@@ -65,7 +65,7 @@ func (ts TxStruct) getPreviousHash() []byte {
 		data = append(data, in.TxID...)
 		data = append(data, in.Vout...)
 	}
-	return owcrypt.Hash(data, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
+	return owcrypt.Hash(data, 0, owcrypt.HASH_ALG_DOUBLE_SHA256)
 }
 
 func (ts TxStruct) getSequenceHash() []byte {
@@ -73,7 +73,7 @@ func (ts TxStruct) getSequenceHash() []byte {
 	for _, in := range ts.Vin {
 		data = append(data, in.Sequence...)
 	}
-	return owcrypt.Hash(data, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
+	return owcrypt.Hash(data, 0, owcrypt.HASH_ALG_DOUBLE_SHA256)
 }
 
 func (ts TxStruct) getOutputHash() []byte {
@@ -84,7 +84,7 @@ func (ts TxStruct) getOutputHash() []byte {
 		data = append(data, out.LockScript...)
 		data = append(data, out.HashData...)
 	}
-	return owcrypt.Hash(data, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
+	return owcrypt.Hash(data, 0, owcrypt.HASH_ALG_DOUBLE_SHA256)
 }
 
 func (ts TxStruct) GetHash() ([]string, error) {
@@ -120,7 +120,7 @@ func (ts TxStruct) GetHash() ([]string, error) {
 		data = append(data, in.LockScript...)
 		data = append(data, in.Sequence...)
 
-		hash := owcrypt.Hash(data, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
+		hash := owcrypt.Hash(data, 0, owcrypt.HASH_ALG_DOUBLE_SHA256)
 		ret = append(ret, hex.EncodeToString(hash))
 	}
 	return ret, nil

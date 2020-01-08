@@ -50,7 +50,7 @@ func SignRawTransaction(hash string, prikey []byte) ([]byte, error) {
 		return nil, errors.New("Invalid transaction hash string!")
 	}
 
-	signature, retCode := owcrypt.Signature(prikey, nil, 0, hashBytes, 32, owcrypt.ECC_CURVE_SECP256K1)
+	signature,_, retCode := owcrypt.Signature(prikey, nil, hashBytes, owcrypt.ECC_CURVE_SECP256K1)
 	if retCode != owcrypt.SUCCESS {
 		return nil, errors.New("Failed to sign transaction hash!")
 	}
@@ -65,7 +65,7 @@ func VerifyAndCombineRawTransaction(emptyTrans string, sigPub SigPub) (bool, str
 	}
 	pubkey := owcrypt.PointDecompress(sigPub.PublicKey, owcrypt.ECC_CURVE_SECP256K1)[1:]
 
-	if owcrypt.SUCCESS != owcrypt.Verify(pubkey, nil, 0, hash, 32, sigPub.Signature, owcrypt.ECC_CURVE_SECP256K1) {
+	if owcrypt.SUCCESS != owcrypt.Verify(pubkey, nil, hash, sigPub.Signature, owcrypt.ECC_CURVE_SECP256K1) {
 		return false, ""
 	}
 

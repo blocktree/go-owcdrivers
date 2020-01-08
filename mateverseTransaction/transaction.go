@@ -48,7 +48,7 @@ func GetSigHash(emptyTrans string, inputs *[]*TxInput) error {
 		hashBytes = append(hashBytes, trans[inputsEnd:]...)
 		hashBytes = append(hashBytes, uint32ToLittleEndianBytes(SigHashAll)...)
 
-		input.hash = hex.EncodeToString(owcrypt.Hash(hashBytes, 0, owcrypt.HASh_ALG_DOUBLE_SHA256))
+		input.hash = hex.EncodeToString(owcrypt.Hash(hashBytes, 0, owcrypt.HASH_ALG_DOUBLE_SHA256))
 	}
 
 	return nil
@@ -63,7 +63,7 @@ func SignTransaction(hash string, prikey []byte) (string, error) {
 		return "", errors.New("Invalid prikey!")
 	}
 
-	signature, reCode := owcrypt.Signature(prikey, nil, 0, hashBytes, 32, owcrypt.ECC_CURVE_SECP256K1)
+	signature,_, reCode := owcrypt.Signature(prikey, nil, hashBytes, owcrypt.ECC_CURVE_SECP256K1)
 	if reCode != owcrypt.SUCCESS {
 		return "", errors.New("Failed to sign transaction!")
 	}

@@ -36,7 +36,7 @@ func calcSignaturePubkey(txHash, prikey []byte) (*SignaturePubkey, error) {
 		return nil, errors.New("Transaction hash or private key data error!")
 	}
 
-	sig, err := owcrypt.Signature(prikey, nil, 0, txHash, 32, owcrypt.ECC_CURVE_SECP256K1)
+	sig,_, err := owcrypt.Signature(prikey, nil, txHash, owcrypt.ECC_CURVE_SECP256K1)
 	if err != owcrypt.SUCCESS {
 		return nil, errors.New("Signature failed!")
 	}

@@ -92,7 +92,7 @@ func (ts TxStruct) GetHash() ([]string, error) {
 		data = append(data, ts.LockTime...)
 		data = append(data, DefaultSigTypeBytes...)
 
-		hashes = append(hashes, hex.EncodeToString(owcrypt.Hash(data, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)))
+		hashes = append(hashes, hex.EncodeToString(owcrypt.Hash(data, 0, owcrypt.HASH_ALG_DOUBLE_SHA256)))
 	}
 
 	return hashes, nil

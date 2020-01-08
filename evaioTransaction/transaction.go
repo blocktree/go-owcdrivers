@@ -55,7 +55,7 @@ func SignTransactionHash(txHash string, prikey []byte) (string, error) {
 		return "", errors.New("Invalid transaction hash!")
 	}
 
-	sig, ret := owcrypt.Signature(prikey, nil, 0, hash, 32, owcrypt.ECC_CURVE_SECP256K1)
+	sig,_, ret := owcrypt.Signature(prikey, nil, hash, owcrypt.ECC_CURVE_SECP256K1)
 	sig = serilizeS(sig)
 
 	if ret != owcrypt.SUCCESS {
@@ -74,7 +74,7 @@ func VerifyTransactionSig(emptyTrans, signature string, pubkey []byte) bool {
 		return false
 	}
 
-	if owcrypt.Verify(pubkey, nil, 0, hash, 32, sig, owcrypt.ECC_CURVE_SECP256K1) != owcrypt.SUCCESS {
+	if owcrypt.Verify(pubkey, nil, hash, sig, owcrypt.ECC_CURVE_SECP256K1) != owcrypt.SUCCESS {
 		return false
 	}
 

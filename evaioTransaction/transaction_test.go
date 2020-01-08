@@ -68,7 +68,7 @@ func Test_sig(t *testing.T) {
 	fmt.Println(hex.EncodeToString(pub))
 
 	hash, _ := hex.DecodeString("2038971d7a25019a6fbf42c81b98e7e90f5fe842ec4fe90035d4fed4ca27dec5")
-	pass := owcrypt.Verify(pub, nil, 0, hash, 32, sig, owcrypt.ECC_CURVE_SECP256K1)
+	pass := owcrypt.Verify(pub, nil, hash, sig, owcrypt.ECC_CURVE_SECP256K1)
 
 	fmt.Println(pass)
 

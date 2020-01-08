@@ -40,7 +40,7 @@ func SignTransaction(hash string, prikey []byte) ([]byte, error) {
 		return nil, errors.New("Invalid hash!")
 	}
 
-	signature, retCode := owcrypt.Signature(prikey, nil, 0, hashBytes, 32, owcrypt.ECC_CURVE_SECP256K1)
+	signature,_, retCode := owcrypt.Signature(prikey, nil, hashBytes, owcrypt.ECC_CURVE_SECP256K1)
 	if retCode != owcrypt.SUCCESS {
 		return nil, errors.New("Sign Failed!")
 	}
@@ -65,7 +65,7 @@ func VerifyAndCombineTransaction(emptyTrans string, sigPubs []SigPub) (bool, str
 	for index := 0; index < len(sigPubs); index++ {
 		hashBytes, _ := hex.DecodeString(hashes[index])
 		pubkey := owcrypt.PointDecompress(sigPubs[index].Pubkey, owcrypt.ECC_CURVE_SECP256K1)[1:]
-		if owcrypt.SUCCESS != owcrypt.Verify(pubkey, nil, 0, hashBytes, 32, sigPubs[index].Signature, owcrypt.ECC_CURVE_SECP256K1) {
+		if owcrypt.SUCCESS != owcrypt.Verify(pubkey, nil, hashBytes, sigPubs[index].Signature, owcrypt.ECC_CURVE_SECP256K1) {
 			return false, "", errors.New("verify transaction failed!")
 		}
 		txStruct.Vin[index].SigPub = &sigPubs[index]

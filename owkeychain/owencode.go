@@ -41,7 +41,7 @@ func Base58checkDecode(address string, fix []byte) ([]byte, error) {
 		}
 	}
 
-	checksum := owcrypt.Hash(decodeBytes[:len(decodeBytes)-4], 0, owcrypt.HASh_ALG_DOUBLE_SHA256)[:4]
+	checksum := owcrypt.Hash(decodeBytes[:len(decodeBytes)-4], 0, owcrypt.HASH_ALG_DOUBLE_SHA256)[:4]
 
 	for i := 0; i < 4; i++ {
 		if checksum[i] != decodeBytes[len(decodeBytes)-4+i] {

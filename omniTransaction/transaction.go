@@ -209,7 +209,7 @@ func VerifyRawTransaction(txHex string, unlockData []TxUnlock, addressPrefix Add
 		th, _ := hex.DecodeString(t.Hash)
 		if t.NRequired == 0 {
 			pubkey := owcrypt.PointDecompress(t.Normal.SigPub.Pubkey, owcrypt.ECC_CURVE_SECP256K1)[1:]
-			if owcrypt.Verify(pubkey, nil, 0, th, 32, t.Normal.SigPub.Signature, owcrypt.ECC_CURVE_SECP256K1) != owcrypt.SUCCESS {
+			if owcrypt.Verify(pubkey, nil, th, t.Normal.SigPub.Signature, owcrypt.ECC_CURVE_SECP256K1) != owcrypt.SUCCESS {
 				return false
 			}
 		} else {
@@ -217,7 +217,7 @@ func VerifyRawTransaction(txHex string, unlockData []TxUnlock, addressPrefix Add
 			for i := 0; i < int(t.NRequired); i++ {
 				for j := count; j < len(t.Multi); j++ {
 					pubkey := owcrypt.PointDecompress(t.Multi[j].SigPub.Pubkey, owcrypt.ECC_CURVE_SECP256K1)[1:]
-					if owcrypt.Verify(pubkey, nil, 0, th, 32, t.Multi[i].SigPub.Signature, owcrypt.ECC_CURVE_SECP256K1) == owcrypt.SUCCESS {
+					if owcrypt.Verify(pubkey, nil, th, t.Multi[i].SigPub.Signature, owcrypt.ECC_CURVE_SECP256K1) == owcrypt.SUCCESS {
 						count++
 						break
 					}

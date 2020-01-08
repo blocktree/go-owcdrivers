@@ -158,7 +158,7 @@ func GetProgramHashFromAddress(address string) ([]byte, error) {
 	if len(ret) != 25 {
 		return nil, errors.New("Invalid address!")
 	}
-	checksum := owcrypt.Hash(ret[:len(ret)-4], 0, owcrypt.HASh_ALG_DOUBLE_SHA256)[:4]
+	checksum := owcrypt.Hash(ret[:len(ret)-4], 0, owcrypt.HASH_ALG_DOUBLE_SHA256)[:4]
 	for i := 0; i < 4; i++ {
 		if checksum[i] != ret[len(ret)-4+i] {
 			return nil, errors.New("Invalid address!")

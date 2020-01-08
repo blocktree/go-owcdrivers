@@ -33,7 +33,7 @@ func CreateRawTransactionAndHash(gasPrice, gasLimit uint64, txState TxState) (st
 		return "", nil, err
 	}
 
-	th.Hash = hex.EncodeToString(owcrypt.Hash(owcrypt.Hash(txBytes[:len(txBytes)-1], 0, owcrypt.HASh_ALG_DOUBLE_SHA256), 0, owcrypt.HASH_ALG_SHA256))
+	th.Hash = hex.EncodeToString(owcrypt.Hash(owcrypt.Hash(txBytes[:len(txBytes)-1], 0, owcrypt.HASH_ALG_DOUBLE_SHA256), 0, owcrypt.HASH_ALG_SHA256))
 	th.Addresses = append(th.Addresses, txState.Payer)
 	if txState.Payer != txState.From {
 		th.Addresses = append(th.Addresses, txState.From)
@@ -61,11 +61,11 @@ func VerifyAndCombineRawTransaction(emptyTrans string, sigpub []SigPub) (bool, s
 		return false, "", err
 	}
 
-	hashBytes := owcrypt.Hash(owcrypt.Hash(txBytes[:len(txBytes)-1], 0, owcrypt.HASh_ALG_DOUBLE_SHA256), 0, owcrypt.HASH_ALG_SHA256)
+	hashBytes := owcrypt.Hash(owcrypt.Hash(txBytes[:len(txBytes)-1], 0, owcrypt.HASH_ALG_DOUBLE_SHA256), 0, owcrypt.HASH_ALG_SHA256)
 	sigData.Nrequired = 0
 	for _, sp := range sigpub {
 		pubkey := owcrypt.PointDecompress(sp.PublicKey, owcrypt.ECC_CURVE_SECP256R1)[1:]
-		if owcrypt.SUCCESS != owcrypt.Verify(pubkey, nil, 0, hashBytes, 32, sp.Signature, owcrypt.ECC_CURVE_SECP256R1) {
+		if owcrypt.SUCCESS != owcrypt.Verify(pubkey, nil, hashBytes, sp.Signature, owcrypt.ECC_CURVE_SECP256R1) {
 			return false, "", errors.New("failed to verify transaction!")
 		}
 		sigData.SigPubs = append(sigData.SigPubs, sp)

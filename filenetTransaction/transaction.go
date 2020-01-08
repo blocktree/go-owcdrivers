@@ -43,7 +43,7 @@ func SignTransaction(hash string, prikey []byte) (string, error) {
 		return "", errors.New("Invalid hash data!")
 	}
 
-	signature, retCode := owcrypt.Signature(prikey, nil, 0, hashBytes, 32, owcrypt.ECC_CURVE_SECP256K1)
+	signature,_, retCode := owcrypt.Signature(prikey, nil, hashBytes, owcrypt.ECC_CURVE_SECP256K1)
 	if retCode != owcrypt.SUCCESS {
 		return "", errors.New("Failed to sign transaction!")
 	}
@@ -68,7 +68,7 @@ func VerifyAndCombineTransaction(emptyTrans, signature, pubkey  string) (string,
 
 	pubBytes = owcrypt.PointDecompress(pubBytes, owcrypt.ECC_CURVE_SECP256K1)[1:]
 
-	if owcrypt.SUCCESS != owcrypt.Verify(pubBytes, nil, 0, hash, 32, sig, owcrypt.ECC_CURVE_SECP256K1) {
+	if owcrypt.SUCCESS != owcrypt.Verify(pubBytes, nil, hash, sig, owcrypt.ECC_CURVE_SECP256K1) {
 		return "", false
 	}
 

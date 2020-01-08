@@ -125,9 +125,9 @@ func (t Transaction) calcSegwitSerializationHashes() ([]byte, []byte, []byte) {
 		hashOutputs = append(hashOutputs, byte(len(vout.lockScript)))
 		hashOutputs = append(hashOutputs, vout.lockScript...)
 	}
-	return owcrypt.Hash(hashPrevouts, 0, owcrypt.HASh_ALG_DOUBLE_SHA256),
-		owcrypt.Hash(hashSequence, 0, owcrypt.HASh_ALG_DOUBLE_SHA256),
-		owcrypt.Hash(hashOutputs, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
+	return owcrypt.Hash(hashPrevouts, 0, owcrypt.HASH_ALG_DOUBLE_SHA256),
+		owcrypt.Hash(hashSequence, 0, owcrypt.HASH_ALG_DOUBLE_SHA256),
+		owcrypt.Hash(hashOutputs, 0, owcrypt.HASH_ALG_DOUBLE_SHA256)
 }
 
 func genScriptCodeFromRedeemScript(redeemBytes []byte) ([]byte, error) {
@@ -266,7 +266,7 @@ func (t Transaction) getHashesForSig(unlockData []TxUnlock, SegwitON bool, addre
 			return nil, err
 		}
 
-		hash := owcrypt.Hash(sigBytes, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
+		hash := owcrypt.Hash(sigBytes, 0, owcrypt.HASH_ALG_DOUBLE_SHA256)
 
 		txHash, err := newTxHash(hash, lockBytes, redeemBytes, inType, unlockData[i].SigType, addressPrefix)
 		if err != nil {

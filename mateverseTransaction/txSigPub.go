@@ -73,7 +73,7 @@ func verifyTransactionHash(pubkey, hash, signature string) bool {
 	}
 
 	pubBytes = owcrypt.PointDecompress(pubBytes, owcrypt.ECC_CURVE_SECP256K1)[1:]
-	if owcrypt.SUCCESS != owcrypt.Verify(pubBytes, nil, 0, hashBytes, 32, sigBytes, owcrypt.ECC_CURVE_SECP256K1) {
+	if owcrypt.SUCCESS != owcrypt.Verify(pubBytes, nil, hashBytes, sigBytes, owcrypt.ECC_CURVE_SECP256K1) {
 		return false
 	}
 

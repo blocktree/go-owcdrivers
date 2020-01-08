@@ -81,7 +81,7 @@ func (tx CommonTx) GetHash() []byte {
 	txBytes = append(txBytes, tx.Amount...)
 	txBytes = append(txBytes, byte(0x00)) // empty contract script data
 
-	return owcrypt.Hash(txBytes, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
+	return owcrypt.Hash(txBytes, 0, owcrypt.HASH_ALG_DOUBLE_SHA256)
 }
 
 type RegisterAccountTx struct {
@@ -136,7 +136,7 @@ func (tx RegisterAccountTx) GetHash() []byte {
 	txBytes = append(txBytes, byte(0x00)) // empty miner id
 	txBytes = append(txBytes, tx.Fee...)
 
-	return owcrypt.Hash(txBytes, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
+	return owcrypt.Hash(txBytes, 0, owcrypt.HASH_ALG_DOUBLE_SHA256)
 }
 
 type CallContractTx struct {
@@ -217,7 +217,7 @@ func (tx CallContractTx) GetHash() []byte {
 	txBytes = append(txBytes, tx.Fee...)
 	txBytes = append(txBytes, tx.Amount...)
 	txBytes = append(txBytes, tx.ContractHex...)
-	return owcrypt.Hash(txBytes, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
+	return owcrypt.Hash(txBytes, 0, owcrypt.HASH_ALG_DOUBLE_SHA256)
 }
 
 // 仅实现了单币种转账
@@ -307,7 +307,7 @@ func (tx UcoinTransferTx) GetHash() []byte {
 	txBytes = append(txBytes, tx.CoinAmount...)
 	txBytes = append(txBytes, 0x00) // don't support memo
 
-	return owcrypt.Hash(txBytes, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
+	return owcrypt.Hash(txBytes, 0, owcrypt.HASH_ALG_DOUBLE_SHA256)
 }
 
 func getHashFromEmptyRawTrans(emptyTrans string) ([]byte, error) {
@@ -324,5 +324,5 @@ func getHashFromEmptyRawTrans(emptyTrans string) ([]byte, error) {
 	txBytes[0] = txBytes[1]
 	txBytes[1] = tmp
 
-	return owcrypt.Hash(txBytes, 0, owcrypt.HASh_ALG_DOUBLE_SHA256), nil
+	return owcrypt.Hash(txBytes, 0, owcrypt.HASH_ALG_DOUBLE_SHA256), nil
 }

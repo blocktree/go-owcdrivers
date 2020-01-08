@@ -43,7 +43,7 @@ func calcSignaturePubkey(txHash [][]byte, unlockData []TxUnlock) ([]SignaturePub
 		if txHash[i] == nil || len(txHash[i]) != 32 {
 			return nil, errors.New("Invalid transaction hash data!")
 		}
-		sig, err := owcrypt.Signature(unlockData[i].PrivateKey, nil, 0, txHash[i], 32, owcrypt.ECC_CURVE_SECP256K1)
+		sig,_, err := owcrypt.Signature(unlockData[i].PrivateKey, nil, txHash[i], owcrypt.ECC_CURVE_SECP256K1)
 		if err != owcrypt.SUCCESS {
 			return nil, errors.New("Signature failed!")
 		}

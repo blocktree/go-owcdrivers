@@ -99,7 +99,7 @@ func getPriChildViaPriParent(il, prikey []byte, typeChoose uint32) ([]byte, erro
 		ilNum := new(big.Int).SetBytes(inverse(il[:28]))
 		kpr := new(big.Int).SetBytes(inverse(prikey))
 		num8 := new(big.Int).SetBytes([]byte{8})
-		curveOrder := new(big.Int).SetBytes(owcrypt.GetCurveOrder(typeChoose))
+		curveOrder := new(big.Int).SetBytes(getCurveOrder(typeChoose))
 		ilNum.Mul(ilNum, num8)
 		ilNum.Add(ilNum, kpr)
 		check := new(big.Int).Mod(ilNum, curveOrder)
@@ -115,7 +115,7 @@ func getPriChildViaPriParent(il, prikey []byte, typeChoose uint32) ([]byte, erro
 		priChild = inverse(priChild)
 	} else {
 		ilNum := new(big.Int).SetBytes(il)
-		curveOrder := new(big.Int).SetBytes(owcrypt.GetCurveOrder(typeChoose))
+		curveOrder := new(big.Int).SetBytes(getCurveOrder(typeChoose))
 		if ilNum.Cmp(curveOrder) >= 0 || ilNum.Sign() == 0 {
 			return nil, ErrInvalidChild
 		}
@@ -159,7 +159,7 @@ func getPubChildViaPubParent(il, pubkey []byte, typeChoose uint32) ([]byte, erro
 		return point, nil
 	}
 	ilNum := new(big.Int).SetBytes(il)
-	curveOrder := new(big.Int).SetBytes(owcrypt.GetCurveOrder(typeChoose))
+	curveOrder := new(big.Int).SetBytes(getCurveOrder(typeChoose))
 	if ilNum.Cmp(curveOrder) >= 0 || ilNum.Sign() == 0 {
 		return nil, ErrInvalidChild
 	}

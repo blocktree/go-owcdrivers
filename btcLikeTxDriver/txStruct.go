@@ -325,9 +325,9 @@ func calcSegwitHash(tx Transaction) ([]byte, []byte, []byte, error) {
 		hashOutputs = append(hashOutputs, byte(len(vout.lockScript)))
 		hashOutputs = append(hashOutputs, vout.lockScript...)
 	}
-	return owcrypt.Hash(hashPrevouts, 0, owcrypt.HASh_ALG_DOUBLE_SHA256),
-		owcrypt.Hash(hashSequence, 0, owcrypt.HASh_ALG_DOUBLE_SHA256),
-		owcrypt.Hash(hashOutputs, 0, owcrypt.HASh_ALG_DOUBLE_SHA256),
+	return owcrypt.Hash(hashPrevouts, 0, owcrypt.HASH_ALG_DOUBLE_SHA256),
+		owcrypt.Hash(hashSequence, 0, owcrypt.HASH_ALG_DOUBLE_SHA256),
+		owcrypt.Hash(hashOutputs, 0, owcrypt.HASH_ALG_DOUBLE_SHA256),
 		nil
 }
 
@@ -430,7 +430,7 @@ func (t Transaction) getHashesForSig(unlockData []TxUnlock) ([][]byte, error) {
 
 		sigBytes = append(sigBytes, uint32ToLittleEndianBytes(DefaultHashType)...)
 
-		hash := owcrypt.Hash(sigBytes, 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
+		hash := owcrypt.Hash(sigBytes, 0, owcrypt.HASH_ALG_DOUBLE_SHA256)
 
 		hashes = append(hashes, hash)
 	}
@@ -442,7 +442,7 @@ func verifyHashes(hashes [][]byte, sigPub []SignaturePubkey) bool {
 
 	for i := 0; i < len(sigPub); i++ {
 		pubkey := owcrypt.PointDecompress(sigPub[i].Pubkey, owcrypt.ECC_CURVE_SECP256K1)[1:]
-		if owcrypt.Verify(pubkey, nil, 0, hashes[i], 32, sigPub[i].Signature, owcrypt.ECC_CURVE_SECP256K1) != owcrypt.SUCCESS {
+		if owcrypt.Verify(pubkey, nil, hashes[i], sigPub[i].Signature, owcrypt.ECC_CURVE_SECP256K1) != owcrypt.SUCCESS {
 			return false
 		}
 	}

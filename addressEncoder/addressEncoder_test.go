@@ -1103,7 +1103,7 @@ func Test_EVA_address(t *testing.T) {
 	sig, _ := hex.DecodeString("0d972368ccda4354c0bac2105c761705ec9c345b1f54c190adb187f9a04607e907ac5e693fb390c98c063f30af1327971b1ca72a6c2514cfa3e902cdb48eab85")
 
 	pubkey = owcrypt.PointDecompress(pubkey, owcrypt.ECC_CURVE_SECP256K1)[1:]
-	pass := owcrypt.Verify(pubkey, nil, 0, txhash, 32, sig, owcrypt.ECC_CURVE_SECP256K1)
+	pass := owcrypt.Verify(pubkey, nil, txhash, sig, owcrypt.ECC_CURVE_SECP256K1)
 
 	fmt.Println(pass)
 

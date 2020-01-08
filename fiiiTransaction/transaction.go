@@ -78,7 +78,7 @@ func SignTransactionMessage(message string, prikey []byte) ([]byte, error) {
 	if err != nil {
 		return nil, errors.New("Invalid message to sign!")
 	}
-	signature, retCode := owcrypt.Signature(prikey, nil, 0, data, uint16(len(data)), owcrypt.ECC_CURVE_ED25519)
+	signature,_, retCode := owcrypt.Signature(prikey, nil, data, owcrypt.ECC_CURVE_ED25519)
 
 	if retCode != owcrypt.SUCCESS {
 		return nil, errors.New("Failed to sign message!")
@@ -109,7 +109,7 @@ func VerifyAndCombineTransaction(emptyTrans string, sigPub []SigPub) (bool, stri
 		fmt.Println("msg:", hex.EncodeToString(msg))
 		fmt.Println("sig:", hex.EncodeToString(sigPub[i].Signature))
 		fmt.Println("pub:", hex.EncodeToString(sigPub[i].Pubkey))
-		if owcrypt.SUCCESS != owcrypt.Verify(sigPub[i].Pubkey, nil, 0, msg, uint16(len(msg)), sigPub[i].Signature, owcrypt.ECC_CURVE_ED25519) {
+		if owcrypt.SUCCESS != owcrypt.Verify(sigPub[i].Pubkey, nil, msg, sigPub[i].Signature, owcrypt.ECC_CURVE_ED25519) {
 			return false, "", errors.New("Signature verify failed!")
 		}
 		unlock, err := sigPub[i].GenUnlockScript()

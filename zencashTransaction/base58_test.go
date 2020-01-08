@@ -12,7 +12,7 @@ func TestDecode(t *testing.T) {
 	hash, _ :=Decode(address, BitcoinAlphabet)
 	fmt.Println(hex.EncodeToString(hash))
 
-	chk := owcrypt.Hash(hash[:22], 0, owcrypt.HASh_ALG_DOUBLE_SHA256)
+	chk := owcrypt.Hash(hash[:22], 0, owcrypt.HASH_ALG_DOUBLE_SHA256)
 
 	fmt.Println(hex.EncodeToString(chk))
 
