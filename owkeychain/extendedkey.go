@@ -92,10 +92,10 @@ func inverse(data []byte) []byte {
 
 func getPriChildViaPriParent(il, prikey []byte, typeChoose uint32) ([]byte, error) {
 	priChild := []byte{}
-	if typeChoose == owcrypt.ECC_CURVE_X25519 {
+	if typeChoose == owcrypt.ECC_CURVE_X25519 || typeChoose == owcrypt.ECC_CURVE_CURVE25519_SHA256 {
 		typeChoose = owcrypt.ECC_CURVE_ED25519
 	}
-	if typeChoose == owcrypt.ECC_CURVE_ED25519 {
+	if typeChoose == owcrypt.ECC_CURVE_ED25519 || typeChoose == owcrypt.ECC_CURVE_CURVE25519_SHA256 {
 		ilNum := new(big.Int).SetBytes(inverse(il[:28]))
 		kpr := new(big.Int).SetBytes(inverse(prikey))
 		num8 := new(big.Int).SetBytes([]byte{8})
@@ -136,10 +136,10 @@ func getPriChildViaPriParent(il, prikey []byte, typeChoose uint32) ([]byte, erro
 }
 
 func getPubChildViaPubParent(il, pubkey []byte, typeChoose uint32) ([]byte, error) {
-	if typeChoose == owcrypt.ECC_CURVE_X25519 {
+	if typeChoose == owcrypt.ECC_CURVE_X25519 || typeChoose == owcrypt.ECC_CURVE_CURVE25519_SHA256 {
 		typeChoose = owcrypt.ECC_CURVE_ED25519
 	}
-	if typeChoose == owcrypt.ECC_CURVE_ED25519 {
+	if typeChoose == owcrypt.ECC_CURVE_ED25519 || typeChoose == owcrypt.ECC_CURVE_CURVE25519_SHA256 {
 		ilNum := new(big.Int).SetBytes(inverse(il[:28]))
 		num8 := new(big.Int).SetBytes([]byte{8})
 		ilNum.Mul(ilNum, num8)
@@ -177,7 +177,7 @@ func getFP(key []byte, isPrivate bool, typeChoose uint32) []byte {
 	if !isPrivate {
 		fingerPrint = owcrypt.Hash(key, 0, owcrypt.HASH_ALG_HASH160)[:4]
 	} else {
-		if typeChoose == owcrypt.ECC_CURVE_X25519 {
+		if typeChoose == owcrypt.ECC_CURVE_X25519 || typeChoose == owcrypt.ECC_CURVE_CURVE25519_SHA256 {
 			typeChoose = owcrypt.ECC_CURVE_ED25519
 		}
 		pubkey := owcrypt.Point_mulBaseG(key, typeChoose)
@@ -189,7 +189,7 @@ func getFP(key []byte, isPrivate bool, typeChoose uint32) []byte {
 //GenPrivateChild 通过k扩展子私钥
 func (k *ExtendedKey) GenPrivateChild(serializes uint32) (*ExtendedKey, error) {
 	typeChoose := k.curveType
-	if typeChoose == owcrypt.ECC_CURVE_X25519 {
+	if typeChoose == owcrypt.ECC_CURVE_X25519 || typeChoose == owcrypt.ECC_CURVE_CURVE25519_SHA256 {
 		typeChoose = owcrypt.ECC_CURVE_ED25519
 	}
 	i := []byte{}
@@ -226,7 +226,7 @@ func (k *ExtendedKey) GenPrivateChild(serializes uint32) (*ExtendedKey, error) {
 //GenPublicChild 通过k扩展子公钥
 func (k *ExtendedKey) GenPublicChild(serializes uint32) (*ExtendedKey, error) {
 	typeChoose := k.curveType
-	if typeChoose == owcrypt.ECC_CURVE_X25519 {
+	if typeChoose == owcrypt.ECC_CURVE_X25519 || typeChoose == owcrypt.ECC_CURVE_CURVE25519_SHA256 {
 		typeChoose = owcrypt.ECC_CURVE_ED25519
 	}
 	if !k.isPrivate {
@@ -264,7 +264,7 @@ func InitRootKeyFromSeed(seed []byte, curveType uint32) (*ExtendedKey, error) {
 	ctx := sha512.New()
 	ctx.Write(seed)
 	i := ctx.Sum(nil)
-	if curveType == owcrypt.ECC_CURVE_ED25519 || curveType == owcrypt.ECC_CURVE_X25519 {
+	if curveType == owcrypt.ECC_CURVE_ED25519 || curveType == owcrypt.ECC_CURVE_X25519 || curveType == owcrypt.ECC_CURVE_CURVE25519_SHA256 {
 		i[0] &= 248
 		i[31] &= 63
 		i[31] |= 64

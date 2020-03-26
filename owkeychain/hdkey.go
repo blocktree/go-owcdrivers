@@ -140,7 +140,7 @@ func (k *ExtendedKey) DerivedPublicKeyFromSerializes(serializes uint32) (*Extend
 //GetPublicKeyBytes 获取当前密钥对应的公钥
 func (k *ExtendedKey) GetPublicKeyBytes() []byte {
 	typeChoose := k.curveType
-	if typeChoose == owcrypt.ECC_CURVE_X25519 {
+	if typeChoose == owcrypt.ECC_CURVE_X25519 || typeChoose == owcrypt.ECC_CURVE_CURVE25519_SHA256 {
 		typeChoose = owcrypt.ECC_CURVE_ED25519
 	}
 
@@ -168,7 +168,7 @@ func (k *ExtendedKey) GetPublicKey() *ExtendedKey {
 		return k
 	}
 	typeChoose := k.curveType
-	if typeChoose == owcrypt.ECC_CURVE_X25519 {
+	if typeChoose == owcrypt.ECC_CURVE_X25519 || typeChoose == owcrypt.ECC_CURVE_CURVE25519_SHA256 {
 		typeChoose = owcrypt.ECC_CURVE_ED25519
 	}
 
