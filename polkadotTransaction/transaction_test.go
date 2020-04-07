@@ -28,7 +28,7 @@ func Test_transaction(t *testing.T) {
 		//创世块哈希
 		GenesisHash:     "b0a8d493285c2df73290dfb7e61f870f17b41801197a149ca93654499ea3dafe",
 		//spec版本
-		SpecVersion:     1055,
+		SpecVersion:     1059,
 	}
 
 	// 创建空交易单和待签消息
