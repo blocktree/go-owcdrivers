@@ -6,5 +6,5 @@ const (
 	Default_Period = 50
 	SigningBitV4 = byte(0x84)
 	Compact_U32 = "Compact<u32>"
-	AccounntIDFollow = true
+	AccounntIDFollow = false
 )
