@@ -52,14 +52,15 @@ func (tx TxStruct) NewTxPayLoad() (*TxPayLoad, error) {
 	}
 
 	if tx.Fee == 0 {
-		return nil, errors.New("a none zero fee must be payed")
+		//return nil, errors.New("a none zero fee must be payed")
+		tp.Fee = []byte{0}
+	} else {
+		fee, err := codec.Encode(Compact_U32, uint64(tx.Fee))
+		if err != nil {
+			return nil, err
+		}
+		tp.Fee, _ = hex.DecodeString(fee)
 	}
-
-	fee, err := codec.Encode(Compact_U32, uint64(tx.Fee))
-	if err != nil {
-		return nil, err
-	}
-	tp.Fee, _ = hex.DecodeString(fee)
 
 	specv := make([]byte, 4)
 	binary.LittleEndian.PutUint32(specv, tx.SpecVersion)
@@ -144,14 +145,18 @@ func (ts TxStruct) GetSignedTransaction (signature string) (string, error) {
 		signed = append(signed, nonceBytes...)
 	}
 
+	feeBytes := make([]byte, 0)
 	if ts.Fee == 0 {
-		return "", errors.New("a none zero fee must be payed")
+		//return "", errors.New("a none zero fee must be payed")
+		feeBytes = []byte{0}
+	} else {
+		fee, err := codec.Encode(Compact_U32, uint64(ts.Fee))
+		if err != nil {
+			return "", err
+		}
+		feeBytes, _ = hex.DecodeString(fee)
 	}
-	fee, err := codec.Encode(Compact_U32, uint64(ts.Fee))
-	if err != nil {
-		return "", err
-	}
-	feeBytes, _ := hex.DecodeString(fee)
+
 	signed = append(signed, feeBytes...)
 
 	method, err := NewMethodTransfer(ts.RecipientPubkey, ts.Amount)
