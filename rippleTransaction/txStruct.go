@@ -44,8 +44,8 @@ func getSequenceBytes(sequence uint32) []byte {
 	return append(enc, sequenceBytes...)
 }
 
-func getDestinationTagBytes(tag uint64) []byte {
-	if tag > 0xffffffff  {
+func getDestinationTagBytes(tag int64) []byte {
+	if tag < 0 {
 		return nil
 	}
 	enc := getEncBytes(encodings["DestinationTag"])
@@ -134,7 +134,7 @@ func getMemosBytes(memoType, memoData, memoFormat string) []byte {
 	return nil
 }
 
-func NewTxStruct(from, pubkey string, sequence uint32, to string, amount, fee uint64, signature string, destinationTag uint64, lastLedgerSequence uint32, memoType, memoData, memoFormat string) (*TxStruct, error) {
+func NewTxStruct(from, pubkey string, sequence uint32, to string, amount, fee uint64, signature string, destinationTag int64, lastLedgerSequence uint32, memoType, memoData, memoFormat string) (*TxStruct, error) {
 	var (
 		txStruct TxStruct
 		err      error
