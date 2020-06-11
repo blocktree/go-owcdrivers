@@ -44,13 +44,13 @@ func getSequenceBytes(sequence uint32) []byte {
 	return append(enc, sequenceBytes...)
 }
 
-func getDestinationTagBytes(tag int32) []byte {
+func getDestinationTagBytes(tag uint32) []byte {
 	if tag < 0 {
 		return nil
 	}
 	enc := getEncBytes(encodings["DestinationTag"])
 	tagBytes := make([]byte, 4)
-	binary.BigEndian.PutUint32(tagBytes, uint32(tag))
+	binary.BigEndian.PutUint32(tagBytes, tag)
 	return append(enc, tagBytes...)
 }
 
@@ -134,7 +134,7 @@ func getMemosBytes(memoType, memoData, memoFormat string) []byte {
 	return nil
 }
 
-func NewTxStruct(from, pubkey string, sequence uint32, to string, amount, fee uint64, signature string, destinationTag int32, lastLedgerSequence uint32, memoType, memoData, memoFormat string) (*TxStruct, error) {
+func NewTxStruct(from, pubkey string, sequence uint32, to string, amount, fee uint64, signature string, destinationTag uint32, lastLedgerSequence uint32, memoType, memoData, memoFormat string) (*TxStruct, error) {
 	var (
 		txStruct TxStruct
 		err      error
