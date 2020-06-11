@@ -8,7 +8,7 @@ import (
 	owcrypt "github.com/blocktree/go-owcrypt"
 )
 
-func CreateEmptyRawTransactionAndHash(from, pubkey string, destinationTag uint32, sequence uint32, to string, amount, fee uint64, lastLedgerSequence uint32, memoType, memoData, memoFormat string) (string, string, error) {
+func CreateEmptyRawTransactionAndHash(from, pubkey string, destinationTag uint64, sequence uint32, to string, amount, fee uint64, lastLedgerSequence uint32, memoType, memoData, memoFormat string) (string, string, error) {
 	tx, err := NewTxStruct(from, pubkey,sequence , to, amount, fee, "",destinationTag, lastLedgerSequence, memoType, memoData, memoFormat)
 	if err != nil {
 		return "", "", err
