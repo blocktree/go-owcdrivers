@@ -10,6 +10,7 @@ type TxPayLoad struct {
 	SpecVersion []byte
 	GenesisHash []byte
 	BlockHash []byte
+	TxVersion []byte
 }
 
 func (t TxPayLoad) ToBytesString () string {
@@ -20,6 +21,7 @@ func (t TxPayLoad) ToBytesString () string {
 	payload = append(payload, t.Nonce...)
 	payload = append(payload, t.Fee...)
 	payload = append(payload, t.SpecVersion...)
+	payload = append(payload, t.TxVersion...)
 	payload = append(payload, t.GenesisHash...)
 	payload = append(payload, t.BlockHash...)
 

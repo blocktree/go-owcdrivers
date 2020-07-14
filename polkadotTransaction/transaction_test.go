@@ -29,6 +29,8 @@ func Test_transaction(t *testing.T) {
 		GenesisHash:     "b0a8d493285c2df73290dfb7e61f870f17b41801197a149ca93654499ea3dafe",
 		//spec版本
 		SpecVersion:     1059,
+		//Transaction版本
+		TxVersion: 1,
 	}
 
 	// 创建空交易单和待签消息

@@ -20,6 +20,7 @@ type TxStruct struct {
 	BlockHash string `json:"block_hash"`
 	GenesisHash string `json:"genesis_hash"`
 	SpecVersion uint32 `json:"spec_version"`
+	TxVersion uint32 `json:"txVersion"`
 }
 
 
@@ -65,6 +66,10 @@ func (tx TxStruct) NewTxPayLoad() (*TxPayLoad, error) {
 	specv := make([]byte, 4)
 	binary.LittleEndian.PutUint32(specv, tx.SpecVersion)
 	tp.SpecVersion = specv
+
+	txv := make([]byte, 4)
+	binary.LittleEndian.PutUint32(txv, tx.TxVersion)
+	tp.TxVersion = txv
 
 	genesis, err := hex.DecodeString(tx.GenesisHash)
 	if err != nil || len(genesis) != 32 {
