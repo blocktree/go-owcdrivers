@@ -6,9 +6,9 @@ import (
 	"github.com/blocktree/go-owcrypt"
 )
 
-func (ts TxStruct) CreateEmptyTransactionAndMessage() (string, string, error) {
+func (ts TxStruct) CreateEmptyTransactionAndMessage(transferCode string) (string, string, error) {
 
-	tp, err := ts.NewTxPayLoad()
+	tp, err := ts.NewTxPayLoad(transferCode)
 	if err != nil {
 		return "", "", err
 	}
@@ -34,13 +34,13 @@ func SignTransaction(msgStr string, prikey []byte) ([]byte, error) {
 	return signature, nil
 }
 
-func VerifyAndCombineTransaction(emptyTrans, signature string) (string, bool) {
+func VerifyAndCombineTransaction(transferCode, emptyTrans, signature string) (string, bool) {
 	ts, err := NewTxStructFromJSON(emptyTrans)
 	if err != nil {
 		return "", false
 	}
 
-	tp, err := ts.NewTxPayLoad()
+	tp, err := ts.NewTxPayLoad(transferCode)
 	if err != nil {
 		return "", false
 	}
@@ -58,7 +58,7 @@ func VerifyAndCombineTransaction(emptyTrans, signature string) (string, bool) {
 		return "", false
 	}
 
-	signned, err := ts.GetSignedTransaction(signature)
+	signned, err := ts.GetSignedTransaction(transferCode, signature)
 	if err != nil {
 		return "", false
 	}

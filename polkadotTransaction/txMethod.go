@@ -33,13 +33,13 @@ func NewMethodTransfer(pubkey string, amount uint64) (*MethodTransfer, error) {
 	}, nil
 }
 
-func (mt MethodTransfer) ToBytes() ([]byte, error) {
+func (mt MethodTransfer) ToBytes(transferCode string) ([]byte, error) {
 
 	if mt.DestPubkey == nil || len(mt.DestPubkey) != 32 || mt.Amount == nil || len(mt.Amount) == 0 {
 		return nil, errors.New("invalid method")
 	}
 
-	ret, _ := hex.DecodeString(Balannce_Transfer)
+	ret, _ := hex.DecodeString(transferCode)
 	if AccounntIDFollow {
 		ret = append(ret, 0xff)
 	}

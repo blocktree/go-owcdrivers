@@ -24,14 +24,14 @@ type TxStruct struct {
 }
 
 
-func (tx TxStruct) NewTxPayLoad() (*TxPayLoad, error) {
+func (tx TxStruct) NewTxPayLoad(transfer_code string) (*TxPayLoad, error) {
 	var tp TxPayLoad
 	method, err := NewMethodTransfer(tx.RecipientPubkey, tx.Amount)
 	if err != nil {
 		return nil, err
 	}
 
-	tp.Method, err = method.ToBytes()
+	tp.Method, err = method.ToBytes(transfer_code)
 	if err != nil {
 		return  nil, err
 	}
@@ -107,7 +107,7 @@ func NewTxStructFromJSON(j string) (*TxStruct, error) {
 	return &ts, nil
 }
 
-func (ts TxStruct) GetSignedTransaction (signature string) (string, error) {
+func (ts TxStruct) GetSignedTransaction (transfer_code, signature string) (string, error) {
 
 	signed := make([]byte, 0)
 
@@ -169,7 +169,7 @@ func (ts TxStruct) GetSignedTransaction (signature string) (string, error) {
 		return "", err
 	}
 
-	methodBytes, err := method.ToBytes()
+	methodBytes, err := method.ToBytes(transfer_code)
 	if err != nil {
 		return "", err
 	}
