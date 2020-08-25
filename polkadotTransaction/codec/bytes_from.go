@@ -79,6 +79,16 @@ func IntToBytes(value interface{}) (res OffsetBytes, err error) {
 		return
 	}
 	bytes = RemoveExtraLEBytes(bytes)
+
+	i,_ := value.(uint64)
+	tmp, _ := intToLEBytes(i * 4)
+	tmp_bytes := RemoveExtraLEBytes(tmp)
+
+	if len(bytes) != len(tmp_bytes) {
+		bytes = append(bytes, 0)
+	}
+
+
 	res, err = NewBytes(bytes)
 	return
 }
