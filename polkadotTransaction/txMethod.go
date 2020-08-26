@@ -20,7 +20,7 @@ func NewMethodTransfer(pubkey string, amount uint64) (*MethodTransfer, error) {
 	if amount == 0 {
 		return nil, errors.New("zero amount")
 	}
-	amountStr, err := codec.Encode("Compact<u32>", amount)
+	amountStr, err := codec.EncodeOld("Compact<u32>", amount)
 	if err != nil {
 		return nil, errors.New("invalid amount")
 	}

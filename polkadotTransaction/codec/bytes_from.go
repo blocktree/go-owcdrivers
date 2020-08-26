@@ -93,6 +93,40 @@ func IntToBytes(value interface{}) (res OffsetBytes, err error) {
 	return
 }
 
+//临时加上处理，要删掉的
+func IntToBytesOld(value interface{}) (res OffsetBytes, err error) {
+	var bytes []byte
+
+	switch t := value.(type) {
+	case uint8:
+		i, _ := value.(uint8)
+		bytes, err = intToLEBytes(i)
+	case uint16:
+		i, _ := value.(uint16)
+		bytes, err = intToLEBytes(i)
+	case uint32:
+		i, _ := value.(uint32)
+		bytes, err = intToLEBytes(i)
+	case uint64:
+		i, _ := value.(uint64)
+		bytes, err = intToLEBytes(i)
+	case big.Int:
+		i, _ := value.(big.Int)
+		bytes = RevertBytes(i.Bytes())
+	default:
+		err = fmt.Errorf("wrong type of value %T", t)
+		return
+
+	}
+	if err != nil {
+		return
+	}
+	bytes = RemoveExtraLEBytes(bytes)
+
+	res, err = NewBytes(bytes)
+	return
+}
+
 func StringToBytes(value interface{}) (res OffsetBytes, err error) {
 	switch t := value.(type) {
 	case string:
