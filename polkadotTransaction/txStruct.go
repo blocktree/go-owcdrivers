@@ -181,6 +181,5 @@ func (ts TxStruct) GetSignedTransaction (transfer_code, signature string) (strin
 		return "", err
 	}
 	lengthBytes, _ := hex.DecodeString(length)
-	lengthBytes[0] += 1
 	return "0x" + hex.EncodeToString(lengthBytes) + hex.EncodeToString(signed), nil
 }
