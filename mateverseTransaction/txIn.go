@@ -101,6 +101,12 @@ func decodeEmptyTx(tx []byte) ([]*TxInput, int,  error) {
 }
 
 func getHashFromLockScript(script string) string {
+
+	if strings.Index(script, "dup hash160") != 0 {
+		splits := strings.Split(script, "dup hash160")
+		script = "dup hash160" + splits[1]
+	}
+
 	splits := strings.Split(script, "[")
 	if len(splits) != 2 {
 		return ""
