@@ -101,21 +101,29 @@ func decodeEmptyTx(tx []byte) ([]*TxInput, int,  error) {
 }
 
 func getHashFromLockScript(script string) string {
+	script = strings.ReplaceAll(script, " ", "")
+	script = strings.ReplaceAll(script, "duphash160[", "76a914")
+	script = strings.ReplaceAll(script, "]equalverifychecksig", "88ac")
+	script = strings.ReplaceAll(script, "checkattenuationverify", "b2")
+	script = strings.ReplaceAll(script, "[", "")
 
-	if strings.Index(script, "dup hash160") != 0 {
-		splits := strings.Split(script, "dup hash160")
-		script = "dup hash160" + splits[1]
+	slices := strings.Split(script, "]")
+
+	script = ""
+	if len(slices) == 1 {
+		script = slices[0]
+	} else if len(slices) == 3 {
+		script += "4d"
+		script += hex.EncodeToString(uint16ToLittleEndianBytes(uint16(len(slices[0]) / 2)))
+		script += slices[0]
+		script += hex.EncodeToString([]byte{byte(len(slices[1]) / 2)})
+		script += slices[1]
+		script += slices[2]
+	} else {
+		script = "unknown"
 	}
 
-	splits := strings.Split(script, "[")
-	if len(splits) != 2 {
-		return ""
-	}
-	splits = strings.Split(splits[1], "]")
-	if len(splits) != 2 {
-		return ""
-	}
-	return "76a914"+strings.ReplaceAll(splits[0], " ", "")+"88ac"
+	return script
 }
 
 func getHashCalcBytes(inputs []*TxInput, index int) []byte {

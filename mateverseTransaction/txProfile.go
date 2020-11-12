@@ -3,6 +3,11 @@ package mateverseTransaction
 const (
 	DefaultTxVersion = uint32(0x04)
 	SigHashAll = uint32(0x01)
+	OpCheckAttenuationVerify = "b2"
+	OpDup = "76"
+	OpHash160 = "a9"
+	OpEqualVerify = "88"
+	OpCheckSig = "ac"
 )
 
 

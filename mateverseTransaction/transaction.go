@@ -35,7 +35,7 @@ func GetSigHash(emptyTrans string, inputs *[]*TxInput) error {
 			return errors.New("Miss lock script!")
 		}
 		lockScript := getHashFromLockScript(input.lockScript)
-		if lockScript == "" || len(lockScript) != 50 {
+		if lockScript == "" || len(lockScript) < 50 {
 			return errors.New("Invalid lock script!")
 		}
 		input.SetLockScript(lockScript)
