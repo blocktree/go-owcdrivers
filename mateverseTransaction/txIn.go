@@ -57,11 +57,22 @@ func decodeEmptyTx(tx []byte) ([]*TxInput, int,  error) {
 	if index + 1 > limit {
 		return nil, 0, errors.New("Invalid tx data!")
 	}
-	inputCount := int(tx[index])
-	if inputCount == 0 {
-		return nil, 0, errors.New("Invalid tx data!")
+
+	var inputCount int
+	if tx[index] != 0xfd {
+		inputCount = int(tx[index])
+		if inputCount == 0 {
+			return nil, 0, errors.New("Invalid tx data!")
+		}
+		index ++
+	} else {
+		index ++
+		if index + 2 > limit {
+			return nil, 0, errors.New("Invalid tx data!")
+		}
+		inputCount = int(littleEndianBytesToUint16(tx[index:index+2]))
+		index += 2
 	}
-	index ++
 
 	for i := 0; i < inputCount; i ++ {
 		var input TxInput
@@ -130,7 +141,12 @@ func getHashCalcBytes(inputs []*TxInput, index int) []byte {
 	tx := make([]byte, 0)
 
 	tx = append(tx, uint32ToLittleEndianBytes(DefaultTxVersion)...)
-	tx = append(tx, byte(len(inputs)))
+	if len(inputs) < 0xfd {
+		tx = append(tx, byte(len(inputs)))
+	} else {
+		tx = append(tx, 0xfd)
+		tx = append(tx,uint16ToLittleEndianBytes(uint16(len(inputs)))...)
+	}
 
 	for i, input := range inputs {
 		txid, _ := reverseHexToBytes(input.txID)
@@ -160,7 +176,13 @@ func getSubmitBytes(inputs []*TxInput, emptyTrans string) []byte {
 
 	tx := make([]byte, 0)
 	tx = append(tx, uint32ToLittleEndianBytes(DefaultTxVersion)...)
-	tx = append(tx, byte(len(inputs)))
+	tx = append(tx, uint32ToLittleEndianBytes(DefaultTxVersion)...)
+	if len(inputs) < 0xfd {
+		tx = append(tx, byte(len(inputs)))
+	} else {
+		tx = append(tx, 0xfd)
+		tx = append(tx,uint16ToLittleEndianBytes(uint16(len(inputs)))...)
+	}
 
 	for _, input := range inputs {
 		txid, err := reverseHexToBytes(input.txID)
