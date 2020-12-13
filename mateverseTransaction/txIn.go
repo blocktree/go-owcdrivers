@@ -176,7 +176,7 @@ func getSubmitBytes(inputs []*TxInput, emptyTrans string) []byte {
 
 	tx := make([]byte, 0)
 	tx = append(tx, uint32ToLittleEndianBytes(DefaultTxVersion)...)
-	tx = append(tx, uint32ToLittleEndianBytes(DefaultTxVersion)...)
+	
 	if len(inputs) < 0xfd {
 		tx = append(tx, byte(len(inputs)))
 	} else {
