@@ -4,7 +4,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/blocktree/go-owcdrivers/polkadotTransaction/codec"
 	"testing"
 )
 
@@ -135,9 +134,4 @@ func Test_json(t *testing.T)  {
 	js, _ := json.Marshal(ts)
 
 	fmt.Println(string(js))
-}
-
-func Test_decode(t *testing.T) {
-	en, _ := codec.Encode(Compact_U32, uint64(139))
-	fmt.Println(en)
 }
