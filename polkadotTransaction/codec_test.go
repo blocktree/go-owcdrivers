@@ -1,11 +1,13 @@
 package polkadotTransaction
 
 import (
+	"fmt"
+	"math/big"
 	"testing"
 )
 
 func Test_Encode(t *testing.T) {
-	testTable := map[uint32]string {
+	testTable := map[uint64]string {
 		1: "04",
 		2: "08",
 		63: "fc",
@@ -20,6 +22,7 @@ func Test_Encode(t *testing.T) {
 		1073741823: "feffffff",
 		1073741824: "0300000040",
 		4102610000: "0350dc88f4",
+		14102610000: "0750c0944803",
 	}
 
 	for i, excepted := range testTable {
@@ -27,4 +30,11 @@ func Test_Encode(t *testing.T) {
 			t.Error(i, " failed")
 		}
 	}
+}
+
+func  TestBytesToCompactBytes(t *testing.T) {
+	a := big.NewInt(14102610000)
+	fmt.Println(a.BitLen())
+	a.Bytes()
+
 }

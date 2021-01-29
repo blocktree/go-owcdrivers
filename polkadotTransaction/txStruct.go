@@ -44,7 +44,7 @@ func (tx TxStruct) NewTxPayLoad(transfer_code string) (*TxPayLoad, error) {
 	if tx.Nonce == 0 {
 		tp.Nonce = []byte{0}
 	} else {
-		nonce := Encode(uint32(tx.Nonce))
+		nonce := Encode(uint64(tx.Nonce))
 		tp.Nonce, _ = hex.DecodeString(nonce)
 	}
 
@@ -52,7 +52,7 @@ func (tx TxStruct) NewTxPayLoad(transfer_code string) (*TxPayLoad, error) {
 		//return nil, errors.New("a none zero fee must be payed")
 		tp.Fee = []byte{0}
 	} else {
-		fee := Encode( uint32(tx.Fee))
+		fee := Encode( uint64(tx.Fee))
 
 		tp.Fee, _ = hex.DecodeString(fee)
 	}
@@ -135,7 +135,7 @@ func (ts TxStruct) GetSignedTransaction (transfer_code, signature string) (strin
 	if ts.Nonce == 0 {
 		signed = append(signed, 0)
 	} else {
-		nonce:= Encode( uint32(ts.Nonce))
+		nonce:= Encode( uint64(ts.Nonce))
 
 		nonceBytes, _ := hex.DecodeString(nonce)
 		signed = append(signed, nonceBytes...)
@@ -146,7 +146,7 @@ func (ts TxStruct) GetSignedTransaction (transfer_code, signature string) (strin
 		//return "", errors.New("a none zero fee must be payed")
 		feeBytes = []byte{0}
 	} else {
-		fee := Encode(uint32(ts.Fee))
+		fee := Encode(uint64(ts.Fee))
 		feeBytes, _ = hex.DecodeString(fee)
 	}
 
@@ -164,7 +164,7 @@ func (ts TxStruct) GetSignedTransaction (transfer_code, signature string) (strin
 
 	signed = append(signed, methodBytes...)
 
-	length := Encode(uint32(len(signed)))
+	length := Encode(uint64(len(signed)))
 	lengthBytes, _ := hex.DecodeString(length)
 	return "0x" + hex.EncodeToString(lengthBytes) + hex.EncodeToString(signed), nil
 }

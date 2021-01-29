@@ -3,6 +3,7 @@ package polkadotTransaction
 import (
 	"encoding/binary"
 	"encoding/hex"
+	"math/big"
 )
 
 func CompactLength(data uint32) int {
@@ -87,13 +88,27 @@ func BytesToCompactBytes(bytes []byte) (res []byte) {
 	return
 }
 
-func Encode(data uint32) string {
+func getLeadingZeros(data uint64) int {
+	return 64 - big.NewInt(int64(data)).BitLen()
+}
+
+func getPrefix(data uint64) string {
+	return hex.EncodeToString([]byte{byte(3 + (((8 - getLeadingZeros(data) / 8) - 4) << 2))})
+}
+
+func uint64ToLittleEndianArrayWithoutLeadingZeros(data uint64) string {
+	tmp := [8]byte{}
+	binary.LittleEndian.PutUint64(tmp[:], data)
+	return hex.EncodeToString(removeExtraLEBytes(tmp[:]))
+}
+
+func Encode(data uint64) string {
 	if data > fourByteModeMaxValue {
-		return "03" + hex.EncodeToString(uint32ToLittleEndianBytes(data))
+		return getPrefix(data) + uint64ToLittleEndianArrayWithoutLeadingZeros(data)
 	}
-	bytes := uint32ToLittleEndianBytes(data)
+	bytes := uint32ToLittleEndianBytes(uint32(data))
 	bytes = removeExtraLEBytes(bytes)
-	compactLength := CompactLength(data)
+	compactLength := CompactLength(uint32(data))
 	length := len(bytes)
 	if length < compactLength {
 		for i := 0; i < compactLength- length; i ++ {

@@ -19,7 +19,7 @@ func NewMethodTransfer(pubkey string, amount uint64) (*MethodTransfer, error) {
 	if amount == 0 {
 		return nil, errors.New("zero amount")
 	}
-	amountStr:= Encode( uint32(amount))
+	amountStr:= Encode( uint64(amount))
 	if err != nil {
 		return nil, errors.New("invalid amount")
 	}
