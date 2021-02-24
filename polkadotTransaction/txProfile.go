@@ -2,7 +2,7 @@ package polkadotTransaction
 
 const (
 	KSM_Balannce_Transfer = "0400"
-	DOT_Balannce_Transfer = "0500"
+	DOT_Balannce_Transfer = "050000"
 	Balannce_Transfer_name = "transfer"
 	Default_Period = 50
 	SigningBitV4 = byte(0x84)

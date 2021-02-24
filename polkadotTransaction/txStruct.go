@@ -107,6 +107,8 @@ func (ts TxStruct) GetSignedTransaction (transfer_code, signature string) (strin
 
 	signed = append(signed, SigningBitV4)
 
+	signed = append(signed, 0x00)
+
 	if AccounntIDFollow {
 		signed = append(signed, 0xff)
 	}
