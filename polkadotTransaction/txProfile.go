@@ -1,7 +1,7 @@
 package polkadotTransaction
 
 const (
-	KSM_Balannce_Transfer = "0400"
+	KSM_Balannce_Transfer = "040000"
 	DOT_Balannce_Transfer = "050000"
 	Balannce_Transfer_name = "transfer"
 	Default_Period = 50
