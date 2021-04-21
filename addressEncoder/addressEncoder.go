@@ -51,6 +51,9 @@ func VerifyChecksum(data []byte, chkType string) bool {
 }
 
 func verifyChecksum(data []byte, chkType string) bool {
+	if len(data) < 4 {
+		return false
+	}
 	checksum := calcChecksum(data[:len(data)-4], chkType)
 	for i := 0; i < 4; i++ {
 		if checksum[i] != data[len(data)-4+i] {
