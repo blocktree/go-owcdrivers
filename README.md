@@ -84,6 +84,7 @@ owkeychain在[BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediaw
 - NIST-p256
 - sm2-std
 - ed25519
+- BLS12-381(G1 element)
 
 注意事项：
 
