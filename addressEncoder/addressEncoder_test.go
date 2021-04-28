@@ -1176,3 +1176,28 @@ func Test_wicc_address(t *testing.T) {
 
 	fmt.Println(testnet_addr)
 }
+
+
+func Test_Chia_Address(t *testing.T) {
+	hash, _ := hex.DecodeString("ecb8b85aeebbc7b7eb1b37561ae7cd508494e6a9aeb76647ed1162eaea4281ac")
+	address := AddressEncode(hash, XCH_mainnetAddress)
+
+	if address != "xch1ajutskhwh0rm06cmxatp4e7d2zzffe4f46mkv3ldz93w46jzsxkqd3rtq6" {
+		t.Error("chia address encode failed!")
+	} else {
+		fmt.Println("chia address encode success!")
+		fmt.Println(address)
+	}
+
+	check, err := AddressDecode(address, XCH_mainnetAddress)
+	if err != nil {
+		t.Error("chia address decode failed!")
+	} else {
+		for index := 0; index < 20; index++ {
+			if check[index] != hash[index] {
+				t.Error("chia address decode failed!")
+			}
+		}
+		fmt.Println("chia address decode success!")
+	}
+}

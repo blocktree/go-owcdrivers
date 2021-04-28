@@ -20,6 +20,7 @@ var (
 	TRONAlphabet       = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 	VSYSAlphabet       = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 	ATOMBech32Alphabet = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
+	XCHBech32Alphabet = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
 )
 
 type AddressType struct {
@@ -222,4 +223,6 @@ var (
 
 	EVA_mainnetAddress = AddressType{"bech32", ATOMBech32Alphabet, "eva", "h160", 20, nil, nil}
 	EVA_testnetAddress = AddressType{"bech32", ATOMBech32Alphabet, "eva", "h160", 20, nil, nil}
+
+	XCH_mainnetAddress = AddressType{"bech32m", XCHBech32Alphabet, "xch", "", 32, nil, []byte{0}}
 )

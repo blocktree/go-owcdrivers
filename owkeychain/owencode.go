@@ -76,6 +76,9 @@ func (k *ExtendedKey) OWEncode() string {
 	if k.isPrivate {
 		return Base58checkEncode(data, owprvPrefix)
 	}
+	if k.curveType == owcrypt.ECC_CURVE_BLS12_381 {
+		return Base58checkEncode(data, owpubPrefix_BLS)
+	}
 	return Base58checkEncode(data, owpubPrefix)
 }
 
@@ -98,7 +101,10 @@ func OWDecode(data string) (*ExtendedKey, error) {
 	} else {
 		decodeBytes, err = Base58checkDecode(data, owpubPrefix)
 		if err != nil {
-			return nil, err
+			decodeBytes, err = Base58checkDecode(data, owpubPrefix_BLS)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 	curveType := bytesToUInt32(decodeBytes[:4])

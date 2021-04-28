@@ -875,3 +875,88 @@ func Test_ed25519_chain(t *testing.T){
 	test, _ := ChainDecode(share)
 	fmt.Println("check :  \n", hex.EncodeToString(test.Pubkey))
 }
+
+
+func Test_bls21_381_chain(t *testing.T){
+	// 各client持有seed，并产生账户索引下的第一个非强化扩展，作为多签扩展的parent
+	// 账户索引为  m'/44'/7744'/0'
+	parentPath := "m/44'/7744'/0'/1"
+
+	for i := 0; i < 1; i ++ {
+		index := fmt.Sprint(i)
+		pp := []byte(parentPath)
+		pp[15] = index[0]
+		parentPath = string(pp)
+		fmt.Println("==================",parentPath)
+		// client A
+		// seed
+		seedA, _ := hex.DecodeString("FF747E55458A51830E5BCEB1A11D81392A0F0461B16EBDBA5432F6F7C36D1E906598D4459E5533BDF5D9EB31E3119F2A064AEF1B8432027BB5017966D4706167")
+		// 父扩展密钥
+		parentA, _ := DerivedPrivateKeyWithPath(seedA, parentPath, owcrypt.ECC_CURVE_BLS12_381)
+		encodepub := parentA.GetPublicKey()
+		//fmt.Println(hex.EncodeToString(parentA.key))
+		fmt.Println(hex.EncodeToString(encodepub.key))
+
+		chk, _ := owcrypt.GenPubkey(parentA.key, owcrypt.ECC_CURVE_BLS12_381)
+		fmt.Println(hex.EncodeToString(chk))
+
+		if hex.EncodeToString(encodepub.key) != hex.EncodeToString(chk) {
+			t.Error("??????????????????")
+			return
+		}
+		fmt.Println("SUCCESS")
+	}
+
+}
+
+func Test_DerivedPublicKeyFromPath_BLS(t *testing.T) {
+	// 各client持有seed，并产生账户索引下的第一个非强化扩展，作为多签扩展的parent
+	// 账户索引为  m'/44'/7744'/0'
+	parentPath := "m/44'/7744'/0'/1"
+
+		fmt.Println("==================",parentPath)
+		// client A
+		// seed
+		seedA, _ := hex.DecodeString("FF747E55458A51830E5BCEB1A11D81392A0F0461B16EBDBA5432F6F7C36D1E906598D4459E5533BDF5D9EB31E3119F2A064AEF1B8432027BB5017966D4706167")
+		// 父扩展密钥
+		parentA, _ := DerivedPrivateKeyWithPath(seedA, parentPath, owcrypt.ECC_CURVE_BLS12_381)
+		encodepub := parentA.GetPublicKey()
+		//fmt.Println(hex.EncodeToString(parentA.key))
+		fmt.Println(hex.EncodeToString(encodepub.key))
+
+		chk, _ := owcrypt.GenPubkey(parentA.key, owcrypt.ECC_CURVE_BLS12_381)
+		fmt.Println(hex.EncodeToString(chk))
+
+		if hex.EncodeToString(encodepub.key) != hex.EncodeToString(chk) {
+			t.Error("??????????????????")
+			return
+		}
+		fmt.Println("SUCCESS")
+
+	path := "/0"
+	for i := 0; i < 10; i ++ {
+		index := fmt.Sprint(i)
+		pp := []byte(path)
+		pp[1] = index[0]
+		path = string(pp)
+		fmt.Println("==================",path)
+		childPubkey, err := encodepub.DerivedPublicKeyFromSerializes(uint32(i))
+		fmt.Println(err)
+		if err != nil {
+			t.Error("相对路径扩展错误")
+		}
+
+		fmt.Println(hex.EncodeToString(childPubkey.key))
+		//fmt.Println(childPubkey.isPrivate)
+		//fmt.Println(hex.EncodeToString(childPubkey.chainCode))
+
+		parentPath = "m/44'/7744'/0'/1"+path
+
+		chkparentA, _ := DerivedPrivateKeyWithPath(seedA, parentPath, owcrypt.ECC_CURVE_BLS12_381)
+		chkencodepub := chkparentA.GetPublicKey()
+		//fmt.Println(hex.EncodeToString(parentA.key))
+		fmt.Println(hex.EncodeToString(chkencodepub.key))
+	}
+
+
+}

@@ -79,7 +79,10 @@ func getI(data, key []byte, serializes, typeChoose uint32) []byte {
 	}
 	hmac512.Write(data)
 	hmac512.Write(tmp[:])
-	return hmac512.Sum(nil)
+	hm := hmac512.Sum(nil)
+	if typeChoose == owcrypt.ECC_CURVE_BLS12_381 {for hm[0] >= curveoeder_bls12_381[0] { hm[0] -- }}
+
+	return hm
 }
 
 func inverse(data []byte) []byte {
@@ -162,6 +165,13 @@ func getPubChildViaPubParent(il, pubkey []byte, typeChoose uint32) ([]byte, erro
 	curveOrder := new(big.Int).SetBytes(getCurveOrder(typeChoose))
 	if ilNum.Cmp(curveOrder) >= 0 || ilNum.Sign() == 0 {
 		return nil, ErrInvalidChild
+	}
+	if typeChoose == owcrypt.ECC_CURVE_BLS12_381 {
+		point, isinfinity := owcrypt.Point_mulBaseG_add(pubkey, il, typeChoose)
+		if isinfinity {
+			return nil, ErrInvalidChild
+		}
+		return point, nil
 	}
 	parentPubPoint := owcrypt.PointDecompress(pubkey, typeChoose)
 	point, isinfinity := owcrypt.Point_mulBaseG_add(parentPubPoint[1:], il, typeChoose)
@@ -268,6 +278,9 @@ func InitRootKeyFromSeed(seed []byte, curveType uint32) (*ExtendedKey, error) {
 		i[0] &= 248
 		i[31] &= 63
 		i[31] |= 64
+	}
+	if curveType == owcrypt.ECC_CURVE_BLS12_381 {
+		for i[0] >= curveoeder_bls12_381[0] { i[0] -- }
 	}
 	rootParentFP := [4]byte{0, 0, 0, 0}
 	return NewExtendedKey(i[:32], i[32:], rootParentFP[:], 0, 0, true, curveType), nil
