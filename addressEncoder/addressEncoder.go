@@ -160,25 +160,11 @@ func calcHash(data []byte, hashType string) []byte {
 func AddressEncode(hash []byte, addresstype AddressType) string {
 
 	if addresstype.EncodeType == "bech32m" {
-		address := ""
-		var err error
-		if addresstype.Prefix == nil && len(addresstype.Suffix) == 1 {
-			address, err = bech32m.Bech32mEncode(addresstype.ChecksumType, hash, addresstype.Suffix, bech32m.VersionSuffix,addresstype.Alphabet)
-			if err != nil {
-				return ""
-			}
-			return  address
-		} else if addresstype.Suffix == nil && len(addresstype.Prefix) == 1 {
-			address, err = bech32m.Bech32mEncode(addresstype.ChecksumType, hash, addresstype.Prefix, bech32m.VersionPrefix,addresstype.Alphabet)
-			if err != nil {
-				return ""
-			}
-			return  address
-		} else {
+		address, err := bech32m.Bech32mEncode(addresstype.ChecksumType, hash, addresstype.Alphabet)
+		if err != nil {
 			return ""
 		}
-
-
+		return  address
 	}
 
 	if addresstype.EncodeType == "bech32" {
@@ -264,13 +250,7 @@ func AddressEncode(hash []byte, addresstype AddressType) string {
 func AddressDecode(address string, addresstype AddressType) ([]byte, error) {
 
 	if addresstype.EncodeType == "bech32m" {
-		if addresstype.Prefix == nil && len(addresstype.Suffix) == 1 {
-			return bech32m.Bech32mDecode(address, addresstype.ChecksumType, addresstype.Suffix, bech32m.VersionSuffix, addresstype.Alphabet)
-		} else if addresstype.Suffix == nil && len(addresstype.Prefix) == 1 {
-			return bech32m.Bech32mDecode(address, addresstype.ChecksumType, addresstype.Prefix, bech32m.VersionPrefix, addresstype.Alphabet)
-		} else {
-			return nil, errors.New("invalid version")
-		}
+		return bech32m.Bech32mDecode(address, addresstype.ChecksumType, addresstype.Alphabet)
 	}
 
 	if addresstype.EncodeType == "bech32" {

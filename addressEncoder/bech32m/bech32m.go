@@ -2,7 +2,6 @@ package bech32m
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"strings"
 )
@@ -162,45 +161,18 @@ func Convertbits(data []byte, frombits, tobits uint, pad bool) ([]byte, error) {
 	return ret, nil
 }
 
-func Bech32mEncode(prefix string, data, version []byte, versionPlace int, charset string) (string, error) {
-	conv, err := Convertbits(data, 8, 5, false)
+func Bech32mEncode(prefix string, data []byte, charset string) (string, error) {
+	conv, err := Convertbits(data, 8, 5, true)
 	if err != nil {
 		return "", err
 	}
-	if version == nil || len(version) != 1 {
-		return "", errors.New("invalid version")
-	}
-
-	if versionPlace == VersionPrefix {
-		conv = append(version, conv...)
-	} else if versionPlace == VersionSuffix {
-		conv = append(conv, version...)
-	} else {
-		return "", errors.New("unknown version place")
-	}
-
 	return Encode(prefix, conv, Bech32m, charset), nil
 }
 
-func Bech32mDecode(address, prefix string, version []byte, versionPlace int, charset string) ([]byte, error) {
+func Bech32mDecode(address, prefix string, charset string) ([]byte, error) {
 	prechk, data, spec, err := Decode(address, charset)
 	if err != nil || prechk != prefix || spec != Bech32m {
 		return nil, err
-	}
-	if version == nil || len(version) != 1 {
-		return nil, errors.New("invalid version")
-	}
-
-	if versionPlace == VersionPrefix {
-		if data[0] != version[0] {
-			return nil, errors.New("invalid version")
-		}
-	} else if versionPlace == VersionSuffix {
-		if data[len(data) - 1] != version[0] {
-			return nil, errors.New("invalid version")
-		}
-	} else {
-		return nil, errors.New("unknown version place")
 	}
 
 	hash, err := Convertbits(data, 5, 8, false)
