@@ -80,7 +80,7 @@ func getI(data, key []byte, serializes, typeChoose uint32) []byte {
 	hmac512.Write(data)
 	hmac512.Write(tmp[:])
 	hm := hmac512.Sum(nil)
-	if typeChoose == owcrypt.ECC_CURVE_BLS12_381 {for hm[0] >= curveoeder_bls12_381[0] { hm[0] -- }}
+	if typeChoose == owcrypt.ECC_CURVE_BLS12381_G2_XMD_SHA_256_SSWU_RO_AUG || typeChoose == owcrypt.ECC_CURVE_BLS12381_G2_XMD_SHA_256_SSWU_RO_NUL {for hm[0] >= curveoeder_bls12_381[0] { hm[0] -- }}
 
 	return hm
 }
@@ -166,7 +166,7 @@ func getPubChildViaPubParent(il, pubkey []byte, typeChoose uint32) ([]byte, erro
 	if ilNum.Cmp(curveOrder) >= 0 || ilNum.Sign() == 0 {
 		return nil, ErrInvalidChild
 	}
-	if typeChoose == owcrypt.ECC_CURVE_BLS12_381 {
+	if typeChoose == owcrypt.ECC_CURVE_BLS12381_G2_XMD_SHA_256_SSWU_RO_AUG || typeChoose == owcrypt.ECC_CURVE_BLS12381_G2_XMD_SHA_256_SSWU_RO_NUL {
 		point, isinfinity := owcrypt.Point_mulBaseG_add(pubkey, il, typeChoose)
 		if isinfinity {
 			return nil, ErrInvalidChild
@@ -279,7 +279,7 @@ func InitRootKeyFromSeed(seed []byte, curveType uint32) (*ExtendedKey, error) {
 		i[31] &= 63
 		i[31] |= 64
 	}
-	if curveType == owcrypt.ECC_CURVE_BLS12_381 {
+	if curveType == owcrypt.ECC_CURVE_BLS12381_G2_XMD_SHA_256_SSWU_RO_AUG || curveType == owcrypt.ECC_CURVE_BLS12381_G2_XMD_SHA_256_SSWU_RO_NUL {
 		for i[0] >= curveoeder_bls12_381[0] { i[0] -- }
 	}
 	rootParentFP := [4]byte{0, 0, 0, 0}

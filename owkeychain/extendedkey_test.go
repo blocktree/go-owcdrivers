@@ -892,12 +892,12 @@ func Test_bls21_381_chain(t *testing.T){
 		// seed
 		seedA, _ := hex.DecodeString("FF747E55458A51830E5BCEB1A11D81392A0F0461B16EBDBA5432F6F7C36D1E906598D4459E5533BDF5D9EB31E3119F2A064AEF1B8432027BB5017966D4706167")
 		// 父扩展密钥
-		parentA, _ := DerivedPrivateKeyWithPath(seedA, parentPath, owcrypt.ECC_CURVE_BLS12_381)
+		parentA, _ := DerivedPrivateKeyWithPath(seedA, parentPath, owcrypt.ECC_CURVE_BLS12381_G2_XMD_SHA_256_SSWU_RO_AUG)
 		encodepub := parentA.GetPublicKey()
 		//fmt.Println(hex.EncodeToString(parentA.key))
 		fmt.Println(hex.EncodeToString(encodepub.key))
 
-		chk, _ := owcrypt.GenPubkey(parentA.key, owcrypt.ECC_CURVE_BLS12_381)
+		chk, _ := owcrypt.GenPubkey(parentA.key, owcrypt.ECC_CURVE_BLS12381_G2_XMD_SHA_256_SSWU_RO_AUG)
 		fmt.Println(hex.EncodeToString(chk))
 
 		if hex.EncodeToString(encodepub.key) != hex.EncodeToString(chk) {
@@ -919,12 +919,12 @@ func Test_DerivedPublicKeyFromPath_BLS(t *testing.T) {
 		// seed
 		seedA, _ := hex.DecodeString("FF747E55458A51830E5BCEB1A11D81392A0F0461B16EBDBA5432F6F7C36D1E906598D4459E5533BDF5D9EB31E3119F2A064AEF1B8432027BB5017966D4706167")
 		// 父扩展密钥
-		parentA, _ := DerivedPrivateKeyWithPath(seedA, parentPath, owcrypt.ECC_CURVE_BLS12_381)
+		parentA, _ := DerivedPrivateKeyWithPath(seedA, parentPath, owcrypt.ECC_CURVE_BLS12381_G2_XMD_SHA_256_SSWU_RO_AUG)
 		encodepub := parentA.GetPublicKey()
 		//fmt.Println(hex.EncodeToString(parentA.key))
 		fmt.Println(hex.EncodeToString(encodepub.key))
 
-		chk, _ := owcrypt.GenPubkey(parentA.key, owcrypt.ECC_CURVE_BLS12_381)
+		chk, _ := owcrypt.GenPubkey(parentA.key, owcrypt.ECC_CURVE_BLS12381_G2_XMD_SHA_256_SSWU_RO_AUG)
 		fmt.Println(hex.EncodeToString(chk))
 
 		if hex.EncodeToString(encodepub.key) != hex.EncodeToString(chk) {
@@ -952,7 +952,7 @@ func Test_DerivedPublicKeyFromPath_BLS(t *testing.T) {
 
 		parentPath = "m/44'/7744'/0'/1"+path
 
-		chkparentA, _ := DerivedPrivateKeyWithPath(seedA, parentPath, owcrypt.ECC_CURVE_BLS12_381)
+		chkparentA, _ := DerivedPrivateKeyWithPath(seedA, parentPath, owcrypt.ECC_CURVE_BLS12381_G2_XMD_SHA_256_SSWU_RO_AUG)
 		chkencodepub := chkparentA.GetPublicKey()
 		//fmt.Println(hex.EncodeToString(parentA.key))
 		fmt.Println(hex.EncodeToString(chkencodepub.key))

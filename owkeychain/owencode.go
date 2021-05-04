@@ -76,7 +76,7 @@ func (k *ExtendedKey) OWEncode() string {
 	if k.isPrivate {
 		return Base58checkEncode(data, owprvPrefix)
 	}
-	if k.curveType == owcrypt.ECC_CURVE_BLS12_381 {
+	if k.curveType == owcrypt.ECC_CURVE_BLS12381_G2_XMD_SHA_256_SSWU_RO_NUL || k.curveType == owcrypt.ECC_CURVE_BLS12381_G2_XMD_SHA_256_SSWU_RO_AUG {
 		return Base58checkEncode(data, owpubPrefix_BLS)
 	}
 	return Base58checkEncode(data, owpubPrefix)
