@@ -12,7 +12,7 @@ require (
 	github.com/blocktree/eosio-adapter v1.0.0
 	github.com/blocktree/ethereum-adapter v1.1.10
 	github.com/blocktree/futurepia-adapter v1.0.12
-	github.com/blocktree/go-owcrypt v1.1.9
+	github.com/blocktree/go-owcrypt v1.1.10
 	github.com/blocktree/moacchain-adapter v1.0.3
 	github.com/blocktree/nulsio-adapter v1.1.7
 	github.com/blocktree/ontology-adapter v1.0.8
