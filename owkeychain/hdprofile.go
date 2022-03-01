@@ -1,6 +1,9 @@
 package owkeychain
 
-import "github.com/blocktree/go-owcrypt"
+import (
+	"encoding/hex"
+	"github.com/blocktree/go-owcrypt"
+)
 
 var (
 	openwalletPrePath = "m/44'/88'"
@@ -54,7 +57,8 @@ func getCurveOrder(typeChoose uint32) []byte {
 		copy(ret, curveoeder_bls12_381)
 		break
 	case owcrypt.ECC_CURVE_PASTA:
-		ret = owcrypt.GetCurveOrder(owcrypt.ECC_CURVE_PASTA)
+		//ret = owcrypt.GetCurveOrder(owcrypt.ECC_CURVE_PASTA)
+		ret, _ = hex.DecodeString("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
 		break
 	default:
 		return nil

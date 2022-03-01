@@ -86,7 +86,9 @@ func getI(data, key []byte, serializes, typeChoose uint32) []byte {
 		}
 	}
 	if typeChoose == owcrypt.ECC_CURVE_PASTA {
-		hm[0] &= 0x01
+		hm[0] &= 0x00
+		hm[1] &= 0x00
+		hm[2] &= 0x00
 	}
 
 	return hm
