@@ -75,6 +75,22 @@ func bytesReverse(u []byte) []byte {
 	return u
 }
 
+func getLength(l int) []byte {
+	if l < PushBytes75 {
+		return []byte{byte(l)}
+	} else if l < 0x100 {
+		return []byte{PushData1, byte(l)}
+	} else if l < 0x10000 {
+		b := make([]byte, 2)
+		binary.LittleEndian.PutUint16(b, uint16(l))
+		return append([]byte{byte(PushData2)}, b...)
+	} else {
+		b := make([]byte, 4)
+		binary.LittleEndian.PutUint32(b, uint32(l))
+		return append([]byte{byte(PushData4)}, b...)
+	}
+}
+
 var bigOne = big.NewInt(1)
 
 func bigIntToNeoBytes(data *big.Int) []byte {
@@ -92,7 +108,7 @@ func bigIntToNeoBytes(data *big.Int) []byte {
 		temp.Add(temp, bigOne)
 		bs = temp.Bytes()
 		bytesReverse(bs)
-		if b>>7 == 1 {
+		if b>>7 == 0 {
 			bs = append(bs, 255)
 		}
 	} else {
@@ -101,7 +117,7 @@ func bigIntToNeoBytes(data *big.Int) []byte {
 			bs = append(bs, 0)
 		}
 	}
-	return append([]byte{byte(len(bs))}, bs...)
+	return append(getLength(len(bs)), bs...)
 }
 
 func uint64ToEmitBytes(data uint64) []byte {
@@ -115,4 +131,19 @@ func uint64ToEmitBytes(data uint64) []byte {
 	val := big.NewInt(0)
 	val.SetUint64(data)
 	return bigIntToNeoBytes(val)
+}
+
+func bigIntToEmitBytes(data *big.Int) []byte {
+	if data.Cmp(big.NewInt(int64(-1))) == 0 {
+		return []byte{OpCodePushM1}
+	}
+	if data.Sign() == 0 {
+		return []byte{OpCodePush0}
+	}
+
+	if data.Cmp(big.NewInt(int64(0))) == 1 && data.Cmp(big.NewInt(int64(16))) == -1 {
+		return []byte{OpCodePush1 - 1 + byte(data.Int64())}
+	}
+
+	return bigIntToNeoBytes(data)
 }

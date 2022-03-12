@@ -23,12 +23,21 @@ const (
 )
 
 const (
+	PushBytes75 = 0x4B
+	PushData1   = 0x4C
+	PushData2   = 0x4D
+	PushData4   = 0x4E
+)
+
+const (
 	MethodTransfer     = "transfer"
+	MethodTransferV2   = "transferV2"
 	MethodTransferFrom = "transferFrom"
 	NativeInvokeName   = "Ontology.Native.Invoke"
 )
 
 const (
+	OpCodePushM1          = byte(0x4F)
 	OpCodeNewStruct       = byte(0xC6)
 	OpCodeToALTStack      = byte(0x6B)
 	OpCodeDupFromALTStack = byte(0x6A)

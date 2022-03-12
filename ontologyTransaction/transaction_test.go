@@ -276,3 +276,7 @@ func Test_tmp(t *testing.T) {
 	}
 
 }
+
+func Test_temp(t *testing.T) {
+	fmt.Println(hex.EncodeToString([]byte("Ontology.Native.Invoke")))
+}

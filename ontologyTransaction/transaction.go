@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"errors"
+	"math/big"
 
 	"github.com/blocktree/go-owcrypt"
 )
@@ -16,12 +17,46 @@ type TxState struct {
 	Amount    uint64
 }
 
+type TxStateV2 struct {
+	AssetType int // 'ont' or 'ong'
+	Payer     string
+	From      string
+	To        string
+	Amount    *big.Int
+}
+
 func CreateRawTransactionAndHash(gasPrice, gasLimit uint64, txState TxState) (string, *TxHash, error) {
 	var th TxHash
 	if txState.Payer == "" {
 		txState.Payer = txState.From
 	}
 	payLoad, err := NewNativeInvoke(txState).ToBytes()
+	if err != nil {
+		return "", nil, err
+	}
+	randNounce := make([]byte, 4)
+	_, err = rand.Read(randNounce[:])
+
+	txBytes, err := NewEmptyTransaction(txState.AssetType, TxTypeInvoke, littleEndianBytesToUint32(randNounce), gasPrice, gasLimit, txState.Payer, payLoad).ToBytes()
+	if err != nil {
+		return "", nil, err
+	}
+
+	th.Hash = hex.EncodeToString(owcrypt.Hash(owcrypt.Hash(txBytes[:len(txBytes)-1], 0, owcrypt.HASH_ALG_DOUBLE_SHA256), 0, owcrypt.HASH_ALG_SHA256))
+	th.Addresses = append(th.Addresses, txState.Payer)
+	if txState.Payer != txState.From {
+		th.Addresses = append(th.Addresses, txState.From)
+	}
+
+	return hex.EncodeToString(txBytes), &th, nil
+}
+
+func CreateRawTransactionAndHashV2(gasPrice, gasLimit uint64, txState TxStateV2) (string, *TxHash, error) {
+	var th TxHash
+	if txState.Payer == "" {
+		txState.Payer = txState.From
+	}
+	payLoad, err := NewNativeInvokeV2(txState).ToBytes()
 	if err != nil {
 		return "", nil, err
 	}

@@ -987,17 +987,18 @@ func Test_DerivedPublicKeyFromPath_BLS(t *testing.T) {
 func Test_pasta_chain(t *testing.T) {
 	// 各client持有seed，并产生账户索引下的第一个非强化扩展，作为多签扩展的parent
 	// 账户索引为  m'/44'/7744'/0'
-	parentPath := "m/44'/7744'/0'/1"
+	parentPath := "m/44'/7747'/0'/0"
 
-	for i := 0; i < 10; i++ {
+	for i := 10; i < 1000; i++ {
 		index := fmt.Sprint(i)
 		pp := []byte(parentPath)
-		pp[15] = index[0]
-		parentPath = string(pp)
+		//pp[15] = index[0]
+		parentPath = string(pp[:15]) + index
 		fmt.Println("==================", parentPath)
 		// client A
 		// seed
-		seedA, _ := hex.DecodeString("FF747E55458A51830E5BCEB1A11D81392A0F0461B16EBDBA5432F6F7C36D1E906598D4459E5533BDF5D9EB31E3119F2A064AEF1B8432027BB5017966D4706167")
+		seedA, _ := hex.DecodeString("c6de81c8b4ae58da460a73fbf8a4ca4a0e4e9f83d335adb156f0fbd165f8be9b")
+
 		// 父扩展密钥
 		parentA, _ := DerivedPrivateKeyWithPath(seedA, parentPath, owcrypt.ECC_CURVE_PASTA)
 		encodepub := parentA.GetPublicKey()
@@ -1016,3 +1017,107 @@ func Test_pasta_chain(t *testing.T) {
 	}
 
 }
+
+func Test_pasta_chain_temp(t *testing.T) {
+	// 各client持有seed，并产生账户索引下的第一个非强化扩展，作为多签扩展的parent
+	// 账户索引为  m'/44'/7744'/0'
+	parentPath := "m/44'/88'/1'"
+
+	// client A
+	// seed
+	seedA, _ := hex.DecodeString("c6de81c8b4ae58da460a73fbf8a4ca4a0e4e9f83d335adb156f0fbd165f8be9b")
+	//seedA := []byte{38, 131, 84, 214, 132, 224, 248, 94, 33, 95, 61, 247, 165, 44, 112, 216, 53, 208, 40, 56, 184, 255, 211, 19, 6, 16, 215, 81, 208, 146, 71, 71}
+	// 父扩展密钥
+	parentA, _ := DerivedPrivateKeyWithPath(seedA, parentPath, owcrypt.ECC_CURVE_PASTA)
+	encodepub := parentA.GetPublicKey()
+	//fmt.Println(hex.EncodeToString(parentA.key))
+	fmt.Println(hex.EncodeToString(encodepub.key))
+
+	chk, _ := owcrypt.GenPubkey(parentA.key, owcrypt.ECC_CURVE_PASTA)
+	chk = owcrypt.PointCompress(chk, owcrypt.ECC_CURVE_PASTA)
+	fmt.Println(hex.EncodeToString(chk))
+
+	if hex.EncodeToString(encodepub.key) != hex.EncodeToString(chk) {
+		t.Error("??????????????????")
+		return
+	}
+	fmt.Println("SUCCESS")
+
+	child, _ := parentA.GenPrivateChild(0)
+	fmt.Println("child 0 private : ", hex.EncodeToString(child.key))
+	childpub, _ := parentA.GenPublicChild(0)
+	fmt.Println("child 0 public : ", hex.EncodeToString(childpub.key))
+
+	childpub_chk, _ := owcrypt.GenPubkey(child.key, owcrypt.ECC_CURVE_PASTA)
+	fmt.Println("childpub_chk : ", hex.EncodeToString(childpub_chk))
+
+	childchild, _ := child.GenPrivateChild(0)
+	fmt.Println("child child 0 private : ", hex.EncodeToString(childchild.key))
+	chkpub, _ := childpub.GenPublicChild(0)
+	fmt.Println(hex.EncodeToString(owcrypt.PointDecompress(chkpub.key, owcrypt.ECC_CURVE_PASTA)[1:]))
+	chkpub_chk, _ := owcrypt.GenPubkey(childchild.key, owcrypt.ECC_CURVE_PASTA)
+	fmt.Println("chkpub_chk_chk : ", hex.EncodeToString(chkpub_chk))
+
+	chkpri, _ := DerivedPrivateKeyWithPath(seedA, parentPath+"/0/0", owcrypt.ECC_CURVE_PASTA)
+	fmt.Println(hex.EncodeToString(chkpri.key))
+
+	//// 各client持有seed，并产生账户索引下的第一个非强化扩展，作为多签扩展的parent
+	//// 账户索引为  m'/44'/7744'/0'
+	//parentPath := "m/44'/88'/1'/0/"
+	//
+	//for i := 0; i < 6; i++ {
+	//	index := fmt.Sprint(i)
+	//	pp := []byte(parentPath)
+	//	//pp[15] = index[0]
+	//	parentPath = string(pp[:15]) + index
+	//	fmt.Println("==================", parentPath)
+	//	// client A
+	//	// seed
+	//	seedA := []byte{38, 131, 84, 214, 132, 224, 248, 94, 33, 95, 61, 247, 165, 44, 112, 216, 53, 208, 40, 56, 184, 255, 211, 19, 6, 16, 215, 81, 208, 146, 71, 71}
+	//
+	//	// 父扩展密钥
+	//	parentA, _ := DerivedPrivateKeyWithPath(seedA, parentPath, owcrypt.ECC_CURVE_PASTA)
+	//	encodepub := parentA.GetPublicKey()
+	//	//fmt.Println(hex.EncodeToString(parentA.key))
+	//	fmt.Println(hex.EncodeToString(encodepub.key))
+	//
+	//	chk, _ := owcrypt.GenPubkey(parentA.key, owcrypt.ECC_CURVE_PASTA)
+	//	chk = owcrypt.PointCompress(chk, owcrypt.ECC_CURVE_PASTA)
+	//	fmt.Println(hex.EncodeToString(chk))
+	//
+	//	if hex.EncodeToString(encodepub.key) != hex.EncodeToString(chk) {
+	//		t.Error("??????????????????")
+	//		return
+	//	}
+	//	fmt.Println("SUCCESS")
+	//}
+
+}
+
+/*
+0334714ed6cd2e9c4574e6811bb55a84dc23a5c0a1efb7f5f39d9aa56917eb3332
+021b1fc8a76dc854a0b0924c4601001caf8c5e5f045b0fb58ebda38e2f2c036a8a
+03229a2356e0b60a9821ca08c533c1a28ea6e0ee955d05ffc4934af1d3fccef9cf
+0221a30ea7231ea32f6961eb38d7b92514b79fb988ed89864dc87f5edf017727c6
+033cf45115c2e5c57b9f6be7e0ccce85b231ea2c4baf5e19ae7c956e442c92a23a
+033b4f99446c289a4a4b34a8e63bd75b81677ef44a55ff9bafd029316ca016ade4
+*/
+func Test_tmp123(t *testing.T) {
+	//parent, _ := OWDecode("owpubeyoV6HA8GD6dNwkpVQ93KwcyJuMTbRaNHwVHdXNVjzyJfDvCW3kc15HyFiGXKXgWq4SeJxQBoKt8ZnV8HPXkqyvXCAfURzWZyb5pwkMciNBU2dGZj")
+	parent, _ := OWDecode("owpubeyoV6HA6cyaBcqDZ2fGXcA1ojUyBM6xyWcdszDVQiReqAKNQWYpX3cQJpC6AcrZEkors5TRUExVqivEopBkFjCqmu1aPpmyXooQjCTLbQbzuuiqzg")
+	fmt.Println(parent.depth)
+
+	start, _ := parent.GenPublicChild(0)
+
+	for i := 0; i < 6; i++ {
+		newk, _ := start.GenPublicChild(uint32(i))
+
+		fmt.Println(hex.EncodeToString(newk.key))
+	}
+
+	pri, _ := hex.DecodeString("0aac4fa697b1cf1aa5591c6c84b9ab59e05761a0cad33b8b714cac8d64c6bf31")
+	pub, _ := owcrypt.GenPubkey(pri, owcrypt.ECC_CURVE_PASTA)
+	fmt.Println(hex.EncodeToString(pub))
+}
+
+//38,131,84,214,132,224,248,94,33,95, 61, 247, 165, 44, 112, 216, 53, 208, 40, 56, 184,255,211,19,6,16,215,81,208,146,71,71
