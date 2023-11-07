@@ -24,7 +24,7 @@ require (
 	github.com/google/gofuzz v1.0.0 // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/tendermint/tendermint v0.31.2-rc0
-	github.com/tidwall/gjson v1.2.1
+	github.com/tidwall/gjson v1.9.3
 )
 
 // replace github.com/blocktree/go-owcrypt => /Users/heshuchao/workspace/go-workspace/go-owcrypt
